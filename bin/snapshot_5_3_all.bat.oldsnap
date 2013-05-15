@@ -1,0 +1,15 @@
+@ECHO OFF
+SET PHP_SDK_SCRIPT_PATH=%~dp0
+
+REM change the drive
+%~d0
+
+CALL %PHP_SDK_SCRIPT_PATH%\phpsdk_setvars.bat
+
+CD %PHP_SDK_PATH%\snap_5_3\sources
+CALL snapshot_src_download.bat 5.3
+
+CMD /C snapshot_5_3_vc9.bat ts nodownload no msi
+CMD /C snapshot_5_3_vc9.bat nts nodownload no msi
+CMD /C snapshot_5_3.bat ts nodownload no msi
+CMD /C snapshot_5_3.bat nts nodownload no msi
