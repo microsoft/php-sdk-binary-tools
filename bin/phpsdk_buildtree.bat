@@ -22,6 +22,13 @@ MD %_%\vc9\x64\deps\bin
 MD %_%\vc9\x64\deps\lib
 MD %_%\vc9\x64\deps\include
 
+MD %_%\vc11\x86\deps\bin
+MD %_%\vc11\x86\deps\lib
+MD %_%\vc11\x86\deps\include
+MD %_%\vc11\x64\deps\bin
+MD %_%\vc11\x64\deps\lib
+MD %_%\vc11\x64\deps\include
+
 GOTO EXIT
 
 :help
