@@ -46,6 +46,10 @@ $out = array(
 		"x86" => array(),
 		"x64" => array(),
 	),
+	"vc14" => array(
+		"x86" => array(),
+		"x64" => array(),
+	),
 );
 
 
