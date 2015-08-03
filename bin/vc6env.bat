@@ -1,3 +1,0 @@
-set PATH=%PATH%;%VC6_PATH%
-set LIB=%VC6_LIB%
-set INCLUDE=%VC6_INCLUDE%
