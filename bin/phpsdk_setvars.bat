@@ -1,13 +1,9 @@
-REM phpsdk.bat
-@ECHO OFF
+@echo ofF
 
-REM  Add skd\bin directory to the path
-SET PHP_SDK_SCRIPT_PATH=%~dp0
-SET PHP_SDK_BIN_PATH=%PHP_SDK_SCRIPT_PATH%\..\bin
-SET PHP_SDK_PATH=%PHP_SDK_SCRIPT_PATH%\..
+rem Add necessary dirs to the path 
+set PHP_SDK_BIN_PATH=%~dp0\..
+set PHP_SDK_PATH=%PHP_SDK_BIN_PATH%\..
+set PHP_SDK_MSYS2_PATH=%PHP_SDK_PATH%\..\msys2\usr\bin
 
-SET PATH=%PATH%;%PHP_SDK_BIN_PATH%;%PHP_SDK_SCRIPT_PATH%;D:\apps\svn\bin
-
-REM Set BISON_SIMPLE
-SET BISON_SIMPLE=%PHP_SDK_BIN_PATH%\bison.simple
+set PATH=%PHP_SDK_BIN_PATH%;%PHP_SDK_MSYS2_PATH%;%PATH%
 

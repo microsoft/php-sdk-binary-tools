@@ -35,7 +35,7 @@ MD %_%\vc14\x64\deps\include
 GOTO EXIT
 
 :help
-echo createbuildtree ^<nameofthetree^> [PATH]
+echo phpsdk_buildtree ^<nameofthetree^> [PATH]
 echo  Create the common directory structure used by the PHP SDK
 
 :EXIT
