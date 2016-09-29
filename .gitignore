@@ -3,6 +3,7 @@ php54
 php55
 phpmaster
 php
+!bin/php
 rmtools-client
 rmtools.base
 logs
