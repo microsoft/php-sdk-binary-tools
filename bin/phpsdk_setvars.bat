@@ -1,4 +1,4 @@
-rem @echo ofF
+@echo off
 
 rem Add necessary dirs to the path 
 set PHP_SDK_BIN_PATH=%~dp0
