@@ -1,8 +1,12 @@
 php53
 php54
 php55
+php56
+php70
+php71
 phpmaster
 php
+!lib/php
 !bin/php
 rmtools-client
 rmtools.base
