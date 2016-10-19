@@ -30,6 +30,7 @@ class Config
 
 	/* Helper props and methods. */
 	protected static $currentBranchName = NULL;
+	protected static $depsLocalPath = NULL;
 
 	public static function getDepsHost() : string
 	{
@@ -65,7 +66,11 @@ class Config
 
 	public static function getCurrentBranchData() : array
 	{
-		return self::$supportedBranches[self::$currentBranchName];
+		if (isset(self::$supportedBranches[self::$currentBranchName])) {
+			return self::$supportedBranches[self::$currentBranchName];
+		}
+
+		throw new Exception("Unknown branch " . self::$currentBranchName);
 	}
 
 	public static function getSdkNugetFeedUrl() : string
@@ -81,6 +86,7 @@ class Config
 			throw new Exception("PHP_SDK_PATH isn't set!");
 		}
 
+		$path = realpath($path);
 		if (!file_exists($path)) {
 			throw new Exception("The path '$path' is non existent.");
 		}
@@ -97,6 +103,16 @@ class Config
 		}
 
 		return file_get_contents($path);
+	}
+
+	public static function getDepsLocalPath()
+	{
+		return self::$depsLocalPath;
+	}
+
+	public static function setDepsLocalPath(string $path)
+	{
+		self::$depsLocalPath = $path;
 	}
 
 	public static function getCacheDir() : string

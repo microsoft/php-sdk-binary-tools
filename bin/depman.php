@@ -5,7 +5,7 @@ include dirname(__FILE__) . "/../lib/php/libsdk/autoload.php";
 use SDK\Config;
 use SDK\Exception;
 
-$sopt = "s:cuhb:a:";
+$sopt = "s:cuhb:a:d:";
 $lopt = array(
 	"branch:",
 	"update",
@@ -13,6 +13,7 @@ $lopt = array(
 	"stability:",
 	"arch:",
 	"help",
+	"deps:",
 );
 
 $cmd = NULL;
@@ -54,6 +55,11 @@ try {
 				$arch = $val;
 				break;
 
+			case "d":
+			case "deps":
+				Config::setDepsLocalPath($val);
+				break;
+
 			case "c":
 			case "check":
 				$cmd = "check";
@@ -86,10 +92,18 @@ try {
 			if (is_numeric($major) && is_numeric($minor)) {
 				Config::setCurrentBranchName("$major.$minor");
 			} else {
-				usage();
+				usage(3);
 			}
 		} else {
-			usage();
+			usage(3);
+		}
+	}
+
+	if (!Config::getDepsLocalPath()) {
+		if (file_exists("../deps")) {
+			Config::setDepsLocalPath(realpath("../deps"));
+		} else {
+			usage(3);
 		}
 	}
 
@@ -105,10 +119,10 @@ try {
 					$arch = "x86";
 				}
 			} else {
-				usage();
+				usage(3);
 			}
 		} else {
-			usage();
+			usage(3);
 		}
 	}
 
@@ -124,7 +138,7 @@ try {
 	echo "\nConfiguration: " . Config::getCurrentBranchName() . "-$branch_data[crt]-$arch-$stability\n\n";
 
 	/* Let the dep manager to run the command. */
-	$dm = new SDK\Dependency\Manager($stability, $arch);
+	$dm = new SDK\Dependency\Manager(Config::getDepsLocalPath(), $stability, $arch);
 	switch ($cmd) {
 		default:
 			throw new Exception("Unknown command '$cmd'");
@@ -138,11 +152,13 @@ try {
 			}
 			break;
 		case "update":
-			$dm->performUpdate();
+			$dm->performUpdate($msg);
+			msg($msg);
 			break;
 	}
 
 } catch (Throwable $e) {
+	//var_dump($e);
 	echo "\nError: ", $e->getMessage(), PHP_EOL;
 	exit(3);
 }
@@ -151,12 +167,13 @@ function usage(int $code = -1)
 {
 	echo "PHP SDK dependency handling tool.", PHP_EOL;
 	echo "Usage: ", PHP_EOL;
-	echo "  -a --arch      Architecture.", PHP_EOL;
-	echo "  -b --branch    Use dependencies for a specific branch.", PHP_EOL;
+	echo "  -a --arch      Architecture, x86 or x64.", PHP_EOL;
+	echo "  -b --branch    Use dependencies for a specific branch. If omited, CWD is used to guess.", PHP_EOL;
 	echo "  -c --check     Check for dependency updates.", PHP_EOL;
+	echo "  -d --deps      Path to the dependencies directory. If omited, CWD is used to guess.", PHP_EOL;
 	echo "  -h --help      Show help message.", PHP_EOL;
 	echo "  -s --stability One of stable or staging.", PHP_EOL;
-	echo "  -u --update    Update dependencies.", PHP_EOL;
+	echo "  -u --update    Update dependencies. If deps directory already exists, backup copy is created automatically.", PHP_EOL;
 	echo "", PHP_EOL;
 
 	$code = -1 == $code ? 0 : $code;

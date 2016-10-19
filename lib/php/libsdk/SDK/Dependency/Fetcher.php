@@ -32,14 +32,6 @@ class Fetcher
 		$this->series = $series;
 	}
 
-	public function getPackageUri($file) : string
-	{
-		$base = Config::getDepsBaseUri();
-		$branch_data = Config::getCurrentBranchData();
-
-		return "{$base}/{$branch_data['crt']}/{$this->arch}/$file";
-	}
-
 	/* TODO more robust implementation. */
 	/* TODO implement indicator. */
 	public function getByUri($uri) : string
