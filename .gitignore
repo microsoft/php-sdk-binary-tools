@@ -12,4 +12,5 @@ rmtools-client
 rmtools.base
 logs
 PFTT
-
+\.tmp
+\.cache
