@@ -41,6 +41,7 @@ class Fetcher
 	}
 
 	/* TODO more robust implementation. */
+	/* TODO implement indicator. */
 	public function getByUri($uri) : string
 	{
 		$url = "http://{$this->host}:{$this->port}$uri";

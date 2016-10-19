@@ -65,12 +65,51 @@ try {
 		}
 	}
 
-	if (NULL === $arch) {
+	if (NULL === $cmd) {
 		usage();
 	}
 
-	if (NULL === $cmd) {
-		usage();
+	if (!Config::getCurrentBranchName()) {
+		/* Try to figure out the branch. For now it only works if CWD is in php-src. */
+		$fl = "main/php_version.h";
+		if (file_exists($fl)) {
+			$s = file_get_contents($fl);
+			$major = $minor = NULL;
+
+			if (preg_match(",PHP_MAJOR_VERSION (\d+),", $s, $m)) {
+				$major = $m[1];
+			}
+			if (preg_match(",PHP_MINOR_VERSION (\d+),", $s, $m)) {
+				$minor = $m[1];
+			}
+
+			if (is_numeric($major) && is_numeric($minor)) {
+				Config::setCurrentBranchName("$major.$minor");
+			} else {
+				usage();
+			}
+		} else {
+			usage();
+		}
+	}
+
+	if (NULL === $arch) {
+		/* XXX this might be not true for other compilers! */
+		passthru("where cl.exe >nul", $status);
+		if (!$status) {
+			exec("cl.exe /? 2>&1", $a, $status);
+			if (!$status) {
+				if (preg_match(",x64,", $a[0])) {
+					$arch = "x64";
+				} else {
+					$arch = "x86";
+				}
+			} else {
+				usage();
+			}
+		} else {
+			usage();
+		}
 	}
 
 	if (NULL === $stability) {
@@ -82,22 +121,24 @@ try {
 	}
 
 	$branch_data = Config::getCurrentBranchData();
-	echo "\nConfigured for " . Config::getCurrentBranchName() . "-$branch_data[crt]-$arch-$stability\n\n";
+	echo "\nConfiguration: " . Config::getCurrentBranchName() . "-$branch_data[crt]-$arch-$stability\n\n";
 
+	/* Let the dep manager to run the command. */
 	$dm = new SDK\Dependency\Manager($stability, $arch);
 	switch ($cmd) {
 		default:
 			throw new Exception("Unknown command '$cmd'");
 		break;
 		case "check":
-			$ret = $dm->runCheckCmd();
+			$ret = $dm->updatesAvailable();
 			if ($ret) {
-				echo "Updates are available.";
+				msg("Updates are available.");
 			} else {
-				echo "No updates are available.";
+				msg("No updates are available.");
 			}
 			break;
 		case "update":
+			$dm->performUpdate();
 			break;
 	}
 
@@ -120,6 +161,10 @@ function usage(int $code = -1)
 
 	$code = -1 == $code ? 0 : $code;
 	exit($code);
+}
+
+function msg($s) {
+	echo $s, PHP_EOL;
 }
 
 exit(0);

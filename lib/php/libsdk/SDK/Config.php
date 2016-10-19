@@ -13,8 +13,6 @@ class Config
 
 	/* protected static $sdkNugetFeedUrl = "http://127.0.0.1/sdk/nuget"; */
 
-	/* Also used as default branch. */
-	protected static $currentBranchName = "7.0";
 	protected static $supportedBranches = array (
 		'master' => array(
 			"crt" => "vc14",
@@ -30,7 +28,9 @@ class Config
 		),*/
 	);
 
-	/* Helper methods. */
+	/* Helper props and methods. */
+	protected static $currentBranchName = NULL;
+
 	public static function getDepsHost() : string
 	{
 		return self::$depsHost;
@@ -58,7 +58,7 @@ class Config
 		self::$currentBranchName = $name;
 	}
 
-	public static function getCurrentBranchName() : string
+	public static function getCurrentBranchName()
 	{
 		return self::$currentBranchName;
 	}

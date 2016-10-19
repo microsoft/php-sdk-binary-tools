@@ -26,7 +26,7 @@ class Manager
 		$this->series = $series;
 	}
 
-	public function runCheckCmd() : bool
+	public function updatesAvailable() : bool
 	{
 		$series = $this->series;
 
@@ -44,6 +44,12 @@ class Manager
 		$new_sum = md5($series_data);
 
 		return $old_sum != $new_sum;
+	}
+
+
+	public function performUpdate()
+	{
+
 	}
 }
 
