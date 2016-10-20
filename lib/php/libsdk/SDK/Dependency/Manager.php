@@ -21,7 +21,7 @@ class Manager
 
 		$host = Config::getDepsHost();
 		$port = Config::getDepsPort();
-		$fetcher = new Fetcher($this->stability, $this->arch, $host, $port, NULL);
+		$fetcher = new Fetcher($host, $port, $this->arch, $this->stability);
 		$series = new Series($this->stability, $this->arch, NULL);
 		$fetcher->setSeries($series);
 		$series->setFetcher($fetcher);

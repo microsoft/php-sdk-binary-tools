@@ -2,6 +2,8 @@
 
 namespace SDK;
 
+use SDK\Dependency\Fetcher;
+use SDK\Dependency\Cache;
 use SDK\Exception;
 
 class Config
@@ -13,23 +15,12 @@ class Config
 
 	/* protected static $sdkNugetFeedUrl = "http://127.0.0.1/sdk/nuget"; */
 
-	protected static $supportedBranches = array (
-		'master' => array(
-			"crt" => "vc14",
-		),
-		'7.1' => array(
-			"crt" => "vc14",
-		),
-		'7.0' => array(
-			"crt" => "vc14",
-		),
-		/*'5.6' => array(
-			"crt" => "vc11",
-		),*/
-	);
+	protected static $knownBranches = array ();
 
 	/* Helper props and methods. */
 	protected static $currentBranchName = NULL;
+	protected static $currentArchName = NULL;
+	protected static $currentCrtName = NULL;
 	protected static $depsLocalPath = NULL;
 
 	public static function getDepsHost() : string
@@ -45,15 +36,54 @@ class Config
 		return self::$depsBaseUri;
 	}
 
-	public static function getSupportedBranches() : array
+	public static function setCurrentArchName(string $arch)
 	{
-		return self::$supportedBranches;
+		self::$currentArchName = $arch;
+	}	
+
+	public static function getCurrentArchName() 
+	{
+		return self::$currentArchName;
+	}	
+
+	public static function setCurrentCrtName(string $crt)
+	{
+		self::$currentCrtName = $crt;
+	}	
+
+	public static function getCurrentCrtName()
+	{
+		return self::$currentCrtName;
+	}	
+
+	public static function getKnownBranches() : array
+	{
+		if (empty(self::$knownBranches)) {
+			$cache_file = "supported_branches.txt";
+			$cache = new Cache(self::getDepsLocalPath());
+			$fetcher = new Fetcher(self::$depsHost, self::$depsPort);
+
+			$tmp = $fetcher->getByUri(self::$depsBaseUri . "/series/supported_branches.txt");
+			if (false !== $tmp) {
+				$cache->cachecontent($cache_file, $tmp, true);
+			} else {
+				$data = $cache->getCachedContent($cache_file, true);
+			}
+
+			$data = json_decode($tmp, true);
+			if (!is_array($data)) {
+				throw new Exception("Failed to fetch supported branches");
+			}
+			self::$knownBranches = $data;
+		}
+
+		return self::$knownBranches;
 	}
 
 	public static function setCurrentBranchName(string $name)
 	{
-		if (!array_key_exists($name, self::$supportedBranches)) {
-			throw new Exception("Unsupported branch '$name'");
+		if (!array_key_exists($name, self::getKnownBranches())) {
+		//	throw new Exception("Unsupported branch '$name'");
 		}
 
 		self::$currentBranchName = $name;
@@ -66,11 +96,20 @@ class Config
 
 	public static function getCurrentBranchData() : array
 	{
-		if (isset(self::$supportedBranches[self::$currentBranchName])) {
-			return self::$supportedBranches[self::$currentBranchName];
+		if (array_key_exists(self::$currentBranchName, self::getKnownBranches())) {
+			return self::getKnownBranches()[self::$currentBranchName];
 		}
 
-		throw new Exception("Unknown branch " . self::$currentBranchName);
+		$arch = Config::getCurrentArchName();
+		$crt = Config::getCurrentCrtName();
+		if (NULL !== $arch && NULL !== $crt) {
+			$ret = array();
+			$ret["crt"] = $crt;
+
+			return $ret;
+		}
+
+		throw new Exception("Not enough data to handle branch '" . self::$currentBranchName . "'");
 	}
 
 	public static function getSdkNugetFeedUrl() : string

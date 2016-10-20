@@ -14,7 +14,7 @@ class Fetcher
 	protected $series;
 
 
-	public function __construct(string $stability, string $arch, string $host, int $port, Series $series = NULL)
+	public function __construct(string $host, int $port, string $arch = NULL, string $stability = NULL, Series $series = NULL)
 	{
 		$this->stability = $stability;
 		$this->arch = $arch;
@@ -27,7 +27,7 @@ class Fetcher
 		return $this->series;
 	}
 
-	public function setSeries(Series $fetcher)
+	public function setSeries(Series $series)
 	{
 		$this->series = $series;
 	}
