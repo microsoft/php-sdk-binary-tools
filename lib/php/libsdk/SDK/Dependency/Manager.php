@@ -41,8 +41,7 @@ class Manager
 		return $this->series->updatesAvailable();
 	}
 
-
-	/* TODO check if there are actually some updates available, and implement --force. */
+	/* TODO and implement --force. */
 	public function performUpdate(string &$msg = NULL)
 	{
 		if (!$this->updatesAvailable()) {
@@ -85,6 +84,16 @@ class Manager
 			}
 		}
 
+		/* Clear, it is an extra handling. So far it's the only case, doing it this way. And, we have
+			no package definitions ATM to handle it otherwise. */
+		$extra = $tmp_dir_deps . DIRECTORY_SEPARATOR . "openssl.cnf";
+		if (file_exists($extra)) {
+			$tdir = $tmp_dir_deps . DIRECTORY_SEPARATOR . "template" . DIRECTORY_SEPARATOR . "ssl";
+
+			mkdir($tdir, 0755, true);
+			rename($extra, $tdir . DIRECTORY_SEPARATOR . "openssl.cnf");
+		}
+
 		if (!rename($tmp_dir_deps, $this->path)) {
 			throw new Exception("Unable to rename '$tmp_dir_deps' to '{$this->path}'");
 		}
@@ -95,7 +104,11 @@ class Manager
 		$this->series->cache();
 
 		/* save new series file, move the updated deps and backup the old ones, cleanup.*/
-		$msg = "Updates performed successfully, old dependencies dir is moved to '$new_path'";
+		$msg = "Updates performed successfully. ";
+		$msg .= "Updated dependencies was saved to '{$this->path}'. ";
+		if (isset($new_path)) {
+			$msg .= "Old dependencies dir is moved to '$new_path'.";
+		}
 	}
 }
 

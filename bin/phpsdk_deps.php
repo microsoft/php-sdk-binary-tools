@@ -86,6 +86,9 @@ try {
 	if (!Config::getDepsLocalPath()) {
 		if (file_exists("../deps")) {
 			Config::setDepsLocalPath(realpath("../deps"));
+		} else if (file_exists("main/php_version.h")) {
+			/* Deps dir might not exist. */
+			Config::setDepsLocalPath(realpath("..") . DIRECTORY_SEPARATOR . "deps");
 		} else {
 			usage(3);
 		}
