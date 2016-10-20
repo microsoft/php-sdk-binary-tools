@@ -18,11 +18,12 @@ class Manager
 		$this->stability = $stability;
 		$this->arch = $arch;
 		$this->path = $path;
+		$this->cache = new Cache($path);
 
 		$host = Config::getDepsHost();
 		$port = Config::getDepsPort();
 		$fetcher = new Fetcher($host, $port, $this->arch, $this->stability);
-		$series = new Series($this->stability, $this->arch, NULL);
+		$series = new Series($this->stability, $this->arch, $this->cache, NULL);
 		$fetcher->setSeries($series);
 		$series->setFetcher($fetcher);
 
@@ -35,24 +36,9 @@ class Manager
 		return Config::getTmpDir() . DIRECTORY_SEPARATOR . $this->series->getname();
 	}
 
-	protected function getCachedSeriesPath()
-	{
-		return $this->series->getCachedPath();
-	}
-
 	public function updatesAvailable() : bool
 	{
-		$series_data = $this->series->getData(true);
-		$cached_series_file = $this->getCachedSeriesPath();
-
-		if (!file_exists($cached_series_file)) {
-			return true;
-		}
-
-		$old_sum = md5_file($cached_series_file);
-		$new_sum = md5($series_data);
-
-		return $old_sum != $new_sum;
+		return $this->series->updatesAvailable();
 	}
 
 
@@ -79,6 +65,7 @@ class Manager
 
 			$pkg->retrieve($tmp_dir_packs);
 			$pkg->unpack($tmp_dir_deps);
+			$pkg->cleanup();
 
 			unset($pkg);
 		}
@@ -102,12 +89,13 @@ class Manager
 			throw new Exception("Unable to rename '$tmp_dir_deps' to '{$this->path}'");
 		}
 
+		rmdir($tmp_dir_packs);
+		rmdir($tmp_dir);
+
 		$this->series->cache();
 
-		/* TODO cleanup tmp files. */
-
 		/* save new series file, move the updated deps and backup the old ones, cleanup.*/
-		$msg = "Updates performed successfully";
+		$msg = "Updates performed successfully, old dependencies dir is moved to '$new_path'";
 	}
 }
 

@@ -5,7 +5,7 @@ include dirname(__FILE__) . "/../lib/php/libsdk/autoload.php";
 use SDK\Config;
 use SDK\Exception;
 
-$sopt = "s:cuhb:a:d:";
+$sopt = "s:cuhb:a:d:t:";
 $lopt = array(
 	"branch:",
 	"update",
@@ -47,7 +47,7 @@ try {
 				if ("stable" != $val && "staging" != $val) {
 					throw new Exception("Unknown stability keyword, either stable or staging is accepted");
 				}
-				$stability = $val;
+				Config::setCurrentStabilityName($val);
 				break;
 
 			case "a":
@@ -72,6 +72,7 @@ try {
 				$cmd = "update";
 				break;
 
+			case "t":
 			case "crt":
 				Config::setCurrentCrtName($val);
 				break;
@@ -138,22 +139,33 @@ try {
 	}
 
 	if (NULL === Config::getCurrentCrtName()) {
-		Config::setCurrentCrtName(Config::getCurrentBranchData()["crt"]);
+		$all_branches = Config::getKnownBranches();
+
+		if (!isset($all_branches[Config::getCurrentBranchName()])) {
+			throw new Exception("Couldn't find any configuration for branch '" . Config::getCurrentBranchName() . "'");
+		}
+
+		$branch = $all_branches[Config::getCurrentBranchName()];
+		if (count($branch) > 1) {
+			throw new Exception("Multiple CRTs are available for this branch, please choose one from " . implode(",", array_keys($branch)));
+		} else {
+			Config::setCurrentCrtName(array_keys($branch)[0]);
+		}
 	}
 
-	if (NULL === $stability) {
+	if (NULL === Config::getCurrentStabilityName()) {
 		if ("master" == Config::getCurrentBranchName()) {
-			$stability = "staging";
+			Config::setCurrentStabilityName("staging");
 		} else {
-			$stability = "stable";
+			Config::setCurrentStabilityName("stable");
 		}
 	}
 
 	$branch_data = Config::getCurrentBranchData();
-	echo "\nConfiguration: " . Config::getCurrentBranchName() . "-$branch_data[crt]-$arch-$stability\n\n";
+	echo "\nConfiguration: " . Config::getCurrentBranchName() . "-$branch_data[crt]-$branch_data[arch]-$branch_data[stability]\n\n";
 
 	/* Let the dep manager to run the command. */
-	$dm = new SDK\Dependency\Manager(Config::getDepsLocalPath(), $stability, $arch);
+	$dm = new SDK\Dependency\Manager(Config::getDepsLocalPath(), $branch_data["stability"], $branch_data["arch"]);
 	switch ($cmd) {
 		default:
 			throw new Exception("Unknown command '$cmd'");
@@ -173,8 +185,9 @@ try {
 	}
 
 } catch (Throwable $e) {
-//	var_dump($e);
-	echo "\nError: ", $e->getMessage(), PHP_EOL;
+	//var_dump($e);
+	//echo "\nError: ", $e->getMessage(), PHP_EOL;
+	throw $e;
 	exit(3);
 }
 
@@ -185,7 +198,7 @@ function usage(int $code = -1)
 	echo "  -a --arch      Architecture, x86 or x64.", PHP_EOL;
 	echo "  -b --branch    Use dependencies for a specific branch. If omited, CWD is used to guess.", PHP_EOL;
 	echo "  -c --check     Check for dependency updates.", PHP_EOL;
-	echo "     --crt       Usually not needed! Pass a string like vc11, vc14, etc. and hope for best.", PHP_EOL;
+	echo "  -t --crt       CRT.", PHP_EOL;
 	echo "  -d --deps      Path to the dependencies directory. If omited, CWD is used to guess.", PHP_EOL;
 	echo "  -h --help      Show help message.", PHP_EOL;
 	echo "  -s --stability One of stable or staging.", PHP_EOL;

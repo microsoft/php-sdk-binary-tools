@@ -11,12 +11,14 @@ class Series
 	protected $stability;
 	protected $arch;
 	protected $rawData;
+	protected $cache;
 
-	public function __construct(string $stability, string $arch, Fetcher $fetcher = NULL)
+	public function __construct(string $stability, string $arch, Cache $cache, Fetcher $fetcher = NULL)
 	{
 		$this->fetcher = $fetcher;
 		$this->stability = $stability;
 		$this->arch = $arch;
+		$this->cache = $cache;
 	}
 
 	public function getFetcher() : Fetcher
@@ -76,20 +78,26 @@ class Series
 		return $ret;
 	}
 
-	public function getCachedPath()
+	public function getSavePath()
 	{
 		return Config::getCacheDir() . DIRECTORY_SEPARATOR . $this->getname();
+	}
+
+	public function updatesAvailable()
+	{
+		$series_data = $this->getData(true);
+		$series_file = $this->getSavePath();
+		
+		return $this->cache->cachedContentDiffers($series_file, $series_data);
 	}
 
 	public function cache(string $path = NULL)
 	{
 		if (!$path) {
-			$path = $this->getCachedPath();
+			$path = $this->getSavePath();
 		}
 
-		if (false === file_put_contents($path, $this->getData(true))) {
-			throw new Exception("Failed to write series to '$path'");
-		}
+		$this->cache->cacheContent($path, $this->getData(true));
 	}
 }
 

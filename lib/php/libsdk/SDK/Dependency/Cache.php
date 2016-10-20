@@ -39,7 +39,7 @@ class Cache
 	{
 		$p = $this->getCacheablePath($path, $relative);
 		
-		if (!file_exsits($p)) {
+		if (!file_exists($p)) {
 			return true;
 		}
 
