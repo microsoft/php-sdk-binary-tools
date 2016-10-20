@@ -195,10 +195,10 @@ function usage(int $code = -1)
 {
 	echo "PHP SDK dependency handling tool.", PHP_EOL;
 	echo "Usage: ", PHP_EOL;
-	echo "  -a --arch      Architecture, x86 or x64.", PHP_EOL;
+	echo "  -a --arch      Architecture, x86 or x64. If omited, cl.exe is used to guess.", PHP_EOL;
 	echo "  -b --branch    Use dependencies for a specific branch. If omited, CWD is used to guess.", PHP_EOL;
 	echo "  -c --check     Check for dependency updates.", PHP_EOL;
-	echo "  -t --crt       CRT.", PHP_EOL;
+	echo "  -t --crt       CRT, marked by the corresponding VC++ version, eg. vc11, vc14, etc.", PHP_EOL;
 	echo "  -d --deps      Path to the dependencies directory. If omited, CWD is used to guess.", PHP_EOL;
 	echo "  -h --help      Show help message.", PHP_EOL;
 	echo "  -s --stability One of stable or staging.", PHP_EOL;
