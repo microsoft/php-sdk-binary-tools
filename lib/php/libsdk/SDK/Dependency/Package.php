@@ -54,5 +54,10 @@ class Package
 			throw new Exception("Failed to unpack, error code '$ret'");
 		}
 	}
+
+	public function cleanup()
+	{
+		unlink($this->filepath);		
+	}
 }
 
