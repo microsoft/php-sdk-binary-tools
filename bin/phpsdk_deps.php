@@ -194,16 +194,21 @@ try {
 function usage(int $code = -1)
 {
 	echo "PHP SDK dependency handling tool.", PHP_EOL;
-	echo "Usage: ", PHP_EOL;
+	echo "Usage: ", PHP_EOL, PHP_EOL;
+	echo "Configuration:", PHP_EOL;
+	echo "  -b --branch    Branch name, eg. 7.0, 7.1, etc. If omited, CWD is used to guess.", PHP_EOL;
 	echo "  -a --arch      Architecture, x86 or x64. If omited, cl.exe is used to guess.", PHP_EOL;
-	echo "  -b --branch    Use dependencies for a specific branch. If omited, CWD is used to guess.", PHP_EOL;
-	echo "  -c --check     Check for dependency updates.", PHP_EOL;
 	echo "  -t --crt       CRT, marked by the corresponding VC++ version, eg. vc11, vc14, etc.", PHP_EOL;
+	echo "  -s --stability One of stable or staging.", PHP_EOL, PHP_EOL;
+	echo "Commands:", PHP_EOL;
+	echo "  -c --check     Check for dependency updates.", PHP_EOL;
+	echo "  -u --update    Update dependencies. If deps directory already exists, backup copy is created automatically.", PHP_EOL, PHP_EOL;
+	echo "Misc:", PHP_EOL;
 	echo "  -d --deps      Path to the dependencies directory. If omited, CWD is used to guess.", PHP_EOL;
-	echo "  -h --help      Show help message.", PHP_EOL;
-	echo "  -s --stability One of stable or staging.", PHP_EOL;
-	echo "  -u --update    Update dependencies. If deps directory already exists, backup copy is created automatically.", PHP_EOL;
-	echo "", PHP_EOL;
+	echo "  -h --help      Show help message.", PHP_EOL, PHP_EOL;
+	echo "Example: ", PHP_EOL;
+	echo "  phpsdk_deps -c -b master", PHP_EOL;
+	echo "  phpsdk_deps -u -b 7.0 -a x86 -d c:\\path\\to\\deps\\dir", PHP_EOL, PHP_EOL;
 
 	$code = -1 == $code ? 0 : $code;
 	exit($code);
