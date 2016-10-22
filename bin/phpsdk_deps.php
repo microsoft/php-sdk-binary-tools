@@ -176,7 +176,7 @@ try {
 		case "check":
 			$ret = $dm->updatesAvailable();
 			if ($ret) {
-				msg("Updates are available.");
+				msg("Updates are available.", 7);
 			} else {
 				msg("No updates are available.");
 			}
@@ -204,7 +204,7 @@ function usage(int $code = -1)
 	echo "  -t --crt       CRT, marked by the corresponding VC++ version, eg. vc11, vc14, etc.", PHP_EOL;
 	echo "  -s --stability One of stable or staging.", PHP_EOL, PHP_EOL;
 	echo "Commands:", PHP_EOL;
-	echo "  -c --check     Check for dependency updates.", PHP_EOL;
+	echo "  -c --check     Check for dependency updates. If updates are available, the exit code is set to 7.", PHP_EOL;
 	echo "  -u --update    Update dependencies. If deps directory already exists, backup copy is created automatically.", PHP_EOL, PHP_EOL;
 	echo "Misc:", PHP_EOL;
 	echo "  -d --deps      Path to the dependencies directory. If omited, CWD is used to guess.", PHP_EOL;
@@ -217,8 +217,9 @@ function usage(int $code = -1)
 	exit($code);
 }
 
-function msg($s) {
+function msg(string $s, int $code = 0) {
 	echo $s, PHP_EOL;
+	exit($code);
 }
 
 exit(0);
