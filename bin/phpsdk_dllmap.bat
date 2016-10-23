@@ -1,3 +1,11 @@
 @echo off
 
-%PHP_SDK_PHP_CMD% %~dp0phpsdk_dllmap.php %*
+if "%PHP_SDK_PHP_CMD%"=="" (
+	echo PHP SDK is not setup
+	exit 3
+)
+
+call %PHP_SDK_PHP_CMD% %PHP_SDK_BIN_PATH%\phpsdk_dllmap.php %*
+
+exit /b
+
