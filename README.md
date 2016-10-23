@@ -17,7 +17,7 @@ This reworked SDK is compatible with PHP 7.0 and above. The compatibility with p
 - `phpsdk_version`   - show SDK version
 - `phpsdk_dllmap`    - create a JSON listing of DLLs contained in zip files
 
-## Other tools
+## Other available tools
 
 - `bison` 3.0.2, `re2c` 0.15.3
 - `awk`, `gawk`, `sed`, `grep`
@@ -25,6 +25,15 @@ This reworked SDK is compatible with PHP 7.0 and above. The compatibility with p
 - `md5sum`, `sha1sum`, `sha224sum`, `sha256sum`, `sha384sum`, `sha512sum`
 - `7za`, `zip`, `unzip`
 - `wget`
+
+## Not included
+
+These are not included with the PHP SDK, but might be useful for the compilation and other tasks. While Visual C++ is the only required, the others might enable some additional functionality. Care yourself about making them available on your system.
+
+- Visual C++
+- clang
+- ICC
+- Cppcheck
 
 # Usage
 
