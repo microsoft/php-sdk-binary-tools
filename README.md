@@ -8,7 +8,7 @@ BSD
 
 # Notes
 
-This reworked SDK is compatible with PHP 7.0 and above. The compatibility with php-sdk-binary-tools-20110915.zip available from windows.php.net is kept. Though, newer tools and workflows are now possible, and the work is in progress. The toolset consists on a mix of the hand written scripts, selected MSYS2 parts and standalone programs.
+This reworked SDK is compatible with PHP 7.0 and above. The compatibility with php-sdk-binary-tools-20110915.zip available from windows.php.net is kept, though some irrelevant tools was removed. Though, newer tools and workflows are now possible, and the work is in progress. The toolset consists on a mix of the hand written scripts, selected MSYS2 parts and standalone programs.
 
 ## SDK tools
 
