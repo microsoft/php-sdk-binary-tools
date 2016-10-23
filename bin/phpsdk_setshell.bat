@@ -74,9 +74,9 @@ set TMPKEY=
 
 
 if /i "%PHP_SDK_ARCH%"=="x64" (
-	set PHP_SDK_SHELL_CMD="!PHP_SDK_VC_DIR!\vcvarsall.bat" amd64
+	set PHP_SDK_VC_SHELL_CMD="!PHP_SDK_VC_DIR!\vcvarsall.bat" amd64
 ) else (
-	set PHP_SDK_SHELL_CMD="!PHP_SDK_VC_DIR!\vcvarsall.bat" x86
+	set PHP_SDK_VC_SHELL_CMD="!PHP_SDK_VC_DIR!\vcvarsall.bat" x86
 )
 
 rem echo Visual Studio path %PHP_SDK_VC_DIR%
