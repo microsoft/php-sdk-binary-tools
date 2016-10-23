@@ -1,7 +1,5 @@
 @echo off
 
-setlocal enableextensions enabledelayedexpansion
-
 if not defined PHP_SDK_RUN_FROM_ROOT (
 	echo phpsdk_shell.bat should not be run directly, use starter scripts in the PHP SDK root
 	goto out_error
@@ -76,9 +74,9 @@ set TMPKEY=
 
 
 if /i "%PHP_SDK_ARCH%"=="x64" (
-	%comspec% /k "!PHP_SDK_VC_DIR!\vcvarsall.bat" amd64
+	set PHP_SDK_SHELL_CMD="!PHP_SDK_VC_DIR!\vcvarsall.bat" amd64
 ) else (
-	%comspec% /k "!PHP_SDK_VC_DIR!\vcvarsall.bat" x86
+	set PHP_SDK_SHELL_CMD="!PHP_SDK_VC_DIR!\vcvarsall.bat" x86
 )
 
 rem echo Visual Studio path %PHP_SDK_VC_DIR%
@@ -96,5 +94,8 @@ goto out
 	exit /b 3
 
 :out
+rem	echo Shell configuration complete
 	exit /b 0
+
+goto :eof
 
