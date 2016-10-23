@@ -1,6 +1,6 @@
 # PHP SDK
 
-PHP SDK is a toolset for building PHP under Windows
+PHP SDK is a tool kit for Windows PHP builds
 
 # License
 
