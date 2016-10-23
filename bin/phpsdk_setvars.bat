@@ -8,3 +8,5 @@ set PHP_SDK_PHP_CMD=%PHP_SDK_BIN_PATH%php\do_php.bat
 
 set PATH=%PHP_SDK_BIN_PATH%;%PHP_SDK_MSYS2_PATH%;%PATH%
 
+exit /b
+

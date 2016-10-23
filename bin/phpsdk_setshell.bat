@@ -31,18 +31,18 @@ rem check OS arch
 set TMPKEY=HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion
 reg query "%TMPKEY%" /v "ProgramFilesDir (x86)" >nul 2>nul
 if not errorlevel 1 (
-	set PHP_SDK_SYS_ARCH=x64
+	set PHP_SDK_OS_ARCH=x64
 ) else (
 	if /i "%PHP_SDK_ARCH%"=="x64" (
 		echo 32-bit OS detected, native 64-bit toolchain is unavailable.
 		goto out_error
 	)
-	set PHP_SDK_SYS_ARCH=x86
+	set PHP_SDK_OS_ARCH=x86
 )
 set TMPKEY=
 
 rem get vc base dir
-if /i "%PHP_SDK_SYS_ARCH%"=="x64" (
+if /i "%PHP_SDK_OS_ARCH%"=="x64" (
 	set TMPKEY=HKLM\SOFTWARE\Wow6432Node\Microsoft\VisualStudio\%PHP_SDK_VC:~2%.0\Setup\VC
 ) else (
 	set TMPKEY=HKLM\SOFTWARE\Microsoft\VisualStudio\%PHP_SDK_VC:~2%.0\Setup\VC
@@ -56,7 +56,7 @@ for /f "tokens=2*" %%a in ('reg query !TMPKEY! /v ProductDir') do set PHP_SDK_VC
 set TMPKEY=
 
 rem get sdk dir
-if /i "%PHP_SDK_SYS_ARCH%"=="x64" (
+if /i "%PHP_SDK_OS_ARCH%"=="x64" (
 	set TMPKEY=HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Microsoft SDKs\Windows\v8.1
 ) else (
 	set TMPKEY=HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SDKs\Windows\v8.1
