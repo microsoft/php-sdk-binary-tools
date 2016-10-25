@@ -33,6 +33,7 @@ These are not included with the PHP SDK, but might be useful for the compilation
 - Visual C++
 - clang
 - ICC
+- Git
 - Cppcheck
 
 # Usage
@@ -42,7 +43,7 @@ These are not included with the PHP SDK, but might be useful for the compilation
 - `git clone https://github.com/OSTC/php-sdk-binary-tools.git c:\php-sdk`
 - `git checkout new_binary_tools`
 - `cd` to c:\php-sdk and click one of the `phpsdk-*.bat` files in the SDK root, depending on the desired build parameters
-- either move the sources from your old SDK, or - `phpsdk_buildtree`, switch into the source dir and clone PHP
+- `phpsdk_buildtree && git clone https://github.com/php/php-src.git`, or fetch a zipball from windows.php.net
 - while in php-src, run `phpsdk_deps --update --branch YOUR_BRANCH_NAME`
 - do the build, eg. `buildconf && configure --enable-cli && nmake`
 
