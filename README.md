@@ -38,13 +38,13 @@ These are not included with the PHP SDK, but might be useful for the compilation
 
 # Usage
 
-## Basic usage 
+## Basic usage example
 
 - `git clone https://github.com/OSTC/php-sdk-binary-tools.git c:\php-sdk`
 - `git checkout new_binary_tools`
-- `cd` to c:\php-sdk and click on `phpsdk-vc14-x64.bat` (or x86) in the SDK root, depending on the desired build parameters
+- `cd` to c:\php-sdk and click on `phpsdk-vc14-x64.bat` in the SDK root, depending on the desired build parameters
 - `phpsdk_buildtree php70 && git clone https://github.com/php/php-src.git`, or fetch a zipball from windows.php.net
-- while in php-src, run `phpsdk_deps --update --branch YOUR_BRANCH_NAME`
+- cd into php-src, run `phpsdk_deps --update --branch YOUR_BRANCH_NAME`
 - do the build, eg. `buildconf && configure --enable-cli && nmake`
 
 TODO more extensive documentation on the wiki
