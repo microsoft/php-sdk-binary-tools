@@ -43,8 +43,9 @@ These are not included with the PHP SDK, but might be useful for the compilation
 - `git clone https://github.com/OSTC/php-sdk-binary-tools.git c:\php-sdk`
 - `git checkout new_binary_tools`
 - `cd` to c:\php-sdk and click on `phpsdk-vc14-x64.bat` in the SDK root
-- `phpsdk_buildtree php70 && git clone https://github.com/php/php-src.git`, or fetch a zipball
-- cd into php-src, run `phpsdk_deps --update --branch YOUR_BRANCH_NAME`
+- `phpsdk_buildtree phpmaster`
+- `git clone https://github.com/php/php-src.git && cd php-src`, or fetch a zipball
+- `phpsdk_deps --update --branch master`
 - do the build, eg. `buildconf && configure --enable-cli && nmake`
 
 TODO more extensive documentation on the wiki
