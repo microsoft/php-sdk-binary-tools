@@ -16,8 +16,11 @@ set PHP_SDK_RUN_FROM_ROOT=1
 
 title PHP SDK
 
-call %~dp0bin\phpsdk_setshell.bat vc14 x64
+call %~dp0bin\phpsdk_setshell.bat %1 %2
 
+if errorlevel 3 (
+	exit /b %errorlevel%
+)
 
 if "%3" neq "" (
 	if exist "%3" (
