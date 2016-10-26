@@ -41,7 +41,9 @@ These are not included with the PHP SDK, but might be useful for the compilation
 ## Basic usage example
 
 - `git clone https://github.com/OSTC/php-sdk-binary-tools.git c:\php-sdk`
+- `cd c:\php-sdk`
 - `git checkout new_binary_tools`
+- either run or click on `phpsdk-vc14-x64.bat` in the SDK root
 - `cd` to c:\php-sdk and click on `phpsdk-vc14-x64.bat` in the SDK root
 - `phpsdk_buildtree phpmaster`
 - `git clone https://github.com/php/php-src.git && cd php-src`, or fetch a zipball
