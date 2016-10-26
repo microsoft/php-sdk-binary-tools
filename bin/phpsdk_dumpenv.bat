@@ -1,5 +1,10 @@
 @echo off
 
+if "%PHP_SDK_OS_ARCH%"=="" (
+	echo PHP SDK is not setup
+	exit /b 3
+)
+
 call %PHP_SDK_BIN_PATH%\phpsdk_version.bat
 echo.
 
