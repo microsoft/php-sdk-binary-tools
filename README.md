@@ -30,11 +30,11 @@ This reworked SDK is compatible with PHP 7.0 and above. The compatibility with p
 
 These are not included with the PHP SDK, but might be useful for the compilation and other tasks. While Visual C++ is the only required, the others might enable some additional functionality. Care yourself about making them available on your system.
 
-- Visual C++
-- clang
-- ICC
-- Git
-- Cppcheck
+- `Visual C++` - required always
+- `clang`      - optional, useful for experimental builds and for static analysis
+- `ICC`        - optional, useful for experimental builds
+- `Git`        - optional, useful for PHP source management
+- `Cppcheck`   - optional, used for static analysis
 
 # Usage
 
