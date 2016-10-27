@@ -22,13 +22,8 @@ if errorlevel 3 (
 	exit /b %errorlevel%
 )
 
-if "%3" neq "" (
-	if exist "%3" (
-		cmd /k "!PHP_SDK_VC_SHELL_CMD! && %~dp0\bin\phpsdk_setvars.bat && %~dp0\bin\phpsdk_dumpenv.bat && %3 && set prompt=$P$_$+$$$S"
-	) else (
-		echo The appended file %3 doesn't exist
-		exit /b 3
-	)
+if exist "%~dp0phpsdk-local.bat" (
+	cmd /k "!PHP_SDK_VC_SHELL_CMD! && %~dp0\bin\phpsdk_setvars.bat && %~dp0\bin\phpsdk_dumpenv.bat && %~dp0\phpsdk-local.bat && set prompt=$P$_$+$$$S"
 ) else (
 	cmd /k "!PHP_SDK_VC_SHELL_CMD! && %~dp0\bin\phpsdk_setvars.bat && %~dp0\bin\phpsdk_dumpenv.bat && set prompt=$P$_$+$$$S"
 )
