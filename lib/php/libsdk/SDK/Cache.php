@@ -1,8 +1,9 @@
 <?php
 
-namespace SDK\Dependency;
+namespace SDK;
 
 use SDK\Config;
+use SDK\Cache;
 use SDK\Exception;
 
 class Cache

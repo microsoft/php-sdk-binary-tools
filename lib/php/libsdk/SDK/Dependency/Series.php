@@ -3,6 +3,7 @@
 namespace SDK\Dependency;
 
 use SDK\Config;
+use SDK\Cache;
 use SDK\Exception;
 
 class Series
