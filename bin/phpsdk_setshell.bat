@@ -1,7 +1,8 @@
 @echo off
 
 if not defined PHP_SDK_RUN_FROM_ROOT (
-	echo phpsdk_shell.bat should not be run directly, use starter scripts in the PHP SDK root
+	echo This script should not be run directly.
+	echo Use starter scripts looking like phpsdk-^<crt^>-^<arch^>.bat in the PHP SDK root instead.
 	goto out_error
 )
 
