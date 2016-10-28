@@ -39,6 +39,8 @@ trait FileOps
 			return unlink($path);
 		}
 
+		$ret = true;
+
 		$iterator = new \RecursiveIteratorIterator(
 			new \RecursiveDirectoryIterator(
 				$path,
@@ -48,12 +50,12 @@ trait FileOps
 		);
 		foreach ($iterator as $item) {
 			if ($item->isDir()) {
-				rmdir($item->getPathname());
+				$ret = $ret && rmdir($item->getPathname());
 			} else {
-				unlink($item->getPathname());
+				$ret = $ret && unlink($item->getPathname());
 			}
 		}
-		return rmdir($path);
+		return $ret && rmdir($path);
 	}/*}}}*/
 
 	/* TODO islink and more checks */
