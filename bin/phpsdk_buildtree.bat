@@ -26,6 +26,8 @@ if "%PHP_SDK_ARCH%" NEQ "" (
 	MD %_%\vc14\x64\deps\include
 )
 
+set _=
+
 GOTO EXIT
 
 :help
