@@ -12,14 +12,14 @@ class Cache
 	protected $hash;
 
 	public function __construct(string $id)
-	{
+	{/*{{{*/
 		$this->id = $id;
 		$this->hash = md5($id);
 		/* XXX pass as arg, fine for now. */
-	}
+	}/*}}}*/
 
 	protected function getCacheablePath(string $path, bool $relative = false) : string
-	{
+	{/*{{{*/
 		if ($relative) {
 			$dir = Config::getCacheDir();
 			$name = $path;
@@ -29,15 +29,15 @@ class Cache
 		}
 
 		return $dir . DIRECTORY_SEPARATOR . $this->hash . "." . $name;
-	}
+	}/*}}}*/
 
 	public function fileIsCached(string $path, bool $relative = false) : bool
-	{
+	{/*{{{*/
 		return file_exists($this->getCacheablePath($path, $relative));
-	}
+	}/*}}}*/
 
 	public function cachedContentDiffers(string $path, string $content, bool $relative = false) : bool
-	{
+	{/*{{{*/
 		$p = $this->getCacheablePath($path, $relative);
 		
 		if (!file_exists($p)) {
@@ -48,19 +48,19 @@ class Cache
 		$new_sum = md5($content);
 
 		return $old_sum != $new_sum;
-	}
+	}/*}}}*/
 
 	public function cacheContent(string $path, string $content, bool $relative = false)
-	{
+	{/*{{{*/
 		$p = $this->getCacheablePath($path, $relative);
 
 		if (strlen($content) !== file_put_contents($p, $content)) {
 			throw new Exception("Couldn't cache '$p'");
 		}
-	}
+	}/*}}}*/
 
 	public function getCachedContent(string $path, bool $relative = false)
-	{
+	{/*{{{*/
 		$p = $this->getCacheablePath($path, $relative);
 
 		if ($this->isFileCached($p)) {
@@ -68,7 +68,7 @@ class Cache
 		}
 
 		return "";
-	}
+	}/*}}}*/
 }
 
 /*

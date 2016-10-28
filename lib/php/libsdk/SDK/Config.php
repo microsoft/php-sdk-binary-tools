@@ -25,50 +25,52 @@ class Config
 	protected static $depsLocalPath = NULL;
 
 	public static function getDepsHost() : string
-	{
+	{/*{{{*/
 		return self::$depsHost;
-	}
+	}/*}}}*/
+
 	public static function getDepsPort() : string
-	{
+	{/*{{{*/
 		return self::$depsPort;
-	}
+	}/*}}}*/
+
 	public static function getDepsBaseUri() : string
-	{
+	{/*{{{*/
 		return self::$depsBaseUri;
-	}
+	}/*}}}*/
 
 	public static function setCurrentArchName(string $arch)
-	{
+	{/*{{{*/
 		self::$currentArchName = $arch;
-	}	
+	}	/*}}}*/
 
 	public static function getCurrentArchName() 
-	{
+	{/*{{{*/
 		return self::$currentArchName;
-	}	
+	}	/*}}}*/
 
 	public static function setCurrentCrtName(string $crt)
-	{
+	{/*{{{*/
 		self::$currentCrtName = $crt;
-	}	
+	}	/*}}}*/
 
 	public static function getCurrentCrtName()
-	{
+	{/*{{{*/
 		return self::$currentCrtName;
-	}	
+	}	/*}}}*/
 
 	public static function setCurrentStabilityName(string $stability)
-	{
+	{/*{{{*/
 		self::$currentStabilityName = $stability;
-	}	
+	}	/*}}}*/
 
 	public static function getCurrentStabilityName()
-	{
+	{/*{{{*/
 		return self::$currentStabilityName;
-	}	
+	}	/*}}}*/
 
 	public static function getKnownBranches() : array
-	{
+	{/*{{{*/
 		if (empty(self::$knownBranches)) {
 			$cache_file = "known_branches.txt";
 			$cache = new Cache(self::getDepsLocalPath());
@@ -101,24 +103,24 @@ class Config
 		}
 
 		return self::$knownBranches;
-	}
+	}/*}}}*/
 
 	public static function setCurrentBranchName(string $name)
-	{
+	{/*{{{*/
 		if (!array_key_exists($name, self::getKnownBranches())) {
 		//	throw new Exception("Unsupported branch '$name'");
 		}
 
 		self::$currentBranchName = $name;
-	}
+	}/*}}}*/
 
 	public static function getCurrentBranchName()
-	{
+	{/*{{{*/
 		return self::$currentBranchName;
-	}
+	}/*}}}*/
 
 	public static function getCurrentBranchData() : array
-	{
+	{/*{{{*/
 		$ret = array();
 		$branches = self::getKnownBranches();
 
@@ -166,15 +168,15 @@ class Config
 		}
 
 		return $ret; 
-	}
+	}/*}}}*/
 
 	public static function getSdkNugetFeedUrl() : string
-	{
+	{/*{{{*/
 		return self::$sdkNugetFeedUrl;
-	}
+	}/*}}}*/
 
 	public static function getSdkPath()
-	{
+	{/*{{{*/
 		$path = getenv("PHP_SDK_PATH");
 
 		if (!$path) {
@@ -187,10 +189,10 @@ class Config
 		}
 
 		return $path;
-	}
+	}/*}}}*/
 
 	public static function getSdkVersion() : string
-	{
+	{/*{{{*/
 		$path = self::getSdkPath() . DIRECTORY_SEPARATOR . "VERSION";
 
 		if (!file_exists($path)) {
@@ -198,20 +200,20 @@ class Config
 		}
 
 		return file_get_contents($path);
-	}
+	}/*}}}*/
 
 	public static function getDepsLocalPath()
-	{
+	{/*{{{*/
 		return self::$depsLocalPath;
-	}
+	}/*}}}*/
 
 	public static function setDepsLocalPath(string $path)
-	{
+	{/*{{{*/
 		self::$depsLocalPath = $path;
-	}
+	}/*}}}*/
 
 	public static function getCacheDir() : string
-	{
+	{/*{{{*/
 		$path = self::getSdkPath() . DIRECTORY_SEPARATOR . ".cache";
 
 		if (!file_exists($path)) {
@@ -221,10 +223,10 @@ class Config
 		}
 
 		return $path;
-	}
+	}/*}}}*/
 
 	public static function getTmpDir() : string
-	{
+	{/*{{{*/
 		$path = self::getSdkPath() . DIRECTORY_SEPARATOR . ".tmp";
 
 		if (!file_exists($path)) {
@@ -234,7 +236,7 @@ class Config
 		}
 
 		return $path;
-	}
+	}/*}}}*/
 }
 
 /*

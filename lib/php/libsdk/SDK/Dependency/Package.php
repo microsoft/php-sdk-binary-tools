@@ -13,23 +13,23 @@ class Package
 	protected $filepath;
 
 	public function __construct(string $name, Series $series, Fetcher $fetcher)
-	{
+	{/*{{{*/
 		$this->name = $name;
 		$this->series = $series;
 		$this->fetcher = $fetcher;
-	}
+	}/*}}}*/
 
 	public function getUri() : string
-	{
+	{/*{{{*/
 		$base = Config::getDepsBaseUri();
 		$branch_data = Config::getCurrentBranchData();
 		$arch = $this->series->getArch();
 
 		return "$base/{$branch_data['crt']}/$arch/{$this->name}";
-	}
+	}/*}}}*/
 
 	public function retrieve(string $path)
-	{
+	{/*{{{*/
 		$this->filepath = $path . DIRECTORY_SEPARATOR . $this->name;
 
 		$cont = $this->fetcher->getByUri($this->getUri());
@@ -37,10 +37,10 @@ class Package
 		$fd = fopen($this->filepath, "wb");
 		fwrite($fd, $cont);
 		fclose($fd);
-	}
+	}/*}}}*/
 
 	public function unpack(string $path)
-	{
+	{/*{{{*/
 		if (!$this->filepath || !file_exists($this->filepath)) {
 			throw new Exception("Invalid filepath '{$this->filepath}'");
 		}
@@ -53,12 +53,12 @@ class Package
 		} else {
 			throw new Exception("Failed to unpack, error code '$ret'");
 		}
-	}
+	}/*}}}*/
 
 	public function cleanup()
-	{
+	{/*{{{*/
 		unlink($this->filepath);		
-	}
+	}/*}}}*/
 }
 
 /*

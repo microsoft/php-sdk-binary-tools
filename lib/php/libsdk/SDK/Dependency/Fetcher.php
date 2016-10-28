@@ -15,27 +15,27 @@ class Fetcher
 
 
 	public function __construct(string $host, int $port, string $arch = NULL, string $stability = NULL, Series $series = NULL)
-	{
+	{/*{{{*/
 		$this->stability = $stability;
 		$this->arch = $arch;
 		$this->host = $host;
 		$this->port = $port;
-	}
+	}/*}}}*/
 
 	public function getSeries() : Series
-	{
+	{/*{{{*/
 		return $this->series;
-	}
+	}/*}}}*/
 
 	public function setSeries(Series $series)
-	{
+	{/*{{{*/
 		$this->series = $series;
-	}
+	}/*}}}*/
 
 	/* TODO more robust implementation. */
 	/* TODO implement indicator. */
 	public function getByUri($uri) : string
-	{
+	{/*{{{*/
 		$url = "http://{$this->host}:{$this->port}$uri";
 		$s = file_get_contents($url);
 
@@ -44,7 +44,7 @@ class Fetcher
 		}
 
 		return $s;
-	}
+	}/*}}}*/
 
 	/*protected function fetch($uri) : string
 	{

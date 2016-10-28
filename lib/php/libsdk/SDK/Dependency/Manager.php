@@ -18,7 +18,7 @@ class Manager
 	protected $fetcher;
 
 	public function __construct(string $path, string $stability, string $arch)
-	{
+	{/*{{{*/
 		$this->stability = $stability;
 		$this->arch = $arch;
 		$this->path = $path;
@@ -33,21 +33,21 @@ class Manager
 
 		$this->fetcher = $fetcher;
 		$this->series = $series;
-	}
+	}/*}}}*/
 
 	protected function getTmpSeriesPath()
-	{
+	{/*{{{*/
 		return Config::getTmpDir() . DIRECTORY_SEPARATOR . $this->series->getname();
-	}
+	}/*}}}*/
 
 	public function updatesAvailable() : bool
-	{
+	{/*{{{*/
 		return $this->series->updatesAvailable();
-	}
+	}/*}}}*/
 
 	/* TODO and implement --force. */
 	public function performUpdate(string &$msg = NULL)
-	{
+	{/*{{{*/
 		if (!$this->updatesAvailable()) {
 			$msg = "No updates are available";
 			return;
@@ -109,7 +109,7 @@ class Manager
 		if (isset($new_path)) {
 			$msg .= "Old dependencies backup is saved to '$new_path'.";
 		}
-	}
+	}/*}}}*/
 }
 
 /*

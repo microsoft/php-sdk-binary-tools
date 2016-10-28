@@ -8,7 +8,7 @@ use SDK\Exception;
 trait FileOps
 {
 	protected function md(string $name = "", bool $tmp = false) : string
-	{
+	{/*{{{*/
 		$ret = $name;
 
 		if (!$name) {
@@ -28,11 +28,11 @@ trait FileOps
 		}
 
 		return $ret;
-	}
+	}/*}}}*/
 
 	/* TODO is link and more checks. */
 	protected function rm(string $path) : bool
-	{
+	{/*{{{*/
 		if (!file_exists($path)) {
 			return false;
 		} else if (is_file($path)) {
@@ -54,11 +54,11 @@ trait FileOps
 			}
 		}
 		return rmdir($path);
-	}
+	}/*}}}*/
 
 	/* TODO islink and more checks */
 	protected function cp_or_mv(string $src, string $dst, callable $cb) : bool
-	{
+	{/*{{{*/
 		if (!file_exists($src)) {
 			return false;
 		} else if (is_file($src)) {
@@ -98,21 +98,21 @@ trait FileOps
 		}
 
 		return true;
-	}
+	}/*}}}*/
 
 	protected function cp(string $src, string $dst) : bool
-	{
+	{/*{{{*/
 		return $this->cp_or_mv($src, $dst, "copy");
-	}
+	}/*}}}*/
 
 	protected function mv(string $src, string $dst) : bool
-	{
+	{/*{{{*/
 		$ret = $this->cp_or_mv($src, $dst, "rename");
 
 		$ret = $ret && $this->rm($src);
 
 		return $ret;
-	}
+	}/*}}}*/
 }
 
 /*
