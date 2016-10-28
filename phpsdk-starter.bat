@@ -23,7 +23,7 @@ if errorlevel 3 (
 )
 
 if exist "%~dp0phpsdk-local.bat" (
-	cmd /k "!PHP_SDK_VC_SHELL_CMD! && %~dp0\bin\phpsdk_setvars.bat && %~dp0\bin\phpsdk_dumpenv.bat && %~dp0\phpsdk-local.bat && set prompt=$P$_$+$$$S"
+	cmd /k "!PHP_SDK_VC_SHELL_CMD! && %~dp0\bin\phpsdk_setvars.bat && %~dp0\bin\phpsdk_dumpenv.bat && %~dp0\phpsdk-local.bat && echo. && set prompt=$P$_$+$$$S"
 ) else (
 	cmd /k "!PHP_SDK_VC_SHELL_CMD! && %~dp0\bin\phpsdk_setvars.bat && %~dp0\bin\phpsdk_dumpenv.bat && set prompt=$P$_$+$$$S"
 )
