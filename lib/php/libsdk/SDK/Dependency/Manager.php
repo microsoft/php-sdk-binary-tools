@@ -5,9 +5,12 @@ namespace SDK\Dependency;
 use SDK\Config;
 use SDK\Cache;
 use SDK\Exception;
+use SDK\FileOps;
 
 class Manager
 {
+	use FileOps;
+
 	protected $stability;
 	protected $arch;
 	protected $path;
@@ -52,12 +55,9 @@ class Manager
 
 		$series_data = $this->series->getData();
 
-		$tmp_dir = Config::getTmpDir() . DIRECTORY_SEPARATOR . md5(uniqid());
-		$tmp_dir_packs = $tmp_dir . DIRECTORY_SEPARATOR . "packs";
-		$tmp_dir_deps = $tmp_dir . DIRECTORY_SEPARATOR . "deps";
-		mkdir($tmp_dir);
-		mkdir($tmp_dir_packs);
-		mkdir($tmp_dir_deps);
+		$tmp_dir = $this->md("", true);
+		$tmp_dir_packs = $this->md($tmp_dir . DIRECTORY_SEPARATOR . "packs");
+		$tmp_dir_deps = $this->md($tmp_dir . DIRECTORY_SEPARATOR . "deps");
 
 		foreach ($series_data as $item) {
 			echo "Processing package $item", PHP_EOL;
@@ -70,43 +70,43 @@ class Manager
 			unset($pkg);
 		}
 
-		if (file_exists($this->path)) {
-			$suffix = date("YmdHi");
-			$new_path = "{$this->path}.$suffix";
-			if (!rename($this->path, $new_path)) {
-				throw new Exception("Unable to rename '{$this->path}' to '$new_path'");
-			}
-		} else {
-			$up = dirname($this->path);
-			if (!file_exists($up)) {
-				if (!mkdir($up, 0755, true)) {
-					throw new Exception("Unable to create '{$this->path}'");
-				}
-			}
-		}
-
 		/* Clear, it is an extra handling. So far it's the only case, doing it this way. And, we have
 			no package definitions ATM to handle it otherwise. */
 		$extra = $tmp_dir_deps . DIRECTORY_SEPARATOR . "openssl.cnf";
 		if (file_exists($extra)) {
 			$tdir = $tmp_dir_deps . DIRECTORY_SEPARATOR . "template" . DIRECTORY_SEPARATOR . "ssl";
 
-			mkdir($tdir, 0755, true);
-			rename($extra, $tdir . DIRECTORY_SEPARATOR . "openssl.cnf");
+			$this->md($tdir);
+			$this->mv($extra, $tdir . DIRECTORY_SEPARATOR . "openssl.cnf");
 		}
 
-		if (!rename($tmp_dir_deps, $this->path)) {
-			throw new Exception("Unable to rename '$tmp_dir_deps' to '{$this->path}'");
+		if (file_exists($this->path)) {
+			$suffix = date("YmdHi");
+			$new_path = "{$this->path}.$suffix";
+
+			/* This is fine, it's gonna be on the same drive. */
+			if (!$this->mv($this->path, $new_path)) {
+				throw new Exception("Unable to rename '{$this->path}' to '$new_path'");
+			}
+		} else {
+			$up = dirname($this->path);
+			if (!file_exists($up)) {
+				if (!$this->md($up)) {
+					throw new Exception("Unable to create '{$this->path}'");
+				}
+			}
 		}
 
-		rmdir($tmp_dir_packs);
-		rmdir($tmp_dir);
+		$this->mv($tmp_dir_deps, $this->path);
+
+		$this->rm($tmp_dir_packs);
+		$this->rm($tmp_dir);
 
 		$this->series->cache();
 
 		/* save new series file, move the updated deps and backup the old ones, cleanup.*/
-		$msg = "Updates performed successfully. ";
-		$msg .= "Updated dependencies was saved to '{$this->path}'. ";
+		$msg = "Updates performed successfully. " . PHP_EOL;
+		$msg .= "Updated dependencies was saved to '{$this->path}'. " . PHP_EOL;
 		if (isset($new_path)) {
 			$msg .= "Old dependencies dir is moved to '$new_path'.";
 		}
