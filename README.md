@@ -4,17 +4,18 @@ PHP SDK is a tool kit for Windows PHP builds
 
 # License
 
-BSD
+The PHP SDK itself and the SDK own tools are licensed under the BSD 2-Clause license. With the usage of the other tools, you accept the respective licenses.
 
 # Overview
 
-This reworked SDK is compatible with PHP 7.0 and above. The compatibility with php-sdk-binary-tools-20110915.zip available from windows.php.net is kept. Though, some irrelevant tools was removed. Newer tools and workflows are now possible. The toolset consists on a mix of the hand written scripts, selected MSYS2 parts and standalone programs.
+The reworked SDK is compatible with PHP 7.0 and above. The compatibility with php-sdk-binary-tools-20110915.zip available from windows.php.net is kept. Though, some irrelevant tools was removed. Newer tools and workflows are now possible. The toolset consists on a mix of the hand written scripts, selected MSYS2 parts and standalone programs.
+
+# Requirements
+
+- `Visual C++ 2015` must be installed prior SDK usage.
+- if `Cygwin` is installed, please read notes in the pitfalls section
 
 # Tools
-
-## Required
-
-- `Visual C++ 2015` is required and must to be installed prior SDK usage.
 
 ## SDK
 
@@ -22,9 +23,9 @@ This reworked SDK is compatible with PHP 7.0 and above. The compatibility with p
 - `phpsdk_deps`      - check and handle dependency libraries
 - `phpsdk_version`   - show SDK version
 - `phpsdk_dllmap`    - create a JSON listing of DLLs contained in zip files
-- minimal `PHP` distribution is available through the PHP_SDK_PHP_CMD variable. 
+- starter scripts, named `phpsdk-&lt;crt&gt;-&lt;arch&gt;`
 
-## MSYS2
+## Other tools
 
 - `bison` 3.0.2, `re2c` 0.15.3
 - `awk`, `gawk`, `sed`, `grep`
@@ -62,6 +63,10 @@ TODO more extensive documentation on the wiki
 
 - `git clone https://github.com/OSTC/php-sdk-binary-tools.git c:\php-sdk`
 - follow the instructions on the PHP [wiki page](https://wiki.php.net/internals/windows/stepbystepbuild "PHP wiki page")
+
+# Extending
+
+The SDK tools are KISS and should be kept so. Basic tools are implemented as simple batch script. The minimalistic `PHP` is available for internal SDK purposes. It can be used, if more complexity is required. If you have an idea for some useful tool, please open a ticket or PR, so it can be discussed, implemented and added to the SDK.
 
 # Pitfalls
 
