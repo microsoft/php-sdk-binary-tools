@@ -8,22 +8,25 @@ The PHP SDK itself and the SDK own tools are licensed under the BSD 2-Clause lic
 
 # Overview
 
-The reworked SDK is compatible with PHP 7.0 and above. The compatibility with php-sdk-binary-tools-20110915.zip available from windows.php.net is kept. Though, some irrelevant tools was removed. Newer tools and workflows are now possible. The toolset consists on a mix of the hand written scripts, selected MSYS2 parts and standalone programs.
+The PHP SDK 2.0 is compatible with PHP 7.0 and above. The compatibility with older versions, eq. php-sdk-binary-tools-20110915.zip available from windows.php.net previously, is kept. Though, some irrelevant tools was removed. Newer tools are now available, better workflows are now possible. The toolset consists on a mix of the hand written scripts, selected MSYS2 parts and standalone programs.
 
 # Requirements
 
-- `Visual C++ 2015` must be installed prior SDK usage.
+- `Visual C++ 2015` must be installed prior SDK usage
 - if `Cygwin` is installed, please read notes in the pitfalls section
+- if a 64-bit build is intended, a 64-bit system is required. Cross compilation of 64-bit on 32-bit system is not supported at the moment
 
 # Tools
 
+All the tools included are either scripts or 32-bit binaries. They are therefore runable on any of x86 or x64 Windows system.
+
 ## SDK
 
+- starter scripts, named phpsdk-&lt;crt&gt;-&lt;arch&gt;.bat
 - `phpsdk_buildtree` - initialize the development filesystem structure
-- `phpsdk_deps`      - check and handle dependency libraries
+- `phpsdk_deps`      - handle dependency libraries
 - `phpsdk_version`   - show SDK version
 - `phpsdk_dllmap`    - create a JSON listing of DLLs contained in zip files
-- starter scripts, named `phpsdk-&lt;crt&gt;-&lt;arch&gt;`
 
 ## Other tools
 
@@ -34,43 +37,61 @@ The reworked SDK is compatible with PHP 7.0 and above. The compatibility with ph
 - `7za`, `zip`, `unzip`, `unzipsfx`
 - `wget`
 
-## Not included
+## Optional, not included
 
-These are not included with the PHP SDK, but might be useful for the compilation and other tasks. While Visual C++ is the only required, the others might enable some additional functionality. Care yourself about making them available on your system.
+These are not included with the PHP SDK, but might be useful. While Visual C++ is the only required, the others might enable some additional functionality. Care yourself about making them available on your system, if relevant.
 
-- `Git`        - optional, useful for PHP source management
-- `Cppcheck`   - optional, used for static analysis
-- `clang`      - optional, useful for experimental builds and for static analysis
-- `ICC`        - optional, useful for experimental builds
+- `Git`        - useful for PHP source management
+- `Cppcheck`   - used for static analysis
+- `clang`      - useful for experimental builds and for static analysis
+- `ICC`        - useful for experimental builds
 
 # Usage
+
+The PHP SDK should be unzipped into the shortest possible path, preferrably into the drive root.
+
+Usually, the first step to start the PHP SDK is by invoking one of the suitable starter scripts. This automatically puts the console on the correct environment relevant for the desired PHP build configuration.
+
+It is not required to hold the source in the PHP SDK directory. It could be useful, for example, to simplify the SDK updates.
 
 ## Basic usage example
 
 - `git clone https://github.com/OSTC/php-sdk-binary-tools.git c:\php-sdk`
 - `cd c:\php-sdk`
 - `git checkout new_binary_tools`
-- either run or click on `phpsdk-vc14-x64.bat` in the SDK root
-- `cd` to c:\php-sdk and click on `phpsdk-vc14-x64.bat` in the SDK root
+- either run or click on `phpsdk-vc14-x64.bat` in the PHP SDK root
+- `cd` to c:\php-sdk and click on `phpsdk-vc14-x64.bat` in the PHP SDK root
 - `phpsdk_buildtree phpmaster`
 - `git clone https://github.com/php/php-src.git && cd php-src`, or fetch a zipball
 - `phpsdk_deps --update --branch master`
 - do the build, eg. `buildconf && configure --enable-cli && nmake`
 
-TODO more extensive documentation on the wiki
+TODO more extensive documentation on the wiki.
 
-## Staying compatible with the older version of the SDK
+## The old way
 
 - `git clone https://github.com/OSTC/php-sdk-binary-tools.git c:\php-sdk`
 - follow the instructions on the PHP [wiki page](https://wiki.php.net/internals/windows/stepbystepbuild "PHP wiki page")
 
+# Customizing
+
+A sript called phpsdk-local.bat has to be put into the PHP SDK root. If present, it will be automatically picked up by the starter script. A template for such a script is included with the PHP SDK.
+
+# Upgrading
+
+- backup phpsdk-local.bat
+- backup the source trees, contained in the PHP SDK root
+- move the PHP SDK folder into trash
+- download, unpack and the new PHP SDK version under the same path
+
 # Extending
 
-The SDK tools are KISS and should be kept so. Basic tools are implemented as simple batch script. The minimalistic `PHP` is available for internal SDK purposes. It can be used, if more complexity is required. If you have an idea for some useful tool, please open a ticket or PR, so it can be discussed, implemented and added to the SDK.
+The SDK tools are KISS and should be kept so. Basic tools are implemented as simple batch script. The minimalistic `PHP` is available for internal SDK purposes. It can be used, if more complexity is required. If you have an idea for some useful tool or workflow, please open a ticket or PR, so it can be discussed, implemented and added to the SDK. By contributing an implementation, you should also accept the SDK license.
 
 # Pitfalls
 
 - SDK or PHP sources put into paths including spaces might cause issue.
+- SDK or PHP sources put into too long paths, will cause an issue.
 - If Cygwin is installed, it might cause issues. If it's unavoidable, to have Cygwin on the same machine, ensure SDK preceeds it on the PATH.
 - Tools, based on MSYS2, only accept paths with forward slashes.
 
