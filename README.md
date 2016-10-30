@@ -75,7 +75,11 @@ TODO more extensive documentation on the wiki.
 
 # Customizing
 
-A sript called phpsdk-local.bat has to be put into the PHP SDK root. If present, it will be automatically picked up by the starter script. A template for such a script is included with the PHP SDK.
+A sript called phpsdk-local.bat has to be put into the PHP SDK root. If present, it will be automatically picked up by the starter script. A template for such a script is included with the PHP SDK. This allows to setup additional environment.
+
+The starter scripts can be also easy integrated with the consoles other than standard cmd.exe. For the reference, here's an example ConEmu task
+
+`C:\php-sdk\phpsdk-vc14-x64.bat -cur_console:d:C:\php-sdk\php70\vc14\x64\php-src`
 
 # Upgrading
 
