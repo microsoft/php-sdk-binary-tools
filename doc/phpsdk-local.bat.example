@@ -1,0 +1,20 @@
+@echo off
+
+set PGSQL_TEST_CONNSTR=host=127.0.0.1 dbname=test port=5432 user=test password=test
+set PDO_PGSQL_TEST_DSN=pgsql:host=127.0.0.1 port=5432 dbname=test user=test password=test
+
+set PHP_SDK_FIREBIRD_PATH=
+if "%PHP_SDK_ARCH%"=="x64" (
+	set PHP_SDK_FIREBIRD_PATH=E:\local_programs\Firebird-2.5.5.26952-0_x64\bin;
+ 	set PDO_FIREBIRD_TEST_DSN=firebird:dbname=127.0.0.1:E:\local_programs\Firebird-2.5.5.26952-0_x64\examples\empbuild\EMPLOYEE.FDB
+ 	set PDO_FIREBIRD_TEST_USER=SYSDBA
+ 	set PDO_FIREBIRD_TEST_PASS=masterkey
+)
+set PATH=%PHP_SDK_FIREBIRD_PATH%%PATH%
+
+set ODBC_TEST_USER=php_test2
+set ODBC_TEST_PASS=php_test2
+set ODBC_TEST_DSN=Driver={SQL Server};Server={W530-PHP-DEV\TEST2014};Database={php_test2};uid=%ODBC_TEST_USER%;pwd=%ODBC_TEST_PASS%
+
+set PDOTEST_DSN=odbc:%ODBC_TEST_DSN%
+

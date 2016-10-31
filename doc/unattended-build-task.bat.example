@@ -1,0 +1,19 @@
+
+rem Task batch example.
+rem Create a task, put an action with the following data:
+rem Action: start a program
+rem Program/script: C:\php-sdk\bin\task.exe
+rem Add arguments: "C:\php-sdk\phpsdk-starter.bat -c vc14 -a x64 -t C:\php-sdk\unattended-build-task.bat"
+rem Run the task
+
+pushd C:\php-sdk\php70\vc14\x64\php-src
+
+git pull --rebase
+
+nmake clean
+nmake > vs.log 2>&1
+
+popd
+
+exit
+
