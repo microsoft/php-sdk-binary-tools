@@ -78,7 +78,7 @@ TODO more extensive documentation on the wiki.
 
 ## Custom environment setup
 
-A sript called phpsdk-local.bat has to be put into the PHP SDK root. If present, it will be automatically picked up by the starter script. A template for such a script is included with the PHP SDK. This allows to setup additional environment.
+A sript called phpsdk-local.bat has to be put into the PHP SDK root. If present, it will be automatically picked up by the starter script. A template for such a script is included with the PHP SDK. This allows to meet any required preparations, that are not foreseen by the standard PHP SDK startup.
 
 ## Console emulator integration
 
@@ -93,7 +93,7 @@ An elementary functionality to run unattended builds is included. See an example
 # Upgrading
 
 - backup phpsdk-local.bat
-- backup the source trees, contained in the PHP SDK root
+- backup the source trees and any other custom files in the PHP SDK root
 - move the PHP SDK folder into trash
 - download, unpack and the new PHP SDK version under the same path
 
