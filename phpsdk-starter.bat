@@ -17,7 +17,7 @@ if "%ARCH%" equ "" goto help
 goto skip_help
 
 :help
-	echo Usage: phpsdk-starter -c ^<crt^> -a ^<arch^> -t [^<task_script.bat^>]
+	echo Usage: phpsdk-starter -c ^<crt^> -a ^<arch^> [-t ^<task_script.bat^>]
 	exit /b 0
 
 :skip_help
