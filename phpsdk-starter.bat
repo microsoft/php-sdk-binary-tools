@@ -5,10 +5,10 @@ setlocal enableextensions enabledelayedexpansion
 set IMHERE=%~dp0
 
 :getopt
-if /i %1 == -h goto help
-if /i %1 == -c set CRT=%2& shift
-if /i %1 == -a set ARCH=%2& shift
-if /i %1 == -t set TASK=%2& shift
+if /i "%1" equ "-h" goto help
+if /i "%1" equ "-c" set CRT=%2& shift
+if /i "%1" equ "-a" set ARCH=%2& shift
+if /i "%1" equ "-t" set TASK=%2& shift
 shift
 if not (%1)==() goto getopt
 
