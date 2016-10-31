@@ -49,7 +49,7 @@ These are not included with the PHP SDK, but might be useful. While Visual C++ i
 
 # Usage
 
-The PHP SDK should be unzipped into the shortest possible path, preferrably into the drive root.
+The PHP SDK should be unzipped into the shortest possible path, preferrably somewhere near the drive root.
 
 Usually, the first step to start the PHP SDK is by invoking one of the suitable starter scripts. This automatically puts the console on the correct environment relevant for the desired PHP build configuration.
 
