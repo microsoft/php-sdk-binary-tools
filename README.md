@@ -95,6 +95,7 @@ An elementary functionality to run unattended builds is included. See an example
 - backup the source trees and any other custom files in the PHP SDK root
 - move the PHP SDK folder into trash
 - download, unpack and the new PHP SDK version under the same path
+- move the custom files back into their respective places
 
 # Extending
 
