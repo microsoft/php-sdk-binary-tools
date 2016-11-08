@@ -60,8 +60,7 @@ It is not required to hold the source in the PHP SDK directory. It could be usef
 - `git clone https://github.com/OSTC/php-sdk-binary-tools.git c:\php-sdk`
 - `cd c:\php-sdk`
 - `git checkout new_binary_tools`
-- either run or click on `phpsdk-vc14-x64.bat` in the PHP SDK root
-- `cd` to c:\php-sdk and click on `phpsdk-vc14-x64.bat` in the PHP SDK root
+- invoke `phpsdk-vc14-x64.bat`
 - `phpsdk_buildtree phpmaster`
 - `git clone https://github.com/php/php-src.git && cd php-src`, or fetch a zipball
 - `phpsdk_deps --update --branch master`
