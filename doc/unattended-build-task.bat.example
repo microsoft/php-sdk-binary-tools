@@ -10,6 +10,11 @@ pushd C:\php-sdk\php70\vc14\x64\php-src
 
 git pull --rebase
 
+call phpsdk_deps -u -s staging
+
+call buildconf
+call configure --enable-snapshot-build --enable-debug-pack
+
 nmake clean
 nmake > vs.log 2>&1
 
