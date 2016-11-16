@@ -21,7 +21,7 @@ if "%PHP_SDK_ARCH%"=="x64" (
 )
 
 echo Visual C++:         %PHP_SDK_VC:~2%
-echo PHP-SDK path:       %PHP_SDK_PATH%
+echo PHP-SDK path:       %PHP_SDK_ROOT_PATH%
 
 
 exit /b

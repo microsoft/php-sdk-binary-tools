@@ -8,7 +8,7 @@ if "%PHP_SDK_PHP_CMD%"=="" (
 	)
 )
 
-%PHP_SDK_PHP_CMD% -r "echo 'PHP SDK ' . file_get_contents(getenv('PHP_SDK_PATH') . '\\VERSION');"
+%PHP_SDK_PHP_CMD% -r "echo 'PHP SDK ' . file_get_contents(getenv('PHP_SDK_ROOT_PATH') . '\\VERSION');"
 
 exit /b
 

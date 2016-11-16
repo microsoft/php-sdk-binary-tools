@@ -177,10 +177,10 @@ class Config
 
 	public static function getSdkPath()
 	{/*{{{*/
-		$path = getenv("PHP_SDK_PATH");
+		$path = getenv("PHP_SDK_ROOT_PATH");
 
 		if (!$path) {
-			throw new Exception("PHP_SDK_PATH isn't set!");
+			throw new Exception("PHP_SDK_ROOT_PATH isn't set!");
 		}
 
 		$path = realpath($path);
