@@ -34,8 +34,11 @@ if errorlevel 3 (
 
 if "%TASK%" neq "" (
 	if exist "%TASK%" (
-		cmd /c "!PHP_SDK_VC_SHELL_CMD! && %IMHERE%\bin\phpsdk_setvars.bat && %IMHERE%\bin\phpsdk_dumpenv.bat && %IMHERE%\phpsdk-local.bat && %TASK%"
-		rem exit 0
+		if exist "%IMHERE%phpsdk-local.bat" (
+			cmd /c "!PHP_SDK_VC_SHELL_CMD! && %IMHERE%\bin\phpsdk_setvars.bat && %IMHERE%\bin\phpsdk_dumpenv.bat && %IMHERE%\phpsdk-local.bat && %TASK%"
+		) else (
+			cmd /c "!PHP_SDK_VC_SHELL_CMD! && %IMHERE%\bin\phpsdk_setvars.bat && %IMHERE%\bin\phpsdk_dumpenv.bat && %TASK%"
+		)
 		exit /b
 	) else (
 		echo could not find the task file
