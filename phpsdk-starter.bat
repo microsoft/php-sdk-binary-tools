@@ -41,9 +41,9 @@ if "%TASK%" neq "" (
 		set TASK_ARGS=%TASK_ARGS:"=%
 
 		if exist "%IMHERE%phpsdk-local.bat" (
-			cmd /c "!PHP_SDK_VC_SHELL_CMD! && %IMHERE%\bin\phpsdk_setvars.bat && %IMHERE%\bin\phpsdk_dumpenv.bat && %IMHERE%\phpsdk-local.bat && %TASK% !TASK_ARGS!"
+			cmd /c "!PHP_SDK_VC_SHELL_CMD! && %IMHERE%\bin\phpsdk_setvars.bat && %IMHERE%\phpsdk-local.bat && %TASK% !TASK_ARGS!"
 		) else (
-			cmd /c "!PHP_SDK_VC_SHELL_CMD! && %IMHERE%\bin\phpsdk_setvars.bat && %IMHERE%\bin\phpsdk_dumpenv.bat && %TASK% !TASK_ARGS!"
+			cmd /c "!PHP_SDK_VC_SHELL_CMD! && %IMHERE%\bin\phpsdk_setvars.bat && %TASK% !TASK_ARGS!"
 		)
 		exit /b
 	) else (
