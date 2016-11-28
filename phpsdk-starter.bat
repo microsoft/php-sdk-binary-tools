@@ -48,7 +48,7 @@ if "%TASK%" neq "" (
 		exit /b
 	) else (
 		echo could not find the task file
-		exit 3
+		exit /b 3
 	)
 )
 
