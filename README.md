@@ -31,7 +31,7 @@ All the tools included are either scripts or 32-bit binaries. They are therefore
 
 ## Other tools
 
-- `bison` 3.0.2, `re2c` 0.15.3
+- `bison` 3.0.2, `re2c` 0.15.3, `lemon`
 - `awk`, `gawk`, `sed`, `grep`
 - `diff`, `diff3`, `patch`
 - `md5sum`, `sha1sum`, `sha224sum`, `sha256sum`, `sha384sum`, `sha512sum`
