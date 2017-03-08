@@ -14,8 +14,10 @@ if "%1"=="--help" goto :help
 if "%2"=="" goto :help
 
 if /i not "%1"=="vc14" (
+	if /i not "%1"=="vc15" (
 		echo Unsupported runtime "%1"
 		goto out_error
+	)
 )
 
 if /i not "%2"=="x64" (
@@ -43,17 +45,23 @@ if not errorlevel 1 (
 set TMPKEY=
 
 rem get vc base dir
-if /i "%PHP_SDK_OS_ARCH%"=="x64" (
-	set TMPKEY=HKLM\SOFTWARE\Wow6432Node\Microsoft\VisualStudio\%PHP_SDK_VC:~2%.0\Setup\VC
+if /i "%1"=="vc14" (
+	if /i "%PHP_SDK_OS_ARCH%"=="x64" (
+		set TMPKEY=HKLM\SOFTWARE\Wow6432Node\Microsoft\VisualStudio\%PHP_SDK_VC:~2%.0\Setup\VC
+	) else (
+		set TMPKEY=HKLM\SOFTWARE\Microsoft\VisualStudio\%PHP_SDK_VC:~2%.0\Setup\VC
+	)
+	reg query !TMPKEY! /v ProductDir >nul 2>&1
+	if errorlevel 1 (
+		echo Couldn't determine VC%PHP_SDK_VC:~2% directory
+		goto out_error;
+	)
+	for /f "tokens=2*" %%a in ('reg query !TMPKEY! /v ProductDir') do set PHP_SDK_VC_DIR=%%b
 ) else (
-	set TMPKEY=HKLM\SOFTWARE\Microsoft\VisualStudio\%PHP_SDK_VC:~2%.0\Setup\VC
+	rem vc15 support only for now, could parse out and pass on later
+	for /f "tokens=1* delims=: " %%a in ('%~dp0\vswhere -nologo -version 15 -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath -format text') do set PHP_SDK_VC_DIR=%%b\VC
+	set VSCMD_ARG_no_logo=nologo
 )
-reg query !TMPKEY! /v ProductDir >nul 2>&1
-if errorlevel 1 (
-	echo Couldn't determine VC%PHP_SDK_VC:~2% directory
-	goto out_error;
-)
-for /f "tokens=2*" %%a in ('reg query !TMPKEY! /v ProductDir') do set PHP_SDK_VC_DIR=%%b
 set TMPKEY=
 
 rem get sdk dir
@@ -75,9 +83,17 @@ set TMPKEY=
 
 
 if /i "%PHP_SDK_ARCH%"=="x64" (
-	set PHP_SDK_VC_SHELL_CMD="!PHP_SDK_VC_DIR!\vcvarsall.bat" amd64
+	if /i "%1"=="vc14" (
+		set PHP_SDK_VC_SHELL_CMD="!PHP_SDK_VC_DIR!\vcvarsall.bat" amd64
+	) else (
+		set PHP_SDK_VC_SHELL_CMD="!PHP_SDK_VC_DIR!\Auxiliary\Build\vcvarsall.bat" amd64
+	)
 ) else (
-	set PHP_SDK_VC_SHELL_CMD="!PHP_SDK_VC_DIR!\vcvarsall.bat" x86
+	if /i "%1"=="vc14" (
+		set PHP_SDK_VC_SHELL_CMD="!PHP_SDK_VC_DIR!\vcvarsall.bat" x86
+	) else (
+		set PHP_SDK_VC_SHELL_CMD="!PHP_SDK_VC_DIR!\Auxiliary\Build\vcvarsall.bat" x86
+	)
 )
 
 rem echo Visual Studio path %PHP_SDK_VC_DIR%
