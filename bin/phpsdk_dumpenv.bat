@@ -5,6 +5,8 @@ if "%PHP_SDK_OS_ARCH%"=="" (
 	exit /b 3
 )
 
+echo.
+
 call %PHP_SDK_BIN_PATH%\phpsdk_version.bat
 echo.
 
