@@ -64,7 +64,7 @@ if /i "%1"=="vc14" (
 )
 set TMPKEY=
 
-if /i not "%PHP_SDK_VC%"=="vc14" (
+if /i "%PHP_SDK_VC%"=="vc14" (
 	rem get sdk dir
 	if /i "%PHP_SDK_OS_ARCH%"=="x64" (
 		set TMPKEY=HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Microsoft SDKs\Windows\v8.1
