@@ -64,23 +64,24 @@ if /i "%1"=="vc14" (
 )
 set TMPKEY=
 
-rem get sdk dir
-if /i "%PHP_SDK_OS_ARCH%"=="x64" (
-	set TMPKEY=HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Microsoft SDKs\Windows\v8.1
-) else (
-	set TMPKEY=HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SDKs\Windows\v8.1
-)
-for /f "tokens=2*" %%a in ('reg query "!TMPKEY!" /v InstallationFolder') do (
-	if exist "%%b\Include\um\Windows.h" (
-		set PHP_SDK_WIN_SDK_DIR=%%b
+if /i not "%PHP_SDK_VC%"=="vc14" (
+	rem get sdk dir
+	if /i "%PHP_SDK_OS_ARCH%"=="x64" (
+		set TMPKEY=HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Microsoft SDKs\Windows\v8.1
+	) else (
+		set TMPKEY=HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SDKs\Windows\v8.1
 	)
+	for /f "tokens=2*" %%a in ('reg query "!TMPKEY!" /v InstallationFolder') do (
+		if exist "%%b\Include\um\Windows.h" (
+			set PHP_SDK_WIN_SDK_DIR=%%b
+		)
+	)
+	if not defined PHP_SDK_WIN_SDK_DIR (
+		echo Windows SDK not found.
+		goto out_error;
+	)
+	set TMPKEY=
 )
-if not defined PHP_SDK_WIN_SDK_DIR (
-	echo Windows SDK not found.
-	goto out_error;
-)
-set TMPKEY=
-
 
 if /i "%PHP_SDK_ARCH%"=="x64" (
 	if /i "%1"=="vc14" (
