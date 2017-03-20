@@ -134,8 +134,14 @@ class Config
 				throw new Exception("More than one CRT is available for branch '" . self::$currentBranchName . "', pass one explicitly.");
 			}
 
-			$crt = array_keys($branches[self::$currentBranchName])[0];
-			if ($cur_crt != $crt) {
+			$cur_crt_usable = false;
+			foreach (array_keys($branches[self::$currentBranchName]) as $crt) {
+				if ($cur_crt == $crt) {
+					$cur_crt_usable = true;
+					break;
+				}
+			}
+			if (!$cur_crt_usable) {
 				throw new Exception("The passed CRT '$cur_crt' doesn't match any availbale for branch '" . self::$currentBranchName . "'");
 			}
 			$data = $branches[self::$currentBranchName][$cur_crt];
