@@ -8,7 +8,7 @@ The PHP SDK itself and the SDK own tools are licensed under the BSD 2-Clause lic
 
 # Overview
 
-The PHP SDK 2.0 is compatible with PHP 7.0 and above. The compatibility with [older versions](http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-20110915.zip "php-sdk-binary-tools-20110915.zip")] , is kept. Though, some irrelevant tools was removed. Newer tools are now available, better workflows are now possible. The toolset consists on a mix of the hand written scripts, selected MSYS2 parts and standalone programs.
+The PHP SDK 2.0 is compatible with PHP 7.0 and above. The compatibility with [older versions](http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-20110915.zip "php-sdk-binary-tools-20110915.zip") , is kept. Though, some irrelevant tools was removed. Newer tools are now available, better workflows are now possible. The toolset consists on a mix of the hand written scripts, selected MSYS2 parts and standalone programs.
 
 # Requirements
 
