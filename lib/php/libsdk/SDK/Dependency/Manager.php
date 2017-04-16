@@ -47,11 +47,13 @@ class Manager
 
 	/* TODO and implement --force. */
 	/* FIXME implement rollback */
-	public function performUpdate(string &$msg = NULL)
+	public function performUpdate(string &$msg = NULL, bool $force = false)
 	{/*{{{*/
-		if (!$this->updatesAvailable()) {
-			$msg = "No updates are available";
-			return;
+		if (!$force) {
+			if (!$this->updatesAvailable()) {
+				$msg .= "No updates are available";
+				return;
+			}
 		}
 
 		$series_data = $this->series->getData();
@@ -106,7 +108,7 @@ class Manager
 		$this->series->cache();
 
 		/* save new series file, move the updated deps and backup the old ones, cleanup.*/
-		$msg = "Updates performed successfully. " . PHP_EOL;
+		$msg .= "Updates performed successfully. " . PHP_EOL;
 		if (isset($new_path)) {
 			$msg .= "Old dependencies backed up into '$new_path'.";
 		}

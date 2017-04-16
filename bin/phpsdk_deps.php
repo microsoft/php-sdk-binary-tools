@@ -5,7 +5,7 @@ include dirname(__FILE__) . "/../lib/php/libsdk/autoload.php";
 use SDK\Config;
 use SDK\Exception;
 
-$sopt = "s:cuhb:a:d:t:";
+$sopt = "s:cuhb:a:d:t:f";
 $lopt = array(
 	"branch:",
 	"update",
@@ -15,6 +15,7 @@ $lopt = array(
 	"crt:",
 	"help",
 	"deps:",
+	"force",
 );
 
 $cmd = NULL;
@@ -22,6 +23,7 @@ $stability = NULL;
 $arch = NULL;
 $branch = NULL;
 $crt = NULL;
+$force = false;
 
 try {
 
@@ -75,6 +77,11 @@ try {
 			case "t":
 			case "crt":
 				Config::setCurrentCrtName($val);
+				break;
+
+			case "f":
+			case "force":
+				$force = true;
 				break;
 		}
 	}
@@ -182,7 +189,10 @@ try {
 			}
 			break;
 		case "update":
-			$dm->performUpdate($msg);
+			if ($force) {
+				print "Forcing download.\n\n";
+			}
+			$dm->performUpdate($msg, $force);
 			msg($msg);
 			break;
 	}
@@ -208,6 +218,7 @@ function usage(int $code = -1)
 	echo "  -u --update    Update dependencies. If deps directory already exists, backup copy is created automatically.", PHP_EOL, PHP_EOL;
 	echo "Misc:", PHP_EOL;
 	echo "  -d --deps      Path to the dependencies directory. If omited, CWD is used to guess.", PHP_EOL;
+	echo "  -f --force     Force the operation even if there are no upgrades available.", PHP_EOL;
 	echo "  -h --help      Show help message.", PHP_EOL, PHP_EOL;
 	echo "Example: ", PHP_EOL;
 	echo "  phpsdk_deps -c -b master", PHP_EOL;
