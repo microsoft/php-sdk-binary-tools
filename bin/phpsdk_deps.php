@@ -5,7 +5,7 @@ include dirname(__FILE__) . "/../lib/php/libsdk/autoload.php";
 use SDK\Config;
 use SDK\Exception;
 
-$sopt = "s:cuhb:a:d:t:f";
+$sopt = "s:cuhb:a:d:t:fn";
 $lopt = array(
 	"branch:",
 	"update",
@@ -16,6 +16,7 @@ $lopt = array(
 	"help",
 	"deps:",
 	"force",
+	"no-backup",
 );
 
 $cmd = NULL;
@@ -24,6 +25,7 @@ $arch = NULL;
 $branch = NULL;
 $crt = NULL;
 $force = false;
+$backup = true;
 
 try {
 
@@ -82,6 +84,11 @@ try {
 			case "f":
 			case "force":
 				$force = true;
+				break;
+
+			case "n":
+			case "no-backup":
+				$backup = false;
 				break;
 		}
 	}
@@ -192,7 +199,7 @@ try {
 			if ($force) {
 				print "Replacing the current deps by the force option.\n\n";
 			}
-			$dm->performUpdate($msg, $force);
+			$dm->performUpdate($msg, $force, $backup);
 			msg($msg);
 			break;
 	}
@@ -219,6 +226,7 @@ function usage(int $code = -1)
 	echo "Misc:", PHP_EOL;
 	echo "  -d --deps      Path to the dependencies directory. If omited, CWD is used to guess.", PHP_EOL;
 	echo "  -f --force     Force the operation even if there are no upgrades available.", PHP_EOL;
+	echo "  -n --no-backup Replace the current dependencies without creating backup.", PHP_EOL;
 	echo "  -h --help      Show help message.", PHP_EOL, PHP_EOL;
 	echo "Example: ", PHP_EOL;
 	echo "  phpsdk_deps -c -b master", PHP_EOL;

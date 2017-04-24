@@ -47,7 +47,7 @@ class Manager
 
 	/* TODO and implement --force. */
 	/* FIXME implement rollback */
-	public function performUpdate(string &$msg = NULL, bool $force = false)
+	public function performUpdate(string &$msg = NULL, bool $force = false, bool $backup = true)
 	{/*{{{*/
 		if (!$force) {
 			if (!$this->updatesAvailable()) {
@@ -84,12 +84,18 @@ class Manager
 		}
 
 		if (file_exists($this->path)) {
-			$suffix = date("YmdHi");
-			$new_path = "{$this->path}.$suffix";
+			if ($backup) {
+				$suffix = date("YmdHi");
+				$new_path = "{$this->path}.$suffix";
 
-			/* This is fine, it's gonna be on the same drive. */
-			if (!$this->mv($this->path, $new_path)) {
-				throw new Exception("Unable to rename '{$this->path}' to '$new_path'");
+				/* This is fine, it's gonna be on the same drive. */
+				if (!$this->mv($this->path, $new_path)) {
+					throw new Exception("Unable to rename '{$this->path}' to '$new_path'");
+				}
+			} else {
+				if (!$this->rm($this->path)) {
+					throw new Exception("Unable to remove the current dependency dir at '{$this->path}'");
+				}
 			}
 		} else {
 			$up = dirname($this->path);
@@ -109,8 +115,10 @@ class Manager
 
 		/* save new series file, move the updated deps and backup the old ones, cleanup.*/
 		$msg .= "Updates performed successfully. " . PHP_EOL;
-		if (isset($new_path)) {
+		if ($backup) {
 			$msg .= "Old dependencies backed up into '$new_path'.";
+		} else {
+			$msg .= "No backup was created.";
 		}
 	}/*}}}*/
 }
