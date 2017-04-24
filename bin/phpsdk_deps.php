@@ -190,7 +190,7 @@ try {
 			break;
 		case "update":
 			if ($force) {
-				print "Forcing download.\n\n";
+				print "Replacing the current deps by the force option.\n\n";
 			}
 			$dm->performUpdate($msg, $force);
 			msg($msg);
