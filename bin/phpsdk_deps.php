@@ -167,6 +167,11 @@ try {
 			throw new Exception("Multiple CRTs are available for this branch, please choose one from " . implode(",", array_keys($branch)));
 		} else {
 			Config::setCurrentCrtName(array_keys($branch)[0]);
+
+			$active_crt = getenv("PHP_SDK_VC");
+			if (Config::getCurrentCrtName() != $active_crt && !$force) {
+				throw new Exception("Active CRT '$active_crt' differs from the branch CRT '" . Config::getCurrentCrtName() . "'.");
+			}
 		}
 	}
 
