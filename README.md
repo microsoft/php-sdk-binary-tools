@@ -15,10 +15,11 @@ The PHP SDK 2.0 is compatible with PHP 7.0 and above. The compatibility with [ol
 - `Visual C++ 2015` or `Visual C++ 2017` must be installed prior SDK usage
 - if `Cygwin` is installed, please read notes in the pitfalls section
 - if a 64-bit build is intended, a 64-bit system is required. Cross compilation of 64-bit on 32-bit system is not supported at the moment
+- The PHP SDK was successfully tested on Windows 7 or later, earlier versions might work but are not recommended
 
 # Tools
 
-All the tools included are either scripts or 32-bit binaries. They are therefore runable on any of x86 or x64 Windows system.
+All the tools included are either scripts or 32-bit binaries. They are therefore runable on any of x86 or x64 supported Windows system.
 
 ## SDK
 
