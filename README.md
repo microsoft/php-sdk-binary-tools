@@ -61,13 +61,13 @@ It is not required to hold the source in the PHP SDK directory. It could be usef
 - `git clone https://github.com/OSTC/php-sdk-binary-tools.git c:\php-sdk`
 - `cd c:\php-sdk`
 - `git checkout php-sdk-2.0.0` or later
-- invoke `phpsdk-vc14-x64.bat`
+- invoke `phpsdk-vc15-x64.bat`
 - `phpsdk_buildtree phpmaster`
 - `git clone https://github.com/php/php-src.git && cd php-src`, or fetch a zipball
 - `phpsdk_deps --update --branch master`
 - do the build, eg. `buildconf && configure --enable-cli && nmake`
 
-TODO more extensive documentation on the wiki.
+More extensive documentation can be found on the [wiki](https://wiki.php.net/internals/windows/stepbystepbuild_sdk_2 "PHP wiki page").
 
 ## The old way
 
@@ -78,7 +78,7 @@ TODO more extensive documentation on the wiki.
 
 ## Custom environment setup
 
-A sript called phpsdk-local.bat has to be put into the PHP SDK root. If present, it will be automatically picked up by the starter script. A template for such a script is included with the PHP SDK. This allows to automatically meet any required preparations, that are not foreseen by the standard PHP SDK startup. Be careful while creating your own phpsdk-local. It's your responsibility to ensure the regular PHP SDK startup isn't broken after phpsdk-local was injected into the startup sequence.
+A sript called phpsdk-local.bat has to be put into the PHP SDK root. If present, it will be automatically picked up by the starter script. A template for such a script is included with the PHP SDK. This allows to automatically meet any required preparations, that are not foreseen by the standard PHP SDK startup. Be careful while creating your own phpsdk-local. It's your responsibility to ensure the regular PHP SDK startup isn't broken after phpsdk-local.bat was injected into the startup sequence.
 
 ## Console emulator integration
 
@@ -93,10 +93,12 @@ An elementary functionality to run unattended builds is included. See an example
 # Upgrading
 
 - backup phpsdk-local.bat
-- backup the source trees and any other custom files in the PHP SDK root
+- backup the source trees and any other custom files in the PHP SDK root, if any present
 - move the PHP SDK folder into trash
 - download, unpack and the new PHP SDK version under the same path
-- move the custom files back into their respective places
+- move the custom files back in their respective places
+
+If the PHP SDK is kept as a git checkout, merely what is needed instead is to git fetch and to checkout an updated git tag.
 
 # Extending
 
@@ -108,4 +110,6 @@ The SDK tools are based on the KISS principle and should be kept so. Basic tools
 - SDK or PHP sources put into too long paths, will cause an issue.
 - If Cygwin is installed, it might cause issues. If it's unavoidable, to have Cygwin on the same machine, ensure SDK preceeds it on the PATH.
 - Tools, based on MSYS2, only accept paths with forward slashes.
+- Both Visual C++ toolset and the Windows SDK components have to be installed for the PHP SDK to work properly. 
+- The VC++ toolset is still requried, even if another compiler, fe. clang, is intended to be used.
 
