@@ -2,6 +2,9 @@
 
 setlocal enableextensions enabledelayedexpansion
 
+rem this will be eventually overridden by phpsdk_setvars, but nothing wrong to use the same name here
+set PHP_SDK_ROOT_PATH=%~dp0
+
 :getopt
 if /i "%1" equ "-h" goto help
 if /i "%1" equ "-c" set CRT=%2 & shift
@@ -25,8 +28,6 @@ set CRT=%CRT: =%
 set ARCH=%ARCH: =%
 
 set PHP_SDK_RUN_FROM_ROOT=1
-rem this will be eventually overridden by phpsdk_setvars, but nothing wrong to use the same name here
-set PHP_SDK_ROOT_PATH=%~dp0
 
 
 title PHP SDK
