@@ -37,6 +37,7 @@ if 14 gtr %TMP_CHK% (
 	set TMP_CHK=
 	goto out_error
 )
+set PHP_SDK_VC_NUM=%TMP_CHK%
 set TMP_CHK=
 
 if /i not "%2"=="x64" (
@@ -63,7 +64,7 @@ if not errorlevel 1 (
 set TMPKEY=
 
 rem get vc base dir
-if /i "%1"=="vc14" (
+if 15 gtr %PHP_SDK_VC_NUM% (
 	if /i "%PHP_SDK_OS_ARCH%"=="x64" (
 		set TMPKEY=HKLM\SOFTWARE\Wow6432Node\Microsoft\VisualStudio\%PHP_SDK_VC:~2%.0\Setup\VC
 	) else (
@@ -77,12 +78,12 @@ if /i "%1"=="vc14" (
 	for /f "tokens=2*" %%a in ('reg query !TMPKEY! /v ProductDir') do set PHP_SDK_VC_DIR=%%b
 ) else (
 	rem vc15 support only for now, could parse out and pass on later
-	for /f "tokens=1* delims=: " %%a in ('%~dp0\vswhere -nologo -version %PHP_SDK_VC:~2% -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath -format text') do set PHP_SDK_VC_DIR=%%b\VC
+	for /f "tokens=1* delims=: " %%a in ('%~dp0\vswhere -nologo -version %PHP_SDK_VC_NUM% -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath -format text') do set PHP_SDK_VC_DIR=%%b\VC
 	set VSCMD_ARG_no_logo=nologo
 )
 set TMPKEY=
 
-if /i "%PHP_SDK_VC%"=="vc14" (
+if 15 gtr %PHP_SDK_VC_NUM% (
 	rem get sdk dir
 	if /i "%PHP_SDK_OS_ARCH%"=="x64" (
 		set TMPKEY=HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Microsoft SDKs\Windows\v8.1
@@ -102,13 +103,13 @@ if /i "%PHP_SDK_VC%"=="vc14" (
 )
 
 if /i "%PHP_SDK_ARCH%"=="x64" (
-	if /i "%1"=="vc14" (
+	if 15 gtr %PHP_SDK_VC_NUM% (
 		set PHP_SDK_VC_SHELL_CMD="!PHP_SDK_VC_DIR!\vcvarsall.bat" amd64
 	) else (
 		set PHP_SDK_VC_SHELL_CMD="!PHP_SDK_VC_DIR!\Auxiliary\Build\vcvarsall.bat" amd64
 	)
 ) else (
-	if /i "%1"=="vc14" (
+	if 15 gtr %PHP_SDK_VC_NUM% (
 		set PHP_SDK_VC_SHELL_CMD="!PHP_SDK_VC_DIR!\vcvarsall.bat" x86
 	) else (
 		set PHP_SDK_VC_SHELL_CMD="!PHP_SDK_VC_DIR!\Auxiliary\Build\vcvarsall.bat" x86

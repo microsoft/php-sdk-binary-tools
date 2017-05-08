@@ -22,7 +22,7 @@ if "%PHP_SDK_ARCH%"=="x64" (
 	echo Build architecture: 32-bit 
 )
 
-echo Visual C++:         %PHP_SDK_VC:~2%
+echo Visual C++:         %PHP_SDK_VC_NUM%
 echo PHP-SDK path:       %PHP_SDK_ROOT_PATH%
 
 
