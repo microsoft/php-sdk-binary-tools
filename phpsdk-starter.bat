@@ -4,6 +4,7 @@ setlocal enableextensions enabledelayedexpansion
 
 rem this will be eventually overridden by phpsdk_setvars, but nothing wrong to use the same name here
 set PHP_SDK_ROOT_PATH=%~dp0
+set PHP_SDK_ROOT_PATH=%PHP_SDK_ROOT_PATH:~0,-1%
 
 :getopt
 if /i "%1" equ "-h" goto help
@@ -32,7 +33,7 @@ set PHP_SDK_RUN_FROM_ROOT=1
 
 title PHP SDK
 
-call %PHP_SDK_ROOT_PATH%bin\phpsdk_setshell.bat %CRT% %ARCH%
+call %PHP_SDK_ROOT_PATH%\bin\phpsdk_setshell.bat %CRT% %ARCH%
 
 set PHP_SDK_RUN_FROM_ROOT=
 set CRT=
@@ -46,7 +47,7 @@ if "%TASK%" neq "" (
 	if exist "%TASK%" (
 		set TASK_ARGS=%TASK_ARGS:"=%
 
-		if exist "%PHP_SDK_ROOT_PATH%phpsdk-local.bat" (
+		if exist "%PHP_SDK_ROOT_PATH%\phpsdk-local.bat" (
 			cmd /c "!PHP_SDK_VC_SHELL_CMD! && %PHP_SDK_ROOT_PATH%\bin\phpsdk_setvars.bat && %PHP_SDK_ROOT_PATH%\phpsdk-local.bat && %TASK% !TASK_ARGS!"
 		) else (
 			cmd /c "!PHP_SDK_VC_SHELL_CMD! && %PHP_SDK_ROOT_PATH%\bin\phpsdk_setvars.bat && %TASK% !TASK_ARGS!"
@@ -60,7 +61,7 @@ if "%TASK%" neq "" (
 	)
 )
 
-if exist "%PHP_SDK_ROOT_PATH%phpsdk-local.bat" (
+if exist "%PHP_SDK_ROOT_PATH%\phpsdk-local.bat" (
 	cmd /k "!PHP_SDK_VC_SHELL_CMD! && %PHP_SDK_ROOT_PATH%\bin\phpsdk_setvars.bat && %PHP_SDK_ROOT_PATH%\bin\phpsdk_dumpenv.bat && %PHP_SDK_ROOT_PATH%\phpsdk-local.bat && echo. && set prompt=$P$_$+$$$S"
 ) else (
 	cmd /k "!PHP_SDK_VC_SHELL_CMD! && %PHP_SDK_ROOT_PATH%\bin\phpsdk_setvars.bat && %PHP_SDK_ROOT_PATH%\bin\phpsdk_dumpenv.bat && set prompt=$P$_$+$$$S"
