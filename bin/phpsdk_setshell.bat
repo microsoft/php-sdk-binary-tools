@@ -20,13 +20,13 @@ if /i not "%PHP_SDK_VC:~0,2%"=="vc" (
 	set PHP_SDK_VC=
 	goto out_error
 )
-if ""=="%PHP_SDK_VC:~2,2%" (
+if ""=="%PHP_SDK_VC:~2%" (
 	goto malformed_vc_string
 )
-set /a TMP_CHK=%PHP_SDK_VC:~2,2%
+set /a TMP_CHK=%PHP_SDK_VC:~2%
 if 14 gtr %TMP_CHK% (
 	if "0"=="%TMP_CHK%" (
-		if not "0"=="%PHP_SDK_VC:~2,2%" (
+		if not "0"=="%PHP_SDK_VC:~2%" (
 			set TMP_CHK=
 			goto malformed_vc_string
 		)
@@ -77,7 +77,7 @@ if /i "%1"=="vc14" (
 	for /f "tokens=2*" %%a in ('reg query !TMPKEY! /v ProductDir') do set PHP_SDK_VC_DIR=%%b
 ) else (
 	rem vc15 support only for now, could parse out and pass on later
-	for /f "tokens=1* delims=: " %%a in ('%~dp0\vswhere -nologo -version %PHP_SDK_VC:~2,2% -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath -format text') do set PHP_SDK_VC_DIR=%%b\VC
+	for /f "tokens=1* delims=: " %%a in ('%~dp0\vswhere -nologo -version %PHP_SDK_VC:~2% -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath -format text') do set PHP_SDK_VC_DIR=%%b\VC
 	set VSCMD_ARG_no_logo=nologo
 )
 set TMPKEY=
