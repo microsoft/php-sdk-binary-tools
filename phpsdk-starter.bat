@@ -2,8 +2,6 @@
 
 setlocal enableextensions enabledelayedexpansion
 
-set IMHERE=%~dp0
-
 :getopt
 if /i "%1" equ "-h" goto help
 if /i "%1" equ "-c" set CRT=%2 & shift
@@ -27,10 +25,17 @@ set CRT=%CRT: =%
 set ARCH=%ARCH: =%
 
 set PHP_SDK_RUN_FROM_ROOT=1
+rem this will be eventually overridden by phpsdk_setvars, but nothing wrong to use the same name here
+set PHP_SDK_ROOT_PATH=%~dp0
+
 
 title PHP SDK
 
-call %IMHERE%bin\phpsdk_setshell.bat %CRT% %ARCH%
+call %PHP_SDK_ROOT_PATH%bin\phpsdk_setshell.bat %CRT% %ARCH%
+
+set PHP_SDK_RUN_FROM_ROOT=
+set CRT=
+set ARCH=
 
 if errorlevel 3 (
 	exit /b %errorlevel%
@@ -40,25 +45,25 @@ if "%TASK%" neq "" (
 	if exist "%TASK%" (
 		set TASK_ARGS=%TASK_ARGS:"=%
 
-		if exist "%IMHERE%phpsdk-local.bat" (
-			cmd /c "!PHP_SDK_VC_SHELL_CMD! && %IMHERE%\bin\phpsdk_setvars.bat && %IMHERE%\phpsdk-local.bat && %TASK% !TASK_ARGS!"
+		if exist "%PHP_SDK_ROOT_PATH%phpsdk-local.bat" (
+			cmd /c "!PHP_SDK_VC_SHELL_CMD! && %PHP_SDK_ROOT_PATH%\bin\phpsdk_setvars.bat && %PHP_SDK_ROOT_PATH%\phpsdk-local.bat && %TASK% !TASK_ARGS!"
 		) else (
-			cmd /c "!PHP_SDK_VC_SHELL_CMD! && %IMHERE%\bin\phpsdk_setvars.bat && %TASK% !TASK_ARGS!"
+			cmd /c "!PHP_SDK_VC_SHELL_CMD! && %PHP_SDK_ROOT_PATH%\bin\phpsdk_setvars.bat && %TASK% !TASK_ARGS!"
 		)
+		set TASK=
 		exit /b
 	) else (
 		echo could not find the task file
+		set TASK=
 		exit /b 3
 	)
 )
 
-if exist "%IMHERE%phpsdk-local.bat" (
-	cmd /k "!PHP_SDK_VC_SHELL_CMD! && %IMHERE%\bin\phpsdk_setvars.bat && %IMHERE%\bin\phpsdk_dumpenv.bat && %IMHERE%\phpsdk-local.bat && echo. && set prompt=$P$_$+$$$S"
+if exist "%PHP_SDK_ROOT_PATH%phpsdk-local.bat" (
+	cmd /k "!PHP_SDK_VC_SHELL_CMD! && %PHP_SDK_ROOT_PATH%\bin\phpsdk_setvars.bat && %PHP_SDK_ROOT_PATH%\bin\phpsdk_dumpenv.bat && %PHP_SDK_ROOT_PATH%\phpsdk-local.bat && echo. && set prompt=$P$_$+$$$S"
 ) else (
-	cmd /k "!PHP_SDK_VC_SHELL_CMD! && %IMHERE%\bin\phpsdk_setvars.bat && %IMHERE%\bin\phpsdk_dumpenv.bat && set prompt=$P$_$+$$$S"
+	cmd /k "!PHP_SDK_VC_SHELL_CMD! && %PHP_SDK_ROOT_PATH%\bin\phpsdk_setvars.bat && %PHP_SDK_ROOT_PATH%\bin\phpsdk_dumpenv.bat && set prompt=$P$_$+$$$S"
 )
-
-set PHP_SDK_RUN_FROM_ROOT=
 
 exit /b
 
