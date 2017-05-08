@@ -13,12 +13,28 @@ if "%1"=="-h" goto :help
 if "%1"=="--help" goto :help
 if "%2"=="" goto :help
 
-if /i not "%1"=="vc14" (
-	if /i not "%1"=="vc15" (
-		echo Unsupported runtime "%1"
-		goto out_error
-	)
+set PHP_SDK_VC=%1
+if /i not "%PHP_SDK_VC:~0,2%"=="vc" (
+:malformed_vc_string
+	echo Malformed CRT string "%1"
+	set PHP_SDK_VC=
+	goto out_error
 )
+set /a TMP_CHK=%PHP_SDK_VC:~2,7%
+if 14 gtr %TMP_CHK% (
+	if "0"=="%TMP_CHK%" (
+		if not "0"=="%PHP_SDK_VC:~2,7%" (
+			set TMP_CHK=
+			goto malformed_vc_string
+		)
+	)
+
+	echo At least vc14 is required
+	set PHP_SDK_VC=
+	set TMP_CHK=
+	goto out_error
+)
+set TMP_CHK=
 
 if /i not "%2"=="x64" (
 	if /i not "%2"=="x86" (
@@ -27,7 +43,6 @@ if /i not "%2"=="x64" (
 	)
 )
 
-set PHP_SDK_VC=%1
 set PHP_SDK_ARCH=%2
 
 rem check OS arch
@@ -59,7 +74,7 @@ if /i "%1"=="vc14" (
 	for /f "tokens=2*" %%a in ('reg query !TMPKEY! /v ProductDir') do set PHP_SDK_VC_DIR=%%b
 ) else (
 	rem vc15 support only for now, could parse out and pass on later
-	for /f "tokens=1* delims=: " %%a in ('%~dp0\vswhere -nologo -version 15 -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath -format text') do set PHP_SDK_VC_DIR=%%b\VC
+	for /f "tokens=1* delims=: " %%a in ('%~dp0\vswhere -nologo -version %PHP_SDK_VC:~2,7% -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath -format text') do set PHP_SDK_VC_DIR=%%b\VC
 	set VSCMD_ARG_no_logo=nologo
 )
 set TMPKEY=
