@@ -116,7 +116,9 @@ class Manager
 		/* save new series file, move the updated deps and backup the old ones, cleanup.*/
 		$msg .= "Updates performed successfully. " . PHP_EOL;
 		if ($backup) {
-			$msg .= "Old dependencies backed up into '$new_path'.";
+			if (isset($new_path)) {
+				$msg .= "Old dependencies backed up into '$new_path'.";
+			}
 		} else {
 			$msg .= "No backup was created.";
 		}
