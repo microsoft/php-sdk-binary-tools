@@ -79,11 +79,14 @@ if 15 gtr %PHP_SDK_VC_NUM% (
 ) else (
 	rem vc15 support only for now, could parse out and pass on later
 	for /f "tokens=1* delims=: " %%a in ('%~dp0\vswhere -nologo -version %PHP_SDK_VC_NUM% -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath -format text') do set PHP_SDK_VC_DIR=%%b\VC
-	set VSCMD_ARG_no_logo=nologo
 	if not exist "!PHP_SDK_VC_DIR!" (
+            for /f "tokens=1* delims=: " %%a in ('%~dp0\vswhere -nologo -version %PHP_SDK_VC_NUM% -products Microsoft.VisualStudio.Product.BuildTools -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath -format text') do set PHP_SDK_VC_DIR=%%b\VC
+            if not exist "!PHP_SDK_VC_DIR!" (
 		echo Could not determine '%PHP_SDK_VC%' directory
 		goto out_error;
+            )
 	)
+	set VSCMD_ARG_no_logo=nologo
 )
 set TMPKEY=
 
