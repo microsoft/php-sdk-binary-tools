@@ -93,6 +93,9 @@ class Config
 			} else {
 				/* It might be ok to use cached branches list, if a fetch failed. */
 				$tmp = $cache->getCachedContent($cache_file, true);
+				if (NULL == $tmp) {
+					throw new Exception("No cached branches list found");
+				}
 				$data = json_decode($tmp, true);
 			}
 

@@ -59,7 +59,7 @@ class Cache
 		}
 	}/*}}}*/
 
-	public function getCachedContent(string $path, bool $relative = false) : string
+	public function getCachedContent(string $path, bool $relative = false) : ?string
 	{/*{{{*/
 		$p = $this->getCacheablePath($path, $relative);
 
@@ -67,7 +67,7 @@ class Cache
 			return file_get_contents($p);
 		}
 
-		return "";
+		return NULL;
 	}/*}}}*/
 }
 
