@@ -45,7 +45,6 @@ class Manager
 		return $this->series->updatesAvailable();
 	}/*}}}*/
 
-	/* TODO and implement --force. */
 	/* FIXME implement rollback */
 	public function performUpdate(string &$msg = NULL, bool $force = false, bool $backup = true) : void
 	{/*{{{*/
