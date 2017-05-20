@@ -43,6 +43,13 @@ if errorlevel 3 (
 	exit /b %errorlevel%
 )
 
+if "%PHP_SDK_PGO_TOOLS_ROOT_PATH%"=="" (
+	if exist "%PHP_SDK_ROOT_PATH%\pgo" (
+		set PHP_SDK_PGO_TOOLS_ROOT_PATH=%PHP_SDK_ROOT_PATH%\pgo
+		set PATH=!PHP_SDK_PGO_TOOLS_ROOT_PATH!\bin;!PATH!
+	)
+)
+
 if "%TASK%" neq "" (
 	if exist "%TASK%" (
 		set TASK_ARGS=%TASK_ARGS:"=%
