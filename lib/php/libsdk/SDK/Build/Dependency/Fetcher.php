@@ -1,6 +1,6 @@
 <?php
 
-namespace SDK\Dependency;
+namespace SDK\Build\Dependency;
 
 use SDK\Config;
 use SDK\Exception;

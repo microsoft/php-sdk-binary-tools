@@ -2,7 +2,7 @@
 
 namespace SDK;
 
-use SDK\Dependency\Fetcher;
+use SDK\Build\Dependency\Fetcher;
 use SDK\Cache;
 use SDK\Exception;
 
