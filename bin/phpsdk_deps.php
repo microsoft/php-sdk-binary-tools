@@ -187,7 +187,7 @@ try {
 	echo "\nConfiguration: " . Config::getCurrentBranchName() . "-$branch_data[crt]-$branch_data[arch]-$branch_data[stability]\n\n";
 
 	/* Let the dep manager to run the command. */
-	$dm = new SDK\Dependency\Manager(Config::getDepsLocalPath(), $branch_data["stability"], $branch_data["arch"]);
+	$dm = new SDK\Build\Dependency\Manager(Config::getDepsLocalPath(), $branch_data["stability"], $branch_data["arch"]);
 	switch ($cmd) {
 		default:
 			throw new Exception("Unknown command '$cmd'");
