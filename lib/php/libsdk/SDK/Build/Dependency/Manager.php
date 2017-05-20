@@ -35,7 +35,7 @@ class Manager
 		$this->series = $series;
 	}/*}}}*/
 
-	protected function getTmpSeriesPath()
+	protected function getTmpSeriesPath() : string
 	{/*{{{*/
 		return Config::getTmpDir() . DIRECTORY_SEPARATOR . $this->series->getname();
 	}/*}}}*/
@@ -47,7 +47,7 @@ class Manager
 
 	/* TODO and implement --force. */
 	/* FIXME implement rollback */
-	public function performUpdate(string &$msg = NULL, bool $force = false, bool $backup = true)
+	public function performUpdate(string &$msg = NULL, bool $force = false, bool $backup = true) : void
 	{/*{{{*/
 		if (!$force) {
 			if (!$this->updatesAvailable()) {

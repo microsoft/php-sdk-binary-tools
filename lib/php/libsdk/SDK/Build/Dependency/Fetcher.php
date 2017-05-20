@@ -27,7 +27,7 @@ class Fetcher
 		return $this->series;
 	}/*}}}*/
 
-	public function setSeries(Series $series)
+	public function setSeries(Series $series) : void
 	{/*{{{*/
 		$this->series = $series;
 	}/*}}}*/

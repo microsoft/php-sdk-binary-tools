@@ -39,32 +39,32 @@ class Config
 		return self::$depsBaseUri;
 	}/*}}}*/
 
-	public static function setCurrentArchName(string $arch)
+	public static function setCurrentArchName(string $arch) : void
 	{/*{{{*/
 		self::$currentArchName = $arch;
 	}	/*}}}*/
 
-	public static function getCurrentArchName() 
+	public static function getCurrentArchName() : ?string
 	{/*{{{*/
 		return self::$currentArchName;
 	}	/*}}}*/
 
-	public static function setCurrentCrtName(string $crt)
+	public static function setCurrentCrtName(string $crt) : void
 	{/*{{{*/
 		self::$currentCrtName = $crt;
 	}	/*}}}*/
 
-	public static function getCurrentCrtName()
+	public static function getCurrentCrtName() : ?string
 	{/*{{{*/
 		return self::$currentCrtName;
 	}	/*}}}*/
 
-	public static function setCurrentStabilityName(string $stability)
+	public static function setCurrentStabilityName(string $stability) : void
 	{/*{{{*/
 		self::$currentStabilityName = $stability;
 	}	/*}}}*/
 
-	public static function getCurrentStabilityName()
+	public static function getCurrentStabilityName() : ?string
 	{/*{{{*/
 		return self::$currentStabilityName;
 	}	/*}}}*/
@@ -105,7 +105,7 @@ class Config
 		return self::$knownBranches;
 	}/*}}}*/
 
-	public static function setCurrentBranchName(string $name)
+	public static function setCurrentBranchName(string $name) : void
 	{/*{{{*/
 		if (!array_key_exists($name, self::getKnownBranches())) {
 		//	throw new Exception("Unsupported branch '$name'");
@@ -114,7 +114,7 @@ class Config
 		self::$currentBranchName = $name;
 	}/*}}}*/
 
-	public static function getCurrentBranchName()
+	public static function getCurrentBranchName() : ?string
 	{/*{{{*/
 		return self::$currentBranchName;
 	}/*}}}*/
@@ -181,7 +181,7 @@ class Config
 		return self::$sdkNugetFeedUrl;
 	}/*}}}*/
 
-	public static function getSdkPath()
+	public static function getSdkPath() : string
 	{/*{{{*/
 		$path = getenv("PHP_SDK_ROOT_PATH");
 
@@ -208,12 +208,12 @@ class Config
 		return file_get_contents($path);
 	}/*}}}*/
 
-	public static function getDepsLocalPath()
+	public static function getDepsLocalPath() : string
 	{/*{{{*/
 		return self::$depsLocalPath;
 	}/*}}}*/
 
-	public static function setDepsLocalPath(string $path)
+	public static function setDepsLocalPath(string $path) : void
 	{/*{{{*/
 		self::$depsLocalPath = $path;
 	}/*}}}*/

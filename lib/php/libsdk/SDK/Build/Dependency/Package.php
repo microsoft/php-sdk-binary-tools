@@ -28,7 +28,7 @@ class Package
 		return "$base/{$branch_data['crt']}/$arch/{$this->name}";
 	}/*}}}*/
 
-	public function retrieve(string $path)
+	public function retrieve(string $path) : void
 	{/*{{{*/
 		$this->filepath = $path . DIRECTORY_SEPARATOR . $this->name;
 
@@ -39,7 +39,7 @@ class Package
 		fclose($fd);
 	}/*}}}*/
 
-	public function unpack(string $path)
+	public function unpack(string $path) : void
 	{/*{{{*/
 		if (!$this->filepath || !file_exists($this->filepath)) {
 			throw new Exception("Invalid filepath '{$this->filepath}'");
@@ -55,7 +55,7 @@ class Package
 		}
 	}/*}}}*/
 
-	public function cleanup()
+	public function cleanup() : void
 	{/*{{{*/
 		unlink($this->filepath);		
 	}/*}}}*/

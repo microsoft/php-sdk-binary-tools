@@ -50,7 +50,7 @@ class Cache
 		return $old_sum != $new_sum;
 	}/*}}}*/
 
-	public function cacheContent(string $path, string $content, bool $relative = false)
+	public function cacheContent(string $path, string $content, bool $relative = false) : void
 	{/*{{{*/
 		$p = $this->getCacheablePath($path, $relative);
 
@@ -59,7 +59,7 @@ class Cache
 		}
 	}/*}}}*/
 
-	public function getCachedContent(string $path, bool $relative = false)
+	public function getCachedContent(string $path, bool $relative = false) : string
 	{/*{{{*/
 		$p = $this->getCacheablePath($path, $relative);
 

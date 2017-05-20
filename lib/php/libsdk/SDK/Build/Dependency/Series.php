@@ -27,7 +27,7 @@ class Series
 		return $this->fetcher;
 	}/*}}}*/
 
-	public function setFetcher(Fetcher $fetcher)
+	public function setFetcher(Fetcher $fetcher) : void
 	{/*{{{*/
 		$this->fetcher = $fetcher;
 	}/*}}}*/
@@ -37,7 +37,7 @@ class Series
 		return $this->arch;
 	}/*}}}*/
 
-	public function setArch(string $arch)
+	public function setArch(string $arch) : void
 	{/*{{{*/
 		$this->arch = $arch;
 	}/*}}}*/
@@ -52,7 +52,7 @@ class Series
 		return $file;
 	}/*}}}*/
 
-	protected function getUri() : string
+	protected function getUri() : string 
 	{/*{{{*/
 		$base = Config::getDepsBaseUri();
 		$file = $this->getName();
@@ -79,12 +79,12 @@ class Series
 		return $ret;
 	}/*}}}*/
 
-	public function getSavePath()
+	public function getSavePath() : string
 	{/*{{{*/
 		return Config::getCacheDir() . DIRECTORY_SEPARATOR . $this->getname();
 	}/*}}}*/
 
-	public function updatesAvailable()
+	public function updatesAvailable() : bool
 	{/*{{{*/
 		$series_data = $this->getData(true);
 		$series_file = $this->getSavePath();
@@ -92,7 +92,7 @@ class Series
 		return $this->cache->cachedContentDiffers($series_file, $series_data);
 	}/*}}}*/
 
-	public function cache(string $path = NULL)
+	public function cache(string $path = NULL) : void
 	{/*{{{*/
 		if (!$path) {
 			$path = $this->getSavePath();
