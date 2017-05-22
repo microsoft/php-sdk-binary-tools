@@ -43,22 +43,16 @@ try {
 
 			case "b":
 			case "branch":
-				$branch = $val;
+				Config::setCurrentBranchName($val);
 				break;
 
 			case "s":
 			case "stability":
-				if ("stable" != $val && "staging" != $val) {
-					throw new Exception("Unknown stability keyword, either stable or staging is accepted");
-				}
 				Config::setCurrentStabilityName($val);
 				break;
 
 			case "a":
 			case "arch":
-				if ("x64" != $val && "x86" != $val) {
-					throw new Exception("Unknown arch keyword, either x86 or x64 is accepted");
-				}
 				Config::setCurrentArchName($val);
 				break;
 
@@ -98,26 +92,21 @@ try {
 	}
 
 	if (NULL === Config::getDepsLocalPath()) {
-		if (!Config::setDepsLocalPath(NULL)) {
-			usage(3);
-		}
-	}
-
-	if (!Config::setCurrentBranchName($branch)) {
 		usage(3);
 	}
 
-	if (NULL === Config::getCurrentArchName()) {
-		if (!Config::setCurrentArchName(NULL)) {
-			usage(3);
-		}
-		$arch = Config::getCurrentArchName();
+	$branch = Config::getCurrentBranchName();
+	if (NULL == $branch) {
+		usage(3);
+	}
+
+	$arch = Config::getCurrentArchName();
+	if (NULL === $arch) {
+		usage(3);
 	}
 
 	if (NULL === Config::getCurrentCrtName()) {
-		if (!Config::setCurrentCrtName(NULL)) {
-			usage(3);
-		}
+		usage(3);
 	}
 	/* The current CRT needs to match the config one. */
 	$active_crt = getenv("PHP_SDK_VC");

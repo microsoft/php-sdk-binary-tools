@@ -39,40 +39,47 @@ class Config
 		return self::$depsBaseUri;
 	}/*}}}*/
 
-	public static function setCurrentArchName(string $arch = NULL) : bool
+	public static function setCurrentArchName(string $arch) : void
 	{/*{{{*/
-		if (NULL === $arch) {
-			/* XXX this might be not true for other compilers! */
-			passthru("where cl.exe >nul", $status);
-			if (!$status) {
-				exec("cl.exe /? 2>&1", $a, $status);
-				if (!$status) {
-					if (preg_match(",x64,", $a[0])) {
-						self::$currentArchName = "x64";
-						return true;
-					} else {
-						self::$currentArchName = "x86";
-						return true;
-					}
-				}
-			}
-
-			return false;
+		if ("x64" != $arch && "x86" != $arch) {
+			throw new Exception("Unknown arch keyword, either x86 or x64 is accepted");
 		}
 
-		self::$currentArchName = $arch;
-
-		return true;
+		self::$currentArchName = "x64";
 	}	/*}}}*/
 
-	public static function getCurrentArchName() : ?string
+	public static function getCurrentArchName() : string
 	{/*{{{*/
+		if (NULL === self::$currentArchName) {
+			/* XXX this might be not true for other compilers! */
+			passthru("where cl.exe >nul", $status);
+			if ($status) {
+				throw new Exception("Couldn't find cl.exe.");
+			}
+
+			exec("cl.exe /? 2>&1", $a, $status);
+			if ($status) {
+				throw new Exception("Couldn't execute cl.exe.");
+			}
+
+			if (preg_match(",x64,", $a[0])) {
+				self::setCurrentArchName("x64");
+			} else {
+				self::setCurrentArchName("x86");
+			}
+		}
+
 		return self::$currentArchName;
 	}	/*}}}*/
 
-	public static function setCurrentCrtName(string $crt = NULL) : bool
+	public static function setCurrentCrtName(string $crt) : void
 	{/*{{{*/
-		if (!$crt) {
+		self::$currentCrtName = $crt;
+	}	/*}}}*/
+
+	public static function getCurrentCrtName() : ?string
+	{/*{{{*/
+		if (NULL === self::$currentCrtName) {
 			$all_branches = Config::getKnownBranches();
 
 			if (!isset($all_branches[Config::getCurrentBranchName()])) {
@@ -82,30 +89,33 @@ class Config
 			$branch = $all_branches[Config::getCurrentBranchName()];
 			if (count($branch) > 1) {
 				throw new Exception("Multiple CRTs are available for this branch, please choose one from " . implode(",", array_keys($branch)));
-			} else {
-				self::$currentCrtName = array_keys($branch)[0];
-				return true;
 			}
-			return false;
+
+			self::setCurrentCrtName(array_keys($branch)[0]);
 		}
 
-		self::$currentCrtName = $crt;
-
-		return true;
-	}	/*}}}*/
-
-	public static function getCurrentCrtName() : ?string
-	{/*{{{*/
 		return self::$currentCrtName;
 	}	/*}}}*/
 
 	public static function setCurrentStabilityName(string $stability) : void
 	{/*{{{*/
+		if ("stable" != $stability && "staging" != $stability) {
+			throw new Exception("Unknown stability keyword, either stable or staging is accepted");
+		}
+
 		self::$currentStabilityName = $stability;
 	}	/*}}}*/
 
 	public static function getCurrentStabilityName() : ?string
 	{/*{{{*/
+		if (NULL === self::$currentStabilityName) {
+			if ("master" == Config::getCurrentBranchName()) {
+				Config::setCurrentStabilityName("staging");
+			} else {
+				Config::setCurrentStabilityName("stable");
+			}
+		}
+
 		return self::$currentStabilityName;
 	}	/*}}}*/
 
@@ -148,13 +158,18 @@ class Config
 		return self::$knownBranches;
 	}/*}}}*/
 
-	public static function setCurrentBranchName(string $name = NULL) : bool
+	public static function setCurrentBranchName(string $name) : void
 	{/*{{{*/
 		if (!array_key_exists($name, self::getKnownBranches())) {
-		//	throw new Exception("Unsupported branch '$name'");
+			throw new Exception("Unsupported branch '$name'");
 		}
 
-		if (!$name) {
+		self::$currentBranchName = $name;
+	}/*}}}*/
+
+	public static function getCurrentBranchName() : ?string
+	{/*{{{*/
+		if (NULL == self::$currentBranchName) {
 			/* Try to figure out the branch. For now it only works if CWD is in php-src. */
 			$fl = "main/php_version.h";
 			if (file_exists($fl)) {
@@ -169,20 +184,11 @@ class Config
 				}
 
 				if (is_numeric($major) && is_numeric($minor)) {
-					self::$currentBranchName = "$major.$minor";
-					return true;
+					self::setCurrentBranchName("$major.$minor");
 				}
 			}
-			return false;
 		}
-
-		self::$currentBranchName = $name;
-
-		return true; 
-	}/*}}}*/
-
-	public static function getCurrentBranchName() : ?string
-	{/*{{{*/
+	
 		return self::$currentBranchName;
 	}/*}}}*/
 
@@ -277,26 +283,21 @@ class Config
 
 	public static function getDepsLocalPath() : ?string
 	{/*{{{*/
+		if (NULL == self::$depsLocalPath) {
+			if (file_exists("../deps")) {
+				self::setDepsLocalPath(realpath("../deps"));
+			} else if (file_exists("main/php_version.h")) {
+				/* Deps dir might not exist. */
+				self::setDepsLocalPath(realpath("..") . DIRECTORY_SEPARATOR . "deps");
+			}
+		}
+
 		return self::$depsLocalPath;
 	}/*}}}*/
 
-	public static function setDepsLocalPath(string $path = NULL) : bool
+	public static function setDepsLocalPath(string $path) : void
 	{/*{{{*/
-		if (!$path) {
-			if (file_exists("../deps")) {
-				self::$depsLocalPath = realpath("../deps");
-				return true;
-			} else if (file_exists("main/php_version.h")) {
-				/* Deps dir might not exist. */
-				self::$depsLocalPath = realpath("..") . DIRECTORY_SEPARATOR . "deps";
-				return true;
-			}
-			return false;
-		}
-
 		self::$depsLocalPath = $path;
-
-		return true;
 	}/*}}}*/
 
 	public static function getCacheDir() : string
