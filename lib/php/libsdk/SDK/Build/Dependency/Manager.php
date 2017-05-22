@@ -2,10 +2,7 @@
 
 namespace SDK\Build\Dependency;
 
-use SDK\Config;
-use SDK\Cache;
-use SDK\Exception;
-use SDK\FileOps;
+use SDK\{Config, Cache, Exception, FileOps};
 
 class Manager
 {
