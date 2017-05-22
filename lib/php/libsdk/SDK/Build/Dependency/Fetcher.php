@@ -2,11 +2,12 @@
 
 namespace SDK\Build\Dependency;
 
-use SDK\Config;
-use SDK\Exception;
+use SDK\{Config, Exception, FileOps};
 
 class Fetcher
 {
+	use FileOps;
+
 	protected $host;
 	protected $port;
 	protected $stability;
@@ -37,13 +38,8 @@ class Fetcher
 	public function getByUri($uri) : string
 	{/*{{{*/
 		$url = "http://{$this->host}:{$this->port}$uri";
-		$s = file_get_contents($url);
 
-		if (false === $s) {
-			throw new Exception("failed to fetch $url");
-		}
-
-		return $s;
+		return $this->download($url);
 	}/*}}}*/
 
 	/*protected function fetch($uri) : string
