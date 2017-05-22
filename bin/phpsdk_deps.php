@@ -2,8 +2,7 @@
 
 include dirname(__FILE__) . "/../lib/php/libsdk/autoload.php";
 
-use SDK\Config;
-use SDK\Exception;
+use SDK\{Config, Exception};
 
 $sopt = "s:cuhb:a:d:t:fn";
 $lopt = array(
