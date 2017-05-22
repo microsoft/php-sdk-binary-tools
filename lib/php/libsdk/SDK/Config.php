@@ -197,36 +197,37 @@ class Config
 		$ret = array();
 		$branches = self::getKnownBranches();
 
-		if (!array_key_exists(self::$currentBranchName, $branches)) {
-			throw new Exception("Unknown branch '" . self::$currentBranchName . "'");
+		$current_branch_name = self::getCurrentBranchName();
+		if (!array_key_exists($current_branch_name, $branches)) {
+			throw new Exception("Unknown branch '$current_branch_name'");
 		}
 
 		$cur_crt = Config::getCurrentCrtName();
-		if (count($branches[self::$currentBranchName]) > 1) {
+		if (count($branches[$current_branch_name]) > 1) {
 			if (NULL === $cur_crt) {
-				throw new Exception("More than one CRT is available for branch '" . self::$currentBranchName . "', pass one explicitly.");
+				throw new Exception("More than one CRT is available for branch '$current_branch_name', pass one explicitly.");
 			}
 
 			$cur_crt_usable = false;
-			foreach (array_keys($branches[self::$currentBranchName]) as $crt) {
+			foreach (array_keys($branches[$current_branch_name]) as $crt) {
 				if ($cur_crt == $crt) {
 					$cur_crt_usable = true;
 					break;
 				}
 			}
 			if (!$cur_crt_usable) {
-				throw new Exception("The passed CRT '$cur_crt' doesn't match any availbale for branch '" . self::$currentBranchName . "'");
+				throw new Exception("The passed CRT '$cur_crt' doesn't match any availbale for branch '$current_branch_name'");
 			}
-			$data = $branches[self::$currentBranchName][$cur_crt];
+			$data = $branches[$current_branch_name][$cur_crt];
 		} else {
 			/* Evaluate CRTs, to avoid ambiquity. */
-			list($crt, $data) = each($branches[self::$currentBranchName]);
+			list($crt, $data) = each($branches[$current_branch_name]);
 			if ($crt != $cur_crt) {
-				throw new Exception("The passed CRT '$cur_crt' doesn't match any availbale for branch '" . self::$currentBranchName . "'");
+				throw new Exception("The passed CRT '$cur_crt' doesn't match any availbale for branch '$current_branch_name'");
 			}
 		}
 
-		$ret["name"] = self::$currentBranchName;
+		$ret["name"] = $current_branch_name;
 		$ret["crt"] = $crt;
 
 		/* Last step, filter by arch and stability. */
