@@ -39,9 +39,30 @@ class Config
 		return self::$depsBaseUri;
 	}/*}}}*/
 
-	public static function setCurrentArchName(string $arch) : void
+	public static function setCurrentArchName(string $arch = NULL) : bool
 	{/*{{{*/
+		if (NULL === $arch) {
+			/* XXX this might be not true for other compilers! */
+			passthru("where cl.exe >nul", $status);
+			if (!$status) {
+				exec("cl.exe /? 2>&1", $a, $status);
+				if (!$status) {
+					if (preg_match(",x64,", $a[0])) {
+						self::$currentArchName = "x64";
+						return true;
+					} else {
+						self::$currentArchName = "x86";
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+
 		self::$currentArchName = $arch;
+
+		return true;
 	}	/*}}}*/
 
 	public static function getCurrentArchName() : ?string
@@ -49,9 +70,28 @@ class Config
 		return self::$currentArchName;
 	}	/*}}}*/
 
-	public static function setCurrentCrtName(string $crt) : void
+	public static function setCurrentCrtName(string $crt = NULL) : bool
 	{/*{{{*/
+		if (!$crt) {
+			$all_branches = Config::getKnownBranches();
+
+			if (!isset($all_branches[Config::getCurrentBranchName()])) {
+				throw new Exception("Couldn't find any configuration for branch '" . Config::getCurrentBranchName() . "'");
+			}
+
+			$branch = $all_branches[Config::getCurrentBranchName()];
+			if (count($branch) > 1) {
+				throw new Exception("Multiple CRTs are available for this branch, please choose one from " . implode(",", array_keys($branch)));
+			} else {
+				self::$currentCrtName = array_keys($branch)[0];
+				return true;
+			}
+			return false;
+		}
+
 		self::$currentCrtName = $crt;
+
+		return true;
 	}	/*}}}*/
 
 	public static function getCurrentCrtName() : ?string
@@ -108,13 +148,37 @@ class Config
 		return self::$knownBranches;
 	}/*}}}*/
 
-	public static function setCurrentBranchName(string $name) : void
+	public static function setCurrentBranchName(string $name = NULL) : bool
 	{/*{{{*/
 		if (!array_key_exists($name, self::getKnownBranches())) {
 		//	throw new Exception("Unsupported branch '$name'");
 		}
 
+		if (!$name) {
+			/* Try to figure out the branch. For now it only works if CWD is in php-src. */
+			$fl = "main/php_version.h";
+			if (file_exists($fl)) {
+				$s = file_get_contents($fl);
+				$major = $minor = NULL;
+
+				if (preg_match(",PHP_MAJOR_VERSION (\d+),", $s, $m)) {
+					$major = $m[1];
+				}
+				if (preg_match(",PHP_MINOR_VERSION (\d+),", $s, $m)) {
+					$minor = $m[1];
+				}
+
+				if (is_numeric($major) && is_numeric($minor)) {
+					self::$currentBranchName = "$major.$minor";
+					return true;
+				}
+			}
+			return false;
+		}
+
 		self::$currentBranchName = $name;
+
+		return true; 
 	}/*}}}*/
 
 	public static function getCurrentBranchName() : ?string
@@ -211,14 +275,28 @@ class Config
 		return file_get_contents($path);
 	}/*}}}*/
 
-	public static function getDepsLocalPath() : string
+	public static function getDepsLocalPath() : ?string
 	{/*{{{*/
 		return self::$depsLocalPath;
 	}/*}}}*/
 
-	public static function setDepsLocalPath(string $path) : void
+	public static function setDepsLocalPath(string $path = NULL) : bool
 	{/*{{{*/
+		if (!$path) {
+			if (file_exists("../deps")) {
+				self::$depsLocalPath = realpath("../deps");
+				return true;
+			} else if (file_exists("main/php_version.h")) {
+				/* Deps dir might not exist. */
+				self::$depsLocalPath = realpath("..") . DIRECTORY_SEPARATOR . "deps";
+				return true;
+			}
+			return false;
+		}
+
 		self::$depsLocalPath = $path;
+
+		return true;
 	}/*}}}*/
 
 	public static function getCacheDir() : string

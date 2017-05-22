@@ -97,76 +97,26 @@ try {
 		usage();
 	}
 
-	if (!Config::getDepsLocalPath()) {
-		if (file_exists("../deps")) {
-			Config::setDepsLocalPath(realpath("../deps"));
-		} else if (file_exists("main/php_version.h")) {
-			/* Deps dir might not exist. */
-			Config::setDepsLocalPath(realpath("..") . DIRECTORY_SEPARATOR . "deps");
-		} else {
+	if (NULL === Config::getDepsLocalPath()) {
+		if (!Config::setDepsLocalPath(NULL)) {
 			usage(3);
 		}
 	}
 
-	if ($branch) {
-		Config::setCurrentBranchName($branch);
-	}
-	if (!Config::getCurrentBranchName()) {
-		/* Try to figure out the branch. For now it only works if CWD is in php-src. */
-		$fl = "main/php_version.h";
-		if (file_exists($fl)) {
-			$s = file_get_contents($fl);
-			$major = $minor = NULL;
-
-			if (preg_match(",PHP_MAJOR_VERSION (\d+),", $s, $m)) {
-				$major = $m[1];
-			}
-			if (preg_match(",PHP_MINOR_VERSION (\d+),", $s, $m)) {
-				$minor = $m[1];
-			}
-
-			if (is_numeric($major) && is_numeric($minor)) {
-				Config::setCurrentBranchName("$major.$minor");
-			} else {
-				usage(3);
-			}
-		} else {
-			usage(3);
-		}
+	if (!Config::setCurrentBranchName($branch)) {
+		usage(3);
 	}
 
 	if (NULL === Config::getCurrentArchName()) {
-		/* XXX this might be not true for other compilers! */
-		passthru("where cl.exe >nul", $status);
-		if (!$status) {
-			exec("cl.exe /? 2>&1", $a, $status);
-			if (!$status) {
-				if (preg_match(",x64,", $a[0])) {
-					Config::setCurrentArchName("x64");
-				} else {
-					Config::setCurrentArchName("x86");
-				}
-			} else {
-				usage(3);
-			}
-		} else {
+		if (!Config::setCurrentArchName(NULL)) {
 			usage(3);
 		}
 		$arch = Config::getCurrentArchName();
 	}
 
 	if (NULL === Config::getCurrentCrtName()) {
-		$all_branches = Config::getKnownBranches();
-
-		if (!isset($all_branches[Config::getCurrentBranchName()])) {
-			throw new Exception("Couldn't find any configuration for branch '" . Config::getCurrentBranchName() . "'");
-		}
-
-		$branch = $all_branches[Config::getCurrentBranchName()];
-		if (count($branch) > 1) {
-			throw new Exception("Multiple CRTs are available for this branch, please choose one from " . implode(",", array_keys($branch)));
-		} else {
-			Config::setCurrentCrtName(array_keys($branch)[0]);
+		if (!Config::setCurrentCrtName(NULL)) {
+			usage(3);
 		}
 	}
 	/* The current CRT needs to match the config one. */
