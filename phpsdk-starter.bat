@@ -40,7 +40,7 @@ set CRT=
 set ARCH=
 
 if errorlevel 3 (
-	exit /b %errorlevel%
+	exit /b !ERRORLEVEL!
 )
 
 if "%TASK%" neq "" (
