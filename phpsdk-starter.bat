@@ -53,7 +53,7 @@ if "%TASK%" neq "" (
 			cmd /c "!PHP_SDK_VC_SHELL_CMD! && %PHP_SDK_ROOT_PATH%\bin\phpsdk_setvars.bat && %TASK% !TASK_ARGS!"
 		)
 		set TASK=
-		exit /b
+		exit /b !ERRORLEVEL!
 	) else (
 		echo could not find the task file
 		set TASK=
@@ -67,5 +67,5 @@ if exist "%PHP_SDK_ROOT_PATH%\phpsdk-local.bat" (
 	cmd /k "!PHP_SDK_VC_SHELL_CMD! && %PHP_SDK_ROOT_PATH%\bin\phpsdk_setvars.bat && %PHP_SDK_ROOT_PATH%\bin\phpsdk_dumpenv.bat && set prompt=$P$_$+$$$S"
 )
 
-exit /b
+exit /b !ERRORLEVEL!
 
