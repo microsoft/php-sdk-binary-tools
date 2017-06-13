@@ -31,7 +31,7 @@ set ARCH=%ARCH: =%
 set PHP_SDK_RUN_FROM_ROOT=1
 
 
-title PHP SDK
+title PHP SDK %CRT% %ARCH%
 
 call %PHP_SDK_ROOT_PATH%\bin\phpsdk_setshell.bat %CRT% %ARCH%
 
