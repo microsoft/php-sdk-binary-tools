@@ -41,11 +41,13 @@ class Config
 
 	public static function setCurrentArchName(string $arch) : void
 	{/*{{{*/
+		$arch = strtolower($arch);
+
 		if ("x64" != $arch && "x86" != $arch) {
 			throw new Exception("Unknown arch keyword, either x86 or x64 is accepted");
 		}
 
-		self::$currentArchName = "x64";
+		self::$currentArchName = $arch;
 	}	/*}}}*/
 
 	public static function getCurrentArchName() : string
