@@ -112,4 +112,6 @@ The SDK tools are based on the KISS principle and should be kept so. Basic tools
 - Tools, based on MSYS2, only accept paths with forward slashes.
 - Both Visual C++ toolset and the Windows SDK components have to be installed for the PHP SDK to work properly. 
 - The VC++ toolset is still requried, even if another compiler, fe. clang, is intended to be used.
+- task.exe is not a console application, some systems might not propagate exit code except the batch is explicitly run from `cmd /c`, etc.
+
 
