@@ -28,6 +28,8 @@ $backup = true;
 
 try {
 
+	$branch = NULL;
+
 	$opt = getopt($sopt, $lopt);
 	foreach ($opt as $name => $val) {
 		switch ($name) {
@@ -42,7 +44,9 @@ try {
 
 			case "b":
 			case "branch":
-				Config::setCurrentBranchName($val);
+				/* Branch config depends on other information. We can set it
+					right away, because the option order can't be  guaranteed. */
+				$branch = $val;
 				break;
 
 			case "s":
@@ -85,6 +89,8 @@ try {
 				break;
 		}
 	}
+
+	Config::setCurrentBranchName($branch);
 
 	if (NULL === $cmd) {
 		usage();
