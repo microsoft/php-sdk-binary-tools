@@ -169,26 +169,36 @@ class Config
 		self::$currentBranchName = $name;
 	}/*}}}*/
 
-	public static function getCurrentBranchName() : ?string
+	public static function guessCurrentBranchName() : ?string
+	{/*{{{*/
+		$branch = NULL;
+
+		/* Try to figure out the branch. For now it only works if CWD is in php-src. */
+		$fl = "main/php_version.h";
+		if (file_exists($fl)) {
+			$s = file_get_contents($fl);
+			$major = $minor = NULL;
+
+			if (preg_match(",PHP_MAJOR_VERSION (\d+),", $s, $m)) {
+				$major = $m[1];
+			}
+			if (preg_match(",PHP_MINOR_VERSION (\d+),", $s, $m)) {
+				$minor = $m[1];
+			}
+
+			if (is_numeric($major) && is_numeric($minor)) {
+				$branch = "$major.$minor";
+			}
+		}
+
+		return $branch;
+	}/*}}}*/
+
+	public static function getCurrentBranchName() : string
 	{/*{{{*/
 		if (NULL == self::$currentBranchName) {
-			/* Try to figure out the branch. For now it only works if CWD is in php-src. */
-			$fl = "main/php_version.h";
-			if (file_exists($fl)) {
-				$s = file_get_contents($fl);
-				$major = $minor = NULL;
-
-				if (preg_match(",PHP_MAJOR_VERSION (\d+),", $s, $m)) {
-					$major = $m[1];
-				}
-				if (preg_match(",PHP_MINOR_VERSION (\d+),", $s, $m)) {
-					$minor = $m[1];
-				}
-
-				if (is_numeric($major) && is_numeric($minor)) {
-					self::setCurrentBranchName("$major.$minor");
-				}
-			}
+			$branch = self::guessCurrentBranchName();
+			self::setCurrentBranchName($branch);
 		}
 	
 		return self::$currentBranchName;
