@@ -24,7 +24,7 @@ if ""=="%PHP_SDK_VC:~2%" (
 	goto malformed_vc_string
 )
 set /a TMP_CHK=%PHP_SDK_VC:~2%
-if 14 gtr %TMP_CHK% (
+if 11 gtr %TMP_CHK% (
 	if "0"=="%TMP_CHK%" (
 		if not "0"=="%PHP_SDK_VC:~2%" (
 			set TMP_CHK=
@@ -32,7 +32,7 @@ if 14 gtr %TMP_CHK% (
 		)
 	)
 
-	echo At least vc14 is required
+	echo At least vc11 is required
 	set PHP_SDK_VC=
 	set TMP_CHK=
 	goto out_error

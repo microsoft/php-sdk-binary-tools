@@ -15,5 +15,9 @@ set PHP_SDK_PHP_CMD=%PHP_SDK_BIN_PATH%\php\do_php.bat
 
 set PATH=%PHP_SDK_BIN_PATH%;%PHP_SDK_MSYS2_PATH%;%PATH%
 
+if 11 equ %PHP_SDK_VC_NUM% (
+	set "PATH=%PHP_SDK_ROOT_PATH%\compat5\bin;%PATH%"
+)
+
 exit /b
 
