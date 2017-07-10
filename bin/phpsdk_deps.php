@@ -90,6 +90,12 @@ try {
 		}
 	}
 
+	if (NULL == $branch) {
+		$branch = Config::guessCurrentBranchName();
+		if (NULL == $branch) {
+			throw new Exception("Couldn't determine current branch name, expect an explicit input.");
+		}
+	}
 	Config::setCurrentBranchName($branch);
 
 	if (NULL === $cmd) {
