@@ -36,6 +36,7 @@ class Cache
 		return file_exists($this->getCacheablePath($path, $relative));
 	}/*}}}*/
 
+	/* TODO Sometimes a timestamp comparison might make sense. */
 	public function cachedContentDiffers(string $path, string $content, bool $relative = false) : bool
 	{/*{{{*/
 		$p = $this->getCacheablePath($path, $relative);
