@@ -2,3 +2,6 @@
 *.awk text eol=lf
 *.c   text eol=lf
 *.h   text eol=lf
+*.php text eol=lf
+*.json text eol=lf
+*.md text eol=lf
