@@ -1,0 +1,4 @@
+*.m4  text eol=lf
+*.awk text eol=lf
+*.c   text eol=lf
+*.h   text eol=lf
