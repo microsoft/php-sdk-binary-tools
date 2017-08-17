@@ -302,7 +302,7 @@ class Config
 
 				if (preg_match(",PHP_BUILD=(.+),", $s, $m)) {
 					if (isset($m[1]) && is_dir($m[1])) {
-						self::setDepsLocalPath(realpath($m[1]));
+						self::setDepsLocalPath($m[1]);
 					}
 				}
 			}
