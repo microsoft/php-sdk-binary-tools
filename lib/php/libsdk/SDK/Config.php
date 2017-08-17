@@ -297,9 +297,25 @@ class Config
 	public static function getDepsLocalPath() : ?string
 	{/*{{{*/
 		if (NULL == self::$depsLocalPath) {
+			if (file_exists("Makefile")) {
+				$s = file_get_contents("Makefile");
+
+				if (preg_match(",PHP_BUILD=(.+),", $s, $m)) {
+					if (isset($m[1]) && is_dir($m[1])) {
+						self::setDepsLocalPath(realpath($m[1]));
+					}
+				}
+			}
+		}
+
+		if (NULL == self::$depsLocalPath) {
 			if (file_exists("../deps")) {
 				self::setDepsLocalPath(realpath("../deps"));
-			} else if (file_exists("main/php_version.h")) {
+			}
+		}
+
+		if (NULL == self::$depsLocalPath) {
+			if (file_exists("main/php_version.h")) {
 				/* Deps dir might not exist. */
 				self::setDepsLocalPath(realpath("..") . DIRECTORY_SEPARATOR . "deps");
 			}
