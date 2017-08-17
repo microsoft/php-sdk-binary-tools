@@ -309,12 +309,20 @@ class Config
 		}
 
 		if (NULL == self::$depsLocalPath || $reset) {
-			if (file_exists("../deps")) {
-				self::setDepsLocalPath(realpath("../deps"));
+			$tmp = dirname(getcwd()) . DIRECTORY_SEPARATOR . "deps";
+			if (is_dir($tmp)) {
+				self::setDepsLocalPath($tmp);
+			}
+		}
+		
+		if (NULL == self::$depsLocalPath || $reset) {
+			$tmp = realpath("../deps");
+			if (is_dir($tmp)) {
+				self::setDepsLocalPath($tmp);
 			}
 		}
 
-		if (NULL == self::$depsLocalPath || $reset) {
+		if (NULL == self::$depsLocalPath) {
 			if (file_exists("main/php_version.h")) {
 				/* Deps dir might not exist. */
 				self::setDepsLocalPath(realpath("..") . DIRECTORY_SEPARATOR . "deps");
