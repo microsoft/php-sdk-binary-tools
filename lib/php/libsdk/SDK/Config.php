@@ -294,9 +294,9 @@ class Config
 		return file_get_contents($path);
 	}/*}}}*/
 
-	public static function getDepsLocalPath() : ?string
+	public static function getDepsLocalPath(bool $reset = false) : ?string
 	{/*{{{*/
-		if (NULL == self::$depsLocalPath) {
+		if (NULL == self::$depsLocalPath || $reset) {
 			if (file_exists("Makefile")) {
 				$s = file_get_contents("Makefile");
 
@@ -308,13 +308,13 @@ class Config
 			}
 		}
 
-		if (NULL == self::$depsLocalPath) {
+		if (NULL == self::$depsLocalPath || $reset) {
 			if (file_exists("../deps")) {
 				self::setDepsLocalPath(realpath("../deps"));
 			}
 		}
 
-		if (NULL == self::$depsLocalPath) {
+		if (NULL == self::$depsLocalPath || $reset) {
 			if (file_exists("main/php_version.h")) {
 				/* Deps dir might not exist. */
 				self::setDepsLocalPath(realpath("..") . DIRECTORY_SEPARATOR . "deps");
