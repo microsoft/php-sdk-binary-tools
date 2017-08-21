@@ -4,7 +4,7 @@ include dirname(__FILE__) . "/../lib/php/libsdk/autoload.php";
 
 use SDK\{Config, Exception};
 
-$sopt = "s:cuhb:a:d:t:fn";
+$sopt = "s:cuhb:a:d:t:fnp";
 $lopt = array(
 	"branch:",
 	"update",
@@ -16,6 +16,7 @@ $lopt = array(
 	"deps:",
 	"force",
 	"no-backup",
+	"pack",
 );
 
 $cmd = NULL;
@@ -87,6 +88,11 @@ try {
 			case "no-backup":
 				$backup = false;
 				break;
+
+			case "p":
+			case "pack":
+				$cmd = "pack";
+				break;
 		}
 	}
 
@@ -157,6 +163,15 @@ try {
 			$dm->performUpdate($msg, $force, $backup);
 			msg($msg);
 			break;
+		case "pack":
+			$path_to_pack = Config::getDepsLocalPath();
+			$pack_path = dirname($path_to_pack) . DIRECTORY_SEPARATOR . "deps-$branch-$branch_data[crt]-$branch_data[arch].7z";
+			print "Packaging '$path_to_pack' as '$pack_path'.\n\n";
+			if ($force && is_file($pack_path)) {
+				unlink($pack_path);
+			}
+			`7za a $pack_path $path_to_pack`;
+			break;
 	}
 
 } catch (Throwable $e) {
@@ -177,7 +192,8 @@ function usage(int $code = -1)
 	echo "  -s --stability One of stable or staging.", PHP_EOL, PHP_EOL;
 	echo "Commands:", PHP_EOL;
 	echo "  -c --check     Check for dependency updates. If updates are available, the exit code is set to 7.", PHP_EOL;
-	echo "  -u --update    Update dependencies. If deps directory already exists, backup copy is created automatically.", PHP_EOL, PHP_EOL;
+	echo "  -u --update    Update dependencies. If deps directory already exists, backup copy is created automatically.", PHP_EOL;
+	echo "  -p --pack      Archive the dependency directory.", PHP_EOL, PHP_EOL;
 	echo "Misc:", PHP_EOL;
 	echo "  -d --deps      Path to the dependencies directory. If omited, CWD is used to guess.", PHP_EOL;
 	echo "  -f --force     Force the operation even if there are no upgrades available.", PHP_EOL;
