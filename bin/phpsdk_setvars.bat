@@ -1,5 +1,7 @@
 @echo off
 
+cmd /c "exit /b 0"
+
 rem Add necessary dirs to the path 
 
 set PHP_SDK_BIN_PATH=%~dp0
@@ -15,5 +17,5 @@ set PHP_SDK_PHP_CMD=%PHP_SDK_BIN_PATH%\php\do_php.bat
 
 set PATH=%PHP_SDK_BIN_PATH%;%PHP_SDK_MSYS2_PATH%;%PATH%
 
-exit /b
+exit /b %errorlevel%
 

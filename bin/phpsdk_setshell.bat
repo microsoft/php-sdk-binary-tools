@@ -13,6 +13,8 @@ if "%1"=="-h" goto :help
 if "%1"=="--help" goto :help
 if "%2"=="" goto :help
 
+cmd /c "exit /b 0"
+
 set PHP_SDK_VC=%1
 if /i not "%PHP_SDK_VC:~0,2%"=="vc" (
 :malformed_vc_string
