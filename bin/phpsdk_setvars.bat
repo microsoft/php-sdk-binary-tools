@@ -1,5 +1,7 @@
 @echo off
 
+cmd /c "exit /b 0"
+
 rem Add necessary dirs to the path 
 
 set PHP_SDK_BIN_PATH=%~dp0
@@ -19,5 +21,5 @@ if 11 equ %PHP_SDK_VC_NUM% (
 	set "PATH=%PHP_SDK_ROOT_PATH%\compat5\bin;%PATH%"
 )
 
-exit /b
+exit /b %errorlevel%
 

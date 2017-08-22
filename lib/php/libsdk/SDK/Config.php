@@ -301,8 +301,8 @@ class Config
 				$s = file_get_contents("Makefile");
 
 				if (preg_match(",PHP_BUILD=(.+),", $s, $m)) {
-					if (isset($m[1]) && is_dir($m[1])) {
-						self::setDepsLocalPath($m[1]);
+					if (isset($m[1])) {
+						self::setDepsLocalPath(trim($m[1]));
 					}
 				}
 			}

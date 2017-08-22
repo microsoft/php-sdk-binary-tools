@@ -7,6 +7,8 @@ IF "%2" EQU ""   SET _=%CD%\%1
 rem if we're in the starter script shell, create the only struct that corresponds to the current env
 rem otherwise - retain the old behavior, create structs for all the known build combinations and don't cd
 
+cmd /c "exit /b 0"
+
 if "%PHP_SDK_ARCH%" NEQ "" (
 	if "%PHP_SDK_VC%" NEQ "" (
 		MD %_%\%PHP_SDK_VC%\%PHP_SDK_ARCH%\deps\bin
@@ -35,3 +37,5 @@ echo phpsdk_buildtree ^<nameofthetree^> [PATH]
 echo  Create the common directory structure used by the PHP SDK
 
 :EXIT
+exit /b %errorlevel%
+
