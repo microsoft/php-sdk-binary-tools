@@ -170,7 +170,8 @@ try {
 			if ($force && is_file($pack_path)) {
 				unlink($pack_path);
 			}
-			`7za a $pack_path $path_to_pack`;
+			system("7za a $pack_path $path_to_pack", $st);
+			exit((int)$st);
 			break;
 	}
 
