@@ -32,26 +32,7 @@ if (empty($dirs)) {
 	die;
 }
 
-
-$out = array(
-	"vc9" => array(
-		"x86" => array(),
-		"x64" => array(),
-	),
-	"vc11" => array(
-		"x86" => array(),
-		"x64" => array(),
-	),
-	"vc12" => array(
-		"x86" => array(),
-		"x64" => array(),
-	),
-	"vc14" => array(
-		"x86" => array(),
-		"x64" => array(),
-	),
-);
-
+$out = array();
 
 foreach ($dirs as $path) {
 	$dir = new DirectoryIterator($path);
@@ -73,6 +54,13 @@ foreach ($dirs as $path) {
 
 		$crt = $m[1];
 		$arch = $m[2];
+
+		if (!isset($out[$crt])) {
+			$out[$crt] = array();
+		}
+		if (!isset($out[$crt][$arch])) {
+			$out[$crt][$arch] = array();
+		}
 
 		$zip = new ZipArchive();
 
@@ -100,7 +88,7 @@ foreach ($dirs as $path) {
 	}
 }
 
-echo json_encode($out);
+echo json_encode($out/*, JSON_PRETTY_PRINT*/);
 
 /*
  * Local variables:
