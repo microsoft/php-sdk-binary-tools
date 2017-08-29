@@ -6,7 +6,7 @@
 	- create mappings between dll filename and zip filename
 
 	Usage:
-	php dllmap.php path0 [ path1 ... ] > dllmapping.json
+	php dllmap.php [--pretty] path0 [ path1 ... ] > dllmapping.json
 */
 
 
@@ -20,8 +20,25 @@
 	"C:\\tmp\\libs",
 );*/
 
+$sopt = "p";
+$lopt = array(
+	"pretty",
+);
+
+$flags = 0;
+$opt = getopt($sopt, $lopt);
+foreach ($opt as $name => $val) {
+	switch ($name) {
+			case "p":
+			case "pretty":
+				$flags = JSON_PRETTY_PRINT;
+				break;
+	}
+}
+
+
 $dirs = array();
-foreach (array_slice($_SERVER["argv"], 1) as $item) {
+foreach (array_slice($_SERVER["argv"], (0 == $flags ? 1 : 2)) as $item) {
 	if (file_exists($item) && is_dir($item)) {
 		$dirs[] = $item;
 	}
@@ -88,7 +105,7 @@ foreach ($dirs as $path) {
 	}
 }
 
-echo json_encode($out/*, JSON_PRETTY_PRINT*/);
+echo json_encode($out, $flags);
 
 /*
  * Local variables:
