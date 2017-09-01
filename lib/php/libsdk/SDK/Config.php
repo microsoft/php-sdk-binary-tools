@@ -54,21 +54,30 @@ class Config
 	{/*{{{*/
 		if (NULL === self::$currentArchName) {
 			/* XXX this might be not true for other compilers! */
-			passthru("where cl.exe >nul", $status);
-			if ($status) {
-				throw new Exception("Couldn't find cl.exe.");
-			}
 
-			exec("cl.exe /? 2>&1", $a, $status);
+            /*
+             * this could make "cl.exe" detection simpler.
+             * we can get the arch from the the string in the end of the path,
+             * no more need to exec "cl.exe" to get detail information.
+             */
+            exec("where cl.exe 2>&1", $out, $status);
+            if ($status) {
+                throw new Exception("Couldn't find cl.exe.");
+            }
 
-			if (0 < preg_match(",x64,", $a[0])) {
-				self::setCurrentArchName("x64");
-			} elseif(0 < preg_match(",x86,", $a[0])) {
-				self::setCurrentArchName("x86");
-			} else {
-				throw new Exception("Couldn't execute cl.exe.");
-			}
-		}
+            switch (substr($out[0], -11)) {
+                case '\\x64\\cl.exe':
+                    self::setCurrentArchName("x64");
+                    break;
+                case '\\x86\\cl.exe':
+                    self::setCurrentArchName("x86");
+                    break;
+                default:
+                    throw new Exception("Couldn't determine Arch.");
+                    break;
+            }
+
+        }
 
 		return self::$currentArchName;
 	}	/*}}}*/
