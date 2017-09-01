@@ -6,7 +6,7 @@
 	- create mappings between dll filename and zip filename
 
 	Usage:
-	php dllmap.php path0 [ path1 ... ] > dllmapping.json
+	php dllmap.php [--pretty] path0 [ path1 ... ] > dllmapping.json
 */
 
 
@@ -20,8 +20,25 @@
 	"C:\\tmp\\libs",
 );*/
 
+$sopt = "p";
+$lopt = array(
+	"pretty",
+);
+
+$flags = 0;
+$opt = getopt($sopt, $lopt);
+foreach ($opt as $name => $val) {
+	switch ($name) {
+			case "p":
+			case "pretty":
+				$flags = JSON_PRETTY_PRINT;
+				break;
+	}
+}
+
+
 $dirs = array();
-foreach (array_slice($_SERVER["argv"], 1) as $item) {
+foreach (array_slice($_SERVER["argv"], (0 == $flags ? 1 : 2)) as $item) {
 	if (file_exists($item) && is_dir($item)) {
 		$dirs[] = $item;
 	}
@@ -32,26 +49,7 @@ if (empty($dirs)) {
 	die;
 }
 
-
-$out = array(
-	"vc9" => array(
-		"x86" => array(),
-		"x64" => array(),
-	),
-	"vc11" => array(
-		"x86" => array(),
-		"x64" => array(),
-	),
-	"vc12" => array(
-		"x86" => array(),
-		"x64" => array(),
-	),
-	"vc14" => array(
-		"x86" => array(),
-		"x64" => array(),
-	),
-);
-
+$out = array();
 
 foreach ($dirs as $path) {
 	$dir = new DirectoryIterator($path);
@@ -73,6 +71,13 @@ foreach ($dirs as $path) {
 
 		$crt = $m[1];
 		$arch = $m[2];
+
+		if (!isset($out[$crt])) {
+			$out[$crt] = array();
+		}
+		if (!isset($out[$crt][$arch])) {
+			$out[$crt][$arch] = array();
+		}
 
 		$zip = new ZipArchive();
 
@@ -100,7 +105,7 @@ foreach ($dirs as $path) {
 	}
 }
 
-echo json_encode($out);
+echo json_encode($out, $flags);
 
 /*
  * Local variables:

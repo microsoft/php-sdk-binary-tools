@@ -37,7 +37,7 @@ All the tools included are either scripts or 32-bit binaries. They are therefore
 - `diff`, `diff3`, `patch`
 - `md5sum`, `sha1sum`, `sha224sum`, `sha256sum`, `sha384sum`, `sha512sum`
 - `7za`, `zip`, `unzip`, `unzipsfx`
-- `wget`
+- `wget`, `pwgen`
 
 ## Optional, not included
 
