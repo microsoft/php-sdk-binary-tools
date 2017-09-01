@@ -8,368 +8,359 @@ use SDK\Exception;
 
 class Config
 {
-	/* Config variables. */
-	protected static $depsHost = 'windows.php.net';
-	protected static $depsPort = 80;
-	protected static $depsBaseUri = "/downloads/php-sdk/deps";
+    /* Config variables. */
+    protected static $depsHost = 'windows.php.net';
+    protected static $depsPort = 80;
+    protected static $depsBaseUri = "/downloads/php-sdk/deps";
 
-	/* protected static $sdkNugetFeedUrl = "http://127.0.0.1/sdk/nuget"; */
+    /* protected static $sdkNugetFeedUrl = "http://127.0.0.1/sdk/nuget"; */
 
-	protected static $knownBranches = array ();
+    protected static $knownBranches = array ();
 
-	/* Helper props and methods. */
-	protected static $currentBranchName = NULL;
-	protected static $currentArchName = NULL;
-	protected static $currentCrtName = NULL;
-	protected static $currentStabilityName = NULL;
-	protected static $depsLocalPath = NULL;
+    /* Helper props and methods. */
+    protected static $currentBranchName = NULL;
+    protected static $currentArchName = NULL;
+    protected static $currentCrtName = NULL;
+    protected static $currentStabilityName = NULL;
+    protected static $depsLocalPath = NULL;
 
-	public static function getDepsHost() : string
-	{/*{{{*/
-		return self::$depsHost;
-	}/*}}}*/
+    public static function getDepsHost() : string
+    {/*{{{*/
+        return self::$depsHost;
+    }/*}}}*/
 
-	public static function getDepsPort() : string
-	{/*{{{*/
-		return self::$depsPort;
-	}/*}}}*/
+    public static function getDepsPort() : string
+    {/*{{{*/
+        return self::$depsPort;
+    }/*}}}*/
 
-	public static function getDepsBaseUri() : string
-	{/*{{{*/
-		return self::$depsBaseUri;
-	}/*}}}*/
+    public static function getDepsBaseUri() : string
+    {/*{{{*/
+        return self::$depsBaseUri;
+    }/*}}}*/
 
-	public static function setCurrentArchName(string $arch) : void
-	{/*{{{*/
-		$arch = strtolower($arch);
+    public static function setCurrentArchName(string $arch) : void
+    {/*{{{*/
+        $arch = strtolower($arch);
 
-		if ("x64" != $arch && "x86" != $arch) {
-			throw new Exception("Unknown arch keyword, either x86 or x64 is accepted");
-		}
-
-		self::$currentArchName = $arch;
-	}	/*}}}*/
-
-	public static function getCurrentArchName() : string
-	{/*{{{*/
-		if (NULL === self::$currentArchName) {
-			/* XXX this might be not true for other compilers! */
-
-            /*
-             * this could make "cl.exe" detection simpler.
-             * we can get the arch from the the string in the end of the path,
-             * no more need to exec "cl.exe" to get detail information.
-             */
-            exec("where cl.exe 2>&1", $out, $status);
-            if ($status) {
-                throw new Exception("Couldn't find cl.exe.");
-            }
-
-            switch (substr($out[0], -11)) {
-                case '\\x64\\cl.exe':
-                    self::setCurrentArchName("x64");
-                    break;
-                case '\\x86\\cl.exe':
-                    self::setCurrentArchName("x86");
-                    break;
-                default:
-                    throw new Exception("Couldn't determine Arch.");
-                    break;
-            }
-
+        if ("x64" != $arch && "x86" != $arch) {
+            throw new Exception("Unknown arch keyword, either x86 or x64 is accepted");
         }
 
-		return self::$currentArchName;
-	}	/*}}}*/
+        self::$currentArchName = $arch;
+    }	/*}}}*/
 
-	public static function setCurrentCrtName(string $crt) : void
-	{/*{{{*/
-		self::$currentCrtName = $crt;
-	}	/*}}}*/
+    public static function getCurrentArchName() : string
+    {/*{{{*/
+        if (NULL === self::$currentArchName) {
+            /* XXX this might be not true for other compilers! */
+            passthru("where cl.exe >nul", $status);
+            if ($status) {
+                throw new Exception("Couldn't execute cl.exe.");
+            }
 
-	public static function getCurrentCrtName() : ?string
-	{/*{{{*/
-		if (NULL === self::$currentCrtName) {
-			$all_branches = Config::getKnownBranches();
+            exec("cl.exe /? 2>&1", $out);
 
-			if (!isset($all_branches[Config::getCurrentBranchName()])) {
-				throw new Exception("Couldn't find any configuration for branch '" . Config::getCurrentBranchName() . "'");
-			}
+            if (preg_match(",x64,", $out[0])) {
+                self::setCurrentArchName("x64");
+            } elseif (preg_match(",x86,", $out[0])) {
+                self::setCurrentArchName("x86");
+            } else {
+                throw new Exception("Couldn't determine Arch.");
+            }
+        }
 
-			$branch = $all_branches[Config::getCurrentBranchName()];
-			if (count($branch) > 1) {
-				throw new Exception("Multiple CRTs are available for this branch, please choose one from " . implode(",", array_keys($branch)));
-			}
+        return self::$currentArchName;
+    }	/*}}}*/
 
-			self::setCurrentCrtName(array_keys($branch)[0]);
-		}
+    public static function setCurrentCrtName(string $crt) : void
+    {/*{{{*/
+        self::$currentCrtName = $crt;
+    }	/*}}}*/
 
-		return self::$currentCrtName;
-	}	/*}}}*/
+    public static function getCurrentCrtName() : ?string
+    {/*{{{*/
+        if (NULL === self::$currentCrtName) {
+            $all_branches = Config::getKnownBranches();
 
-	public static function setCurrentStabilityName(string $stability) : void
-	{/*{{{*/
-		if ("stable" != $stability && "staging" != $stability) {
-			throw new Exception("Unknown stability keyword, either stable or staging is accepted");
-		}
+            if (!isset($all_branches[Config::getCurrentBranchName()])) {
+                throw new Exception("Couldn't find any configuration for branch '" . Config::getCurrentBranchName() . "'");
+            }
 
-		self::$currentStabilityName = $stability;
-	}	/*}}}*/
+            $branch = $all_branches[Config::getCurrentBranchName()];
+            if (count($branch) > 1) {
+                throw new Exception("Multiple CRTs are available for this branch, please choose one from " . implode(",", array_keys($branch)));
+            }
 
-	public static function getCurrentStabilityName() : ?string
-	{/*{{{*/
-		if (NULL === self::$currentStabilityName) {
-			if ("master" == Config::getCurrentBranchName()) {
-				Config::setCurrentStabilityName("staging");
-			} else {
-				Config::setCurrentStabilityName("stable");
-			}
-		}
+            self::setCurrentCrtName(array_keys($branch)[0]);
+        }
 
-		return self::$currentStabilityName;
-	}	/*}}}*/
+        return self::$currentCrtName;
+    }	/*}}}*/
 
-	public static function getKnownBranches() : array
-	{/*{{{*/
-		if (empty(self::$knownBranches)) {
-			$cache_file = "known_branches.txt";
-			$cache = new Cache(self::getDepsLocalPath());
-			$fetcher = new Fetcher(self::$depsHost, self::$depsPort);
+    public static function setCurrentStabilityName(string $stability) : void
+    {/*{{{*/
+        if ("stable" != $stability && "staging" != $stability) {
+            throw new Exception("Unknown stability keyword, either stable or staging is accepted");
+        }
 
-			$tmp = $fetcher->getByUri(self::$depsBaseUri . "/series/");
-			if (false !== $tmp) {
-				$data = array();
-				if (preg_match_all(",/packages-(.+)-(vc\d+)-(x86|x64)-(stable|staging)\.txt,U", $tmp, $m, PREG_SET_ORDER)) {
-					foreach ($m as $b) {
-						if (!isset($data[$b[1]])) {
-							$data[$b[1]] = array();
-						}
+        self::$currentStabilityName = $stability;
+    }	/*}}}*/
 
-						$data[$b[1]][$b[2]][] = array("arch" => $b[3], "stability" => $b[4]);
-					}
+    public static function getCurrentStabilityName() : ?string
+    {/*{{{*/
+        if (NULL === self::$currentStabilityName) {
+            if ("master" == Config::getCurrentBranchName()) {
+                Config::setCurrentStabilityName("staging");
+            } else {
+                Config::setCurrentStabilityName("stable");
+            }
+        }
 
-					$cache->cachecontent($cache_file, json_encode($data, JSON_PRETTY_PRINT), true);
-				}
-			} else {
-				/* It might be ok to use cached branches list, if a fetch failed. */
-				$tmp = $cache->getCachedContent($cache_file, true);
-				if (NULL == $tmp) {
-					throw new Exception("No cached branches list found");
-				}
-				$data = json_decode($tmp, true);
-			}
+        return self::$currentStabilityName;
+    }	/*}}}*/
 
-			if (!is_array($data) || empty($data)) {
-				throw new Exception("Failed to fetch supported branches");
-			}
-			self::$knownBranches = $data;
-		}
+    public static function getKnownBranches() : array
+    {/*{{{*/
+        if (empty(self::$knownBranches)) {
+            $cache_file = "known_branches.txt";
+            $cache = new Cache(self::getDepsLocalPath());
+            $fetcher = new Fetcher(self::$depsHost, self::$depsPort);
 
-		return self::$knownBranches;
-	}/*}}}*/
+            $tmp = $fetcher->getByUri(self::$depsBaseUri . "/series/");
+            if (false !== $tmp) {
+                $data = array();
+                if (preg_match_all(",/packages-(.+)-(vc\d+)-(x86|x64)-(stable|staging)\.txt,U", $tmp, $m, PREG_SET_ORDER)) {
+                    foreach ($m as $b) {
+                        if (!isset($data[$b[1]])) {
+                            $data[$b[1]] = array();
+                        }
 
-	public static function setCurrentBranchName(string $name) : void
-	{/*{{{*/
-		if (!array_key_exists($name, self::getKnownBranches())) {
-			throw new Exception("Unsupported branch '$name'");
-		}
+                        $data[$b[1]][$b[2]][] = array("arch" => $b[3], "stability" => $b[4]);
+                    }
 
-		self::$currentBranchName = $name;
-	}/*}}}*/
+                    $cache->cachecontent($cache_file, json_encode($data, JSON_PRETTY_PRINT), true);
+                }
+            } else {
+                /* It might be ok to use cached branches list, if a fetch failed. */
+                $tmp = $cache->getCachedContent($cache_file, true);
+                if (NULL == $tmp) {
+                    throw new Exception("No cached branches list found");
+                }
+                $data = json_decode($tmp, true);
+            }
 
-	public static function guessCurrentBranchName() : ?string
-	{/*{{{*/
-		$branch = NULL;
+            if (!is_array($data) || empty($data)) {
+                throw new Exception("Failed to fetch supported branches");
+            }
+            self::$knownBranches = $data;
+        }
 
-		/* Try to figure out the branch. For now it only works if CWD is in php-src. */
-		$fl = "main/php_version.h";
-		if (file_exists($fl)) {
-			$s = file_get_contents($fl);
-			$major = $minor = NULL;
+        return self::$knownBranches;
+    }/*}}}*/
 
-			if (preg_match(",PHP_MAJOR_VERSION (\d+),", $s, $m)) {
-				$major = $m[1];
-			}
-			if (preg_match(",PHP_MINOR_VERSION (\d+),", $s, $m)) {
-				$minor = $m[1];
-			}
+    public static function setCurrentBranchName(string $name) : void
+    {/*{{{*/
+        if (!array_key_exists($name, self::getKnownBranches())) {
+            throw new Exception("Unsupported branch '$name'");
+        }
 
-			if (is_numeric($major) && is_numeric($minor)) {
-				$branch = "$major.$minor";
-			}
-		}
+        self::$currentBranchName = $name;
+    }/*}}}*/
 
-		return $branch;
-	}/*}}}*/
+    public static function guessCurrentBranchName() : ?string
+    {/*{{{*/
+        $branch = NULL;
 
-	public static function getCurrentBranchName() : string
-	{/*{{{*/
-		if (NULL == self::$currentBranchName) {
-			$branch = self::guessCurrentBranchName();
-			self::setCurrentBranchName($branch);
-		}
-	
-		return self::$currentBranchName;
-	}/*}}}*/
+        /* Try to figure out the branch. For now it only works if CWD is in php-src. */
+        $fl = "main/php_version.h";
+        if (file_exists($fl)) {
+            $s = file_get_contents($fl);
+            $major = $minor = NULL;
 
-	public static function getCurrentBranchData() : array
-	{/*{{{*/
-		$ret = array();
-		$branches = self::getKnownBranches();
+            if (preg_match(",PHP_MAJOR_VERSION (\d+),", $s, $m)) {
+                $major = $m[1];
+            }
+            if (preg_match(",PHP_MINOR_VERSION (\d+),", $s, $m)) {
+                $minor = $m[1];
+            }
 
-		$current_branch_name = self::getCurrentBranchName();
-		if (!array_key_exists($current_branch_name, $branches)) {
-			throw new Exception("Unknown branch '$current_branch_name'");
-		}
+            if (is_numeric($major) && is_numeric($minor)) {
+                $branch = "$major.$minor";
+            }
+        }
 
-		$cur_crt = Config::getCurrentCrtName();
-		if (count($branches[$current_branch_name]) > 1) {
-			if (NULL === $cur_crt) {
-				throw new Exception("More than one CRT is available for branch '$current_branch_name', pass one explicitly.");
-			}
+        return $branch;
+    }/*}}}*/
 
-			$cur_crt_usable = false;
-			foreach (array_keys($branches[$current_branch_name]) as $crt) {
-				if ($cur_crt == $crt) {
-					$cur_crt_usable = true;
-					break;
-				}
-			}
-			if (!$cur_crt_usable) {
-				throw new Exception("The passed CRT '$cur_crt' doesn't match any availbale for branch '$current_branch_name'");
-			}
-			$data = $branches[$current_branch_name][$cur_crt];
-		} else {
-			/* Evaluate CRTs, to avoid ambiquity. */
-			list($crt, $data) = each($branches[$current_branch_name]);
-			if ($crt != $cur_crt) {
-				throw new Exception("The passed CRT '$cur_crt' doesn't match any availbale for branch '$current_branch_name'");
-			}
-		}
+    public static function getCurrentBranchName() : string
+    {/*{{{*/
+        if (NULL == self::$currentBranchName) {
+            $branch = self::guessCurrentBranchName();
+            self::setCurrentBranchName($branch);
+        }
 
-		$ret["name"] = $current_branch_name;
-		$ret["crt"] = $crt;
+        return self::$currentBranchName;
+    }/*}}}*/
 
-		/* Last step, filter by arch and stability. */
-		foreach ($data as $d) {
-			if (self::getCurrentArchName() == $d["arch"]) {
-				if (self::getCurrentStabilityName() == $d["stability"]) {
-					$ret["arch"] = $d["arch"];
-					$ret["stability"] = $d["stability"];
-				}
-			}
-		}
+    public static function getCurrentBranchData() : array
+    {/*{{{*/
+        $ret = array();
+        $branches = self::getKnownBranches();
 
-		if (!$ret["stability"]) {
-			throw new Exception("Failed to find config with stability '" . self::getCurrentStabilityName() . "'");
-		}
-		if (!$ret["crt"]) {
-			throw new Exception("Failed to find config with arch '" . self::getCurrentArchName() . "'");
-		}
+        $current_branch_name = self::getCurrentBranchName();
+        if (!array_key_exists($current_branch_name, $branches)) {
+            throw new Exception("Unknown branch '$current_branch_name'");
+        }
 
-		return $ret; 
-	}/*}}}*/
+        $cur_crt = Config::getCurrentCrtName();
+        if (count($branches[$current_branch_name]) > 1) {
+            if (NULL === $cur_crt) {
+                throw new Exception("More than one CRT is available for branch '$current_branch_name', pass one explicitly.");
+            }
 
-	public static function getSdkNugetFeedUrl() : string
-	{/*{{{*/
-		return self::$sdkNugetFeedUrl;
-	}/*}}}*/
+            $cur_crt_usable = false;
+            foreach (array_keys($branches[$current_branch_name]) as $crt) {
+                if ($cur_crt == $crt) {
+                    $cur_crt_usable = true;
+                    break;
+                }
+            }
+            if (!$cur_crt_usable) {
+                throw new Exception("The passed CRT '$cur_crt' doesn't match any availbale for branch '$current_branch_name'");
+            }
+            $data = $branches[$current_branch_name][$cur_crt];
+        } else {
+            /* Evaluate CRTs, to avoid ambiquity. */
+            list($crt, $data) = each($branches[$current_branch_name]);
+            if ($crt != $cur_crt) {
+                throw new Exception("The passed CRT '$cur_crt' doesn't match any availbale for branch '$current_branch_name'");
+            }
+        }
 
-	public static function getSdkPath() : string
-	{/*{{{*/
-		$path = getenv("PHP_SDK_ROOT_PATH");
+        $ret["name"] = $current_branch_name;
+        $ret["crt"] = $crt;
 
-		if (!$path) {
-			throw new Exception("PHP_SDK_ROOT_PATH isn't set!");
-		}
+        /* Last step, filter by arch and stability. */
+        foreach ($data as $d) {
+            if (self::getCurrentArchName() == $d["arch"]) {
+                if (self::getCurrentStabilityName() == $d["stability"]) {
+                    $ret["arch"] = $d["arch"];
+                    $ret["stability"] = $d["stability"];
+                }
+            }
+        }
 
-		$path = realpath($path);
-		if (!file_exists($path)) {
-			throw new Exception("The path '$path' is non existent.");
-		}
+        if (!$ret["stability"]) {
+            throw new Exception("Failed to find config with stability '" . self::getCurrentStabilityName() . "'");
+        }
+        if (!$ret["crt"]) {
+            throw new Exception("Failed to find config with arch '" . self::getCurrentArchName() . "'");
+        }
 
-		return $path;
-	}/*}}}*/
+        return $ret;
+    }/*}}}*/
 
-	public static function getSdkVersion() : string
-	{/*{{{*/
-		$path = self::getSdkPath() . DIRECTORY_SEPARATOR . "VERSION";
+    public static function getSdkNugetFeedUrl() : string
+    {/*{{{*/
+        return self::$sdkNugetFeedUrl;
+    }/*}}}*/
 
-		if (!file_exists($path)) {
-			throw new Exception("Couldn't find the SDK version file.");
-		}
+    public static function getSdkPath() : string
+    {/*{{{*/
+        $path = getenv("PHP_SDK_ROOT_PATH");
 
-		return file_get_contents($path);
-	}/*}}}*/
+        if (!$path) {
+            throw new Exception("PHP_SDK_ROOT_PATH isn't set!");
+        }
 
-	public static function getDepsLocalPath() : ?string
-	{/*{{{*/
-		if (NULL == self::$depsLocalPath) {
-			if (file_exists("Makefile")) {
-				$s = file_get_contents("Makefile");
+        $path = realpath($path);
+        if (!file_exists($path)) {
+            throw new Exception("The path '$path' is non existent.");
+        }
 
-				if (preg_match(",PHP_BUILD=(.+),", $s, $m)) {
-					if (isset($m[1])) {
-						self::setDepsLocalPath(trim($m[1]));
-					}
-				}
-			}
-		}
+        return $path;
+    }/*}}}*/
 
-		if (NULL == self::$depsLocalPath) {
-			$tmp = dirname(getcwd()) . DIRECTORY_SEPARATOR . "deps";
-			if (is_dir($tmp)) {
-				self::setDepsLocalPath($tmp);
-			}
-		}
-		
-		if (NULL == self::$depsLocalPath) {
-			$tmp = realpath("../deps");
-			if (is_dir($tmp)) {
-				self::setDepsLocalPath($tmp);
-			}
-		}
+    public static function getSdkVersion() : string
+    {/*{{{*/
+        $path = self::getSdkPath() . DIRECTORY_SEPARATOR . "VERSION";
 
-		if (NULL == self::$depsLocalPath) {
-			if (file_exists("main/php_version.h")) {
-				/* Deps dir might not exist. */
-				self::setDepsLocalPath(realpath("..") . DIRECTORY_SEPARATOR . "deps");
-			}
-		}
+        if (!file_exists($path)) {
+            throw new Exception("Couldn't find the SDK version file.");
+        }
 
-		return self::$depsLocalPath;
-	}/*}}}*/
+        return file_get_contents($path);
+    }/*}}}*/
 
-	public static function setDepsLocalPath(string $path) : void
-	{/*{{{*/
-		self::$depsLocalPath = $path;
-	}/*}}}*/
+    public static function getDepsLocalPath() : ?string
+    {/*{{{*/
+        if (NULL == self::$depsLocalPath) {
+            if (file_exists("Makefile")) {
+                $s = file_get_contents("Makefile");
 
-	public static function getCacheDir() : string
-	{/*{{{*/
-		$path = self::getSdkPath() . DIRECTORY_SEPARATOR . ".cache";
+                if (preg_match(",PHP_BUILD=(.+),", $s, $m)) {
+                    if (isset($m[1])) {
+                        self::setDepsLocalPath(trim($m[1]));
+                    }
+                }
+            }
+        }
 
-		if (!file_exists($path)) {
-			if (!mkdir($path)) {
-				throw new Exception("Failed to create '$path'");
-			}
-		}
+        if (NULL == self::$depsLocalPath) {
+            $tmp = dirname(getcwd()) . DIRECTORY_SEPARATOR . "deps";
+            if (is_dir($tmp)) {
+                self::setDepsLocalPath($tmp);
+            }
+        }
 
-		return $path;
-	}/*}}}*/
+        if (NULL == self::$depsLocalPath) {
+            $tmp = realpath("../deps");
+            if (is_dir($tmp)) {
+                self::setDepsLocalPath($tmp);
+            }
+        }
 
-	public static function getTmpDir() : string
-	{/*{{{*/
-		$path = self::getSdkPath() . DIRECTORY_SEPARATOR . ".tmp";
+        if (NULL == self::$depsLocalPath) {
+            if (file_exists("main/php_version.h")) {
+                /* Deps dir might not exist. */
+                self::setDepsLocalPath(realpath("..") . DIRECTORY_SEPARATOR . "deps");
+            }
+        }
 
-		if (!file_exists($path)) {
-			if (!mkdir($path)) {
-				throw new Exception("Failed to create '$path'");
-			}
-		}
+        return self::$depsLocalPath;
+    }/*}}}*/
 
-		return $path;
-	}/*}}}*/
+    public static function setDepsLocalPath(string $path) : void
+    {/*{{{*/
+        self::$depsLocalPath = $path;
+    }/*}}}*/
+
+    public static function getCacheDir() : string
+    {/*{{{*/
+        $path = self::getSdkPath() . DIRECTORY_SEPARATOR . ".cache";
+
+        if (!file_exists($path)) {
+            if (!mkdir($path)) {
+                throw new Exception("Failed to create '$path'");
+            }
+        }
+
+        return $path;
+    }/*}}}*/
+
+    public static function getTmpDir() : string
+    {/*{{{*/
+        $path = self::getSdkPath() . DIRECTORY_SEPARATOR . ".tmp";
+
+        if (!file_exists($path)) {
+            if (!mkdir($path)) {
+                throw new Exception("Failed to create '$path'");
+            }
+        }
+
+        return $path;
+    }/*}}}*/
 }
 
 /*
