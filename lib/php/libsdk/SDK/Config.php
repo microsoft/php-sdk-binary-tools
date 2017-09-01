@@ -60,14 +60,13 @@ class Config
 			}
 
 			exec("cl.exe /? 2>&1", $a, $status);
-			if ($status) {
-				throw new Exception("Couldn't execute cl.exe.");
-			}
 
-			if (preg_match(",x64,", $a[0])) {
+			if (0 < preg_match(",x64,", $a[0])) {
 				self::setCurrentArchName("x64");
-			} else {
+			} elseif(0 < preg_match(",x86,", $a[0])) {
 				self::setCurrentArchName("x86");
+			} else {
+				throw new Exception("Couldn't execute cl.exe.");
 			}
 		}
 
