@@ -56,18 +56,17 @@ class Config
 			/* XXX this might be not true for other compilers! */
 			passthru("where cl.exe >nul", $status);
 			if ($status) {
-				throw new Exception("Couldn't find cl.exe.");
-			}
-
-			exec("cl.exe /? 2>&1", $a, $status);
-			if ($status) {
 				throw new Exception("Couldn't execute cl.exe.");
 			}
 
-			if (preg_match(",x64,", $a[0])) {
+			exec("cl.exe /? 2>&1", $out);
+
+			if (preg_match(",x64,", $out[0])) {
 				self::setCurrentArchName("x64");
-			} else {
+			} elseif (preg_match(",x86,", $out[0])) {
 				self::setCurrentArchName("x86");
+			} else {
+				throw new Exception("Couldn't determine Arch.");
 			}
 		}
 
