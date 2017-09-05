@@ -171,10 +171,25 @@ class Config
 	public static function guessCurrentBranchName() : ?string
 	{/*{{{*/
 		$branch = NULL;
+		$found = false;
 
-		/* Try to figure out the branch. For now it only works if CWD is in php-src. */
+		/* Try to figure out the branch. The worky scenarios are
+			- CWD is in php-src 
+			- phpize is on the path
+			FIXME for the dev package, there should be a php-config utility
+		 */
 		$fl = "main/php_version.h";
-		if (file_exists($fl)) {
+		$found = file_exists($fl);
+
+		if (!$found) {
+			exec("where phpize", $out, $status);
+			if (!$status) {
+				$fl = dirname($out[0]) . DIRECTORY_SEPARATOR . "include" . DIRECTORY_SEPARATOR . $fl;
+				$found = file_exists($fl);
+			}
+		}
+
+		if ($found) {
 			$s = file_get_contents($fl);
 			$major = $minor = NULL;
 
