@@ -187,7 +187,7 @@ function usage(int $code = -1)
 	echo "PHP SDK dependency handling tool.", PHP_EOL;
 	echo "Usage: ", PHP_EOL, PHP_EOL;
 	echo "Configuration:", PHP_EOL;
-	echo "  -b --branch    Branch name, eg. 7.0, 7.1, etc. If omited, CWD is used to guess.", PHP_EOL;
+	echo "  -b --branch    Branch name, eg. 7.0, 7.1, etc. If omited, several guess methods apply.", PHP_EOL;
 	echo "  -a --arch      Architecture, x86 or x64. If omited, cl.exe is used to guess.", PHP_EOL;
 	echo "  -t --crt       CRT, marked by the corresponding VC++ version, eg. vc11, vc14, etc.", PHP_EOL;
 	echo "  -s --stability One of stable or staging.", PHP_EOL, PHP_EOL;
