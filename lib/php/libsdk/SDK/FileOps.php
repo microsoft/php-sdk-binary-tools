@@ -117,7 +117,7 @@ trait FileOps
 	}/*}}}*/
 
 	protected function download(string $url, string $dest = NULL) : ?string
-	{
+	{/*{{{*/
 		$fd = NULL;
 		$ch = curl_init($url);
 
@@ -150,7 +150,7 @@ trait FileOps
 		}
 
 		return $ret;
-	}
+	}/*}}}*/
 }
 
 /*
