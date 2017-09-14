@@ -7,18 +7,24 @@ use SDK\{Config, Exception};
 class Lock
 {
 	protected $fd;
+	protected $fn;
 	protected $locked = false;
 	protected $wouldBlock = false;
+	protected $shared = false;
 
-	public function __construct(string $tag, bool $auto = true, bool $auto_flags = LOCK_EX | LOCK_NB)
+	public function __construct(string $tag, bool $auto = true, bool $autoShared = false)
 	{/*{{{*/
-		$hash = md5($tagConfig::getDepsLocalPath());
-		$fd = Config::getTmpDir() . DIRECTORY_SEPARATOR . $hash;
+		$hash = hash("sha256", $tag);
+		$this->fn = Config::getTmpDir() . DIRECTORY_SEPARATOR . $hash . ".lock";
 
-		$this->fd = fopen($fn, "wb");
+		$this->fd = fopen($this->fn, "wb");
 
 		if ($auto) {
-			$this->locked = $this->doLock($auto_flags);
+			if ($autoShared) {
+				$this->shared();
+			} else {
+				$this->exclusive();
+			}
 		}
 	}/*}}}*/
 
@@ -26,7 +32,7 @@ class Lock
 	{
 		$flags = LOCK_SH;
 		if (!$block) {
-			$flags = LOCK_NB;
+			$flags |= LOCK_NB;
 		}
 
 		return $this->doLock($flags);
@@ -36,7 +42,7 @@ class Lock
 	{
 		$flags = LOCK_EX;
 		if (!$block) {
-			$flags = LOCK_NB;
+			$flags |= LOCK_NB;
 		}
 
 		return $this->doLock($flags);
@@ -44,7 +50,13 @@ class Lock
 
 	protected function doLock(int $flags = LOCK_EX) : bool
 	{
+		if ($this->locked) {
+			/* Or throw an exception, as we don't know which lock type the outta world expected. */
+			return true;
+		}
+
 		$this->locked = flock($this->fd, $flags, $this->wouldBlock);	
+		$this->shared = $flags & LOCK_SH;
 		return $this->locked;
 	}
 
@@ -70,6 +82,10 @@ class Lock
 	{
 		$this->unlock();
 		fclose($this->fd);
+		/* We don't really know no one else waits on the same lock yet.*/
+		/*if (file_exists($this->fn) && !$this->shared) {
+			@unlink($this->fn);
+		}*/
 	}
 
 }
