@@ -2,7 +2,7 @@
 
 namespace SDK\Build\Dependency;
 
-use SDK\{Config, Cache, Exception, FileOps};
+use SDK\{Config, Cache, Exception, FileOps, Lock};
 
 class Manager
 {
@@ -39,7 +39,7 @@ class Manager
 
 	public function updatesAvailable() : bool
 	{/*{{{*/
-		return $this->series->updatesAvailable();
+		return $this->series->updatesAvailable() || !file_exists(Config::getDepsLocalPath());
 	}/*}}}*/
 
 	/* FIXME implement rollback */
@@ -48,6 +48,14 @@ class Manager
 		if (!$force) {
 			if (!$this->updatesAvailable()) {
 				$msg .= "No updates are available";
+				return;
+			}
+
+			$lock = new Lock(Config::getDepsLocalPath(), false);
+			if (!$lock->exclusive()) {
+				$msg .= "Another process is updating same dependency path. I'm just going to wait for it to finish and then exit.";
+				$lock->exclusive(true);
+				unset($lock);
 				return;
 			}
 		}
@@ -86,10 +94,16 @@ class Manager
 
 				/* This is fine, it's gonna be on the same drive. */
 				if (!$this->mv($this->path, $new_path)) {
+					if (!$force) {
+						unset($lock);
+					}
 					throw new Exception("Unable to rename '{$this->path}' to '$new_path'");
 				}
 			} else {
 				if (!$this->rm($this->path)) {
+					if (!$force) {
+						unset($lock);
+					}
 					throw new Exception("Unable to remove the current dependency dir at '{$this->path}'");
 				}
 			}
@@ -97,6 +111,9 @@ class Manager
 			$up = dirname($this->path);
 			if (!file_exists($up)) {
 				if (!$this->md($up)) {
+					if (!$force) {
+						unset($lock);
+					}
 					throw new Exception("Unable to create '{$this->path}'");
 				}
 			}
@@ -117,6 +134,10 @@ class Manager
 			}
 		} else {
 			$msg .= "No backup was created.";
+		}
+
+		if (!$force) {
+			unset($lock);
 		}
 	}/*}}}*/
 }
