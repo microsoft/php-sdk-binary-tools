@@ -17,8 +17,6 @@ class Lock
 		$hash = hash("sha256", $tag);
 		$this->fn = Config::getTmpDir() . DIRECTORY_SEPARATOR . $hash . ".lock";
 
-		$this->fd = fopen($this->fn, "wb");
-
 		if ($auto) {
 			if ($autoShared) {
 				$this->shared();
@@ -28,66 +26,75 @@ class Lock
 		}
 	}/*}}}*/
 
+	public function __destruct()
+	{/*{{{*/
+		$this->unlock();
+		/* We don't really know no one else waits on the same lock yet.*/
+		/*if (file_exists($this->fn) && !$this->shared) {
+			@unlink($this->fn);
+		}*/
+	}/*}}}*/
+
 	public function shared(bool $block = false) : bool
-	{
+	{/*{{{*/
 		$flags = LOCK_SH;
 		if (!$block) {
 			$flags |= LOCK_NB;
 		}
 
 		return $this->doLock($flags);
-	}
+	}/*}}}*/
 
 	public function exclusive(bool $block = false) : bool
-	{
+	{/*{{{*/
 		$flags = LOCK_EX;
 		if (!$block) {
 			$flags |= LOCK_NB;
 		}
 
 		return $this->doLock($flags);
-	}
+	}/*}}}*/
 
 	protected function doLock(int $flags = LOCK_EX) : bool
-	{
+	{/*{{{*/
 		if ($this->locked) {
 			/* Or throw an exception, as we don't know which lock type the outta world expected. */
 			return true;
 		}
 
-		$this->locked = flock($this->fd, $flags, $this->wouldBlock);	
 		$this->shared = $flags & LOCK_SH;
+		if ($this->shared) {
+			$this->fd = fopen($this->fn, "rb");
+		} else {
+			$this->fd = fopen($this->fn, "wb");
+		}
+		$this->locked = flock($this->fd, $flags, $this->wouldBlock);	
 		return $this->locked;
-	}
+	}/*}}}*/
 
 	public function unlock() : bool
-	{
-		if ($this->locked) {
-			return $this->doLock(LOCK_UN);
+	{/*{{{*/
+		if (!$this->locked) {
+			return true;
 		}
+
+		$this->doLock(LOCK_UN);
+
+		fclose($this->fd);
+		$this->fd = NULL;
+
 		return $this->locked;
-	}
+	}/*}}}*/
 
 	public function locked() : bool
-	{
+	{/*{{{*/
 		return $this->locked;
-	}
+	}/*}}}*/
 
 	public function wouldBlock() : bool
-	{
+	{/*{{{*/
 		return 1 === $this->wouldBlock;
-	}
-
-	public function __destruct()
-	{
-		$this->unlock();
-		fclose($this->fd);
-		/* We don't really know no one else waits on the same lock yet.*/
-		/*if (file_exists($this->fn) && !$this->shared) {
-			@unlink($this->fn);
-		}*/
-	}
-
+	}/*}}}*/
 }
 
 /*
