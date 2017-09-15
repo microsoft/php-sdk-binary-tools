@@ -51,9 +51,10 @@ class Manager
 				return;
 			}
 
-			$lock = new Lock(Config::getDepsLocalPath(), false);
-			if (!$lock->exclusive()) {
-				$msg .= "Another process is updating same dependency path. I'm just going to wait for it to finish and then exit.";
+			$lock = new Lock(Config::getDepsLocalPath());
+			if (!$lock->locked()) {
+				$msg .= "Dependencies was updated by another process.";
+				echo "Another process is updating same dependency path. I'm just going to wait for it to finish and then exit.", PHP_EOL;
 				$lock->exclusive(true);
 				unset($lock);
 				return;
