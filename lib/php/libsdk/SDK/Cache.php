@@ -55,7 +55,26 @@ class Cache
 	{/*{{{*/
 		$p = $this->getCacheablePath($path, $relative);
 
-		if (strlen($content) !== file_put_contents($p, $content)) {
+		$to_write = strlen($content);
+		$wrote = 0;
+
+		$fd = fopen($p, "wb");
+
+		flock($fd, LOCK_EX);
+
+		do {
+			$got = fwrite($fd, substr($content, $wrote));
+			if (false == $got) {
+				break;
+			}
+			$wrote += $got;
+		} while ($wrote < $to_write);
+
+		flock($fd, LOCK_UN);
+
+		fclose($fd);
+
+		if ($to_write !== $wrote) {
 			throw new Exception("Couldn't cache '$p'");
 		}
 	}/*}}}*/
