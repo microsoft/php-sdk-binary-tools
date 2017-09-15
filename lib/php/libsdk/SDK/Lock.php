@@ -29,27 +29,27 @@ class Lock
 	}/*}}}*/
 
 	public function shared(bool $block = false) : bool
-	{
+	{/*{{{*/
 		$flags = LOCK_SH;
 		if (!$block) {
 			$flags |= LOCK_NB;
 		}
 
 		return $this->doLock($flags);
-	}
+	}/*}}}*/
 
 	public function exclusive(bool $block = false) : bool
-	{
+	{/*{{{*/
 		$flags = LOCK_EX;
 		if (!$block) {
 			$flags |= LOCK_NB;
 		}
 
 		return $this->doLock($flags);
-	}
+	}/*}}}*/
 
 	protected function doLock(int $flags = LOCK_EX) : bool
-	{
+	{/*{{{*/
 		if ($this->locked) {
 			/* Or throw an exception, as we don't know which lock type the outta world expected. */
 			return true;
@@ -58,35 +58,35 @@ class Lock
 		$this->locked = flock($this->fd, $flags, $this->wouldBlock);	
 		$this->shared = $flags & LOCK_SH;
 		return $this->locked;
-	}
+	}/*}}}*/
 
 	public function unlock() : bool
-	{
+	{/*{{{*/
 		if ($this->locked) {
 			return $this->doLock(LOCK_UN);
 		}
 		return $this->locked;
-	}
+	}/*}}}*/
 
 	public function locked() : bool
-	{
+	{/*{{{*/
 		return $this->locked;
-	}
+	}/*}}}*/
 
 	public function wouldBlock() : bool
-	{
+	{/*{{{*/
 		return 1 === $this->wouldBlock;
-	}
+	}/*}}}*/
 
 	public function __destruct()
-	{
+	{/*{{{*/
 		$this->unlock();
 		fclose($this->fd);
 		/* We don't really know no one else waits on the same lock yet.*/
 		/*if (file_exists($this->fn) && !$this->shared) {
 			@unlink($this->fn);
 		}*/
-	}
+	}/*}}}*/
 
 }
 
