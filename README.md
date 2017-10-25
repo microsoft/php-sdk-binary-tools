@@ -109,7 +109,7 @@ The SDK tools are based on the KISS principle and should be kept so. Basic tools
 - SDK or PHP sources put into paths including spaces might cause issue.
 - SDK or PHP sources put into too long paths, will cause an issue.
 - If Cygwin, MSYS2 or MinGW flavors are exposed in global PATH, it might cause issues. If it's unavoidable, ensure SDK preceeds it on the PATH.
-- When fetching from git, git `core.autocrlf` configuration directive set to `false` is recommended.
+- When fetching the binary SDK from git, git `core.autocrlf` configuration directive set to `false` is recommended.
 - Tools, based on MSYS2, only accept paths with forward slashes.
 - Both Visual C++ toolset and the Windows SDK components have to be installed for the PHP SDK to work properly. 
 - The VC++ toolset is still requried, even if another compiler, fe. clang, is intended to be used.
