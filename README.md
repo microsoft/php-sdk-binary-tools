@@ -4,7 +4,7 @@ PHP SDK is a tool kit for Windows PHP builds
 
 # License
 
-The PHP SDK itself and the SDK own tools are licensed under the BSD 2-Clause license. With the usage of the other tools, you accept the respective licenses.
+The PHP SDK itself and the SDK own tools and code are licensed under the BSD 2-Clause license. With the usage of the other tools, you accept the respective licenses.
 
 # Overview
 
@@ -32,7 +32,7 @@ All the tools included are either scripts or 32-bit binaries. They are therefore
 
 ## Other tools
 
-- `bison` 3.0.2, `re2c` 0.15.3, `lemon`
+- `bison` 3.0.4, `re2c` 1.0.2, `lemon`
 - `awk`, `gawk`, `sed`, `grep`
 - `diff`, `diff3`, `patch`
 - `md5sum`, `sha1sum`, `sha224sum`, `sha256sum`, `sha384sum`, `sha512sum`
@@ -108,8 +108,8 @@ The SDK tools are based on the KISS principle and should be kept so. Basic tools
 
 - SDK or PHP sources put into paths including spaces might cause issue.
 - SDK or PHP sources put into too long paths, will cause an issue.
-- If Cygwin is installed, it might cause issues. If it's unavoidable, to have Cygwin on the same machine, ensure SDK preceeds it on the PATH.
-- When fetching from git, git `core.autocrlf` configuration directive set to `false` is recommended.
+- If Cygwin, MSYS2 or MinGW flavors are exposed in global PATH, it might cause issues. If it's unavoidable, ensure SDK preceeds it on the PATH.
+- When fetching the binary SDK from git, git `core.autocrlf` configuration directive set to `false` is recommended.
 - Tools, based on MSYS2, only accept paths with forward slashes.
 - Both Visual C++ toolset and the Windows SDK components have to be installed for the PHP SDK to work properly. 
 - The VC++ toolset is still requried, even if another compiler, fe. clang, is intended to be used.
