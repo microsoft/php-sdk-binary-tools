@@ -102,7 +102,7 @@ If the PHP SDK is kept as a git checkout, merely what is needed instead is to gi
 
 # Extending
 
-The SDK tools are based on the KISS principle and should be kept so. Basic tools are implemented as simple batch script. The minimalistic `PHP` is available for internal SDK purposes. It can be used, if more complexity is required. If you have an idea for some useful tool or workflow, please open a ticket or PR, so it can be discussed, implemented and added to the SDK. By contributing an implementation, you should also accept the SDK license.
+The SDK tools are based on the KISS principle and should be kept so. Basic tools are implemented as simple batch script. The minimalistic `PHP` is available for internal SDK purposes. It can be used, if more complexity is required. A suitable PHP binary is bound with the PHP SDK. If you have an idea for some useful tool or workflow, please open a ticket or PR, so it can be discussed, implemented and added to the SDK. By contributing an implementation, you should also accept the SDK license.
 
 # Pitfalls
 
