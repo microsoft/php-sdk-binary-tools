@@ -4,6 +4,7 @@ setlocal enableextensions enabledelayedexpansion
 
 rem make sure we end up where we started (for VS2017)
 set "VSCMD_START_DIR=%CD%"
+set "__VSCMD_ARG_NO_LOGO=yes"
 
 rem this will be eventually overridden by phpsdk_setvars, but nothing wrong to use the same name here
 set PHP_SDK_ROOT_PATH=%~dp0
