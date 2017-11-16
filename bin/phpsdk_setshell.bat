@@ -98,6 +98,21 @@ set TMPKEY=
 
 if 15 gtr %PHP_SDK_VC_NUM% (
 	rem get sdk dir
+	rem if 10.0 is available, it's ok
+	if /i "%PHP_SDK_OS_ARCH%"=="x64" (
+		set TMPKEY=HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Microsoft SDKs\Windows\v10.0
+	) else (
+		set TMPKEY=HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SDKs\Windows\v10.0
+	)
+	for /f "tokens=2*" %%a in ('reg query "!TMPKEY!" /v InstallationFolder') do (
+		for /f "tokens=2*" %%c in ('reg query "!TMPKEY!" /v ProductVersion') do (
+			if exist "%%bInclude\%%d.0\um\Windows.h" (
+				goto got_sdk
+			)
+		)
+	)
+
+	rem Otherwise 8.1 should be available anyway
 	if /i "%PHP_SDK_OS_ARCH%"=="x64" (
 		set TMPKEY=HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Microsoft SDKs\Windows\v8.1
 	) else (
@@ -105,13 +120,13 @@ if 15 gtr %PHP_SDK_VC_NUM% (
 	)
 	for /f "tokens=2*" %%a in ('reg query "!TMPKEY!" /v InstallationFolder') do (
 		if exist "%%b\Include\um\Windows.h" (
-			set PHP_SDK_WIN_SDK_DIR=%%b
+			goto got_sdk
 		)
 	)
-	if not defined PHP_SDK_WIN_SDK_DIR (
-		echo Windows SDK not found.
-		goto out_error;
-	)
+
+	echo Windows SDK not found.
+	goto out_error;
+:got_sdk
 	set TMPKEY=
 )
 
