@@ -60,7 +60,7 @@ It is not required to hold the source in the PHP SDK directory. It could be usef
 
 - `git clone https://github.com/OSTC/php-sdk-binary-tools.git c:\php-sdk`
 - `cd c:\php-sdk`
-- `git checkout php-sdk-2.0.0` or later
+- `git checkout php-sdk-2.0.12` or later
 - invoke `phpsdk-vc15-x64.bat`
 - `phpsdk_buildtree phpmaster`
 - `git clone https://github.com/php/php-src.git && cd php-src`, or fetch a zipball
@@ -90,6 +90,8 @@ The starter scripts can be also easy integrated with the consoles other than sta
 
 An elementary functionality to run unattended builds is included. See an example on how to setup a simple unattended build task in the doc directory.
 
+Be aware, that starter scripts always start a new shell. Scripts intended to run as a task need to be passed with `-t` argument to a starter script.
+
 # Upgrading
 
 - backup phpsdk-local.bat
@@ -102,7 +104,7 @@ If the PHP SDK is kept as a git checkout, merely what is needed instead is to gi
 
 # Extending
 
-The SDK tools are based on the KISS principle and should be kept so. Basic tools are implemented as simple batch script. The minimalistic `PHP` is available for internal SDK purposes. It can be used, if more complexity is required. If you have an idea for some useful tool or workflow, please open a ticket or PR, so it can be discussed, implemented and added to the SDK. By contributing an implementation, you should also accept the SDK license.
+The SDK tools are based on the KISS principle and should be kept so. Basic tools are implemented as simple batch script. The minimalistic `PHP` is available for internal SDK purposes. It can be used, if more complexity is required. A suitable PHP binary is bound with the PHP SDK. If you have an idea for some useful tool or workflow, please open a ticket or PR, so it can be discussed, implemented and added to the SDK. By contributing an implementation, you should also accept the SDK license.
 
 # Pitfalls
 

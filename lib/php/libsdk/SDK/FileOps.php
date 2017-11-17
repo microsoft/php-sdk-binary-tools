@@ -134,7 +134,7 @@ trait FileOps
 
 		$ret = curl_exec($ch);
 		if (false === $ret) {
-			$err = curl_error();
+			$err = curl_error($ch);
 			curl_close($ch);
 			if ($dest) {
 				fclose($fd);
