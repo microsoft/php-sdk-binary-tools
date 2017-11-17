@@ -84,7 +84,7 @@ A script called phpsdk-local.bat has to be put into the PHP SDK root. If present
 
 The starter scripts can be also easy integrated with the consoles other than standard cmd.exe. For the reference, here's an example ConEmu task
 
-`C:\php-sdk\phpsdk-vc14-x64.bat -cur_console:d:C:\php-sdk\php70\vc14\x64\php-src`
+`C:\php-sdk\phpsdk-vc15-x64.bat -cur_console:d:C:\php-sdk\php72\vc15\x64\php-src`
 
 ## Unattended builds
 
