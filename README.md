@@ -90,6 +90,8 @@ The starter scripts can be also easy integrated with the consoles other than sta
 
 An elementary functionality to run unattended builds is included. See an example on how to setup a simple unattended build task in the doc directory.
 
+Be aware, that starter scripts always start a new shell. Scripts intended to run as a task need to be passed with `-t` argument to a starter script.
+
 # Upgrading
 
 - backup phpsdk-local.bat
