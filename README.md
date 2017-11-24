@@ -47,6 +47,7 @@ These are not included with the PHP SDK, but might be useful. While Visual C++ i
 - `Cppcheck`   - used for static analysis
 - `clang`      - useful for experimental builds and for static analysis
 - `ICC`        - useful for experimental builds
+- `ConEmu`     - console emulator with tabs and more
 
 # Usage
 
