@@ -78,7 +78,7 @@ More extensive documentation can be found on the [wiki](https://wiki.php.net/int
 
 ## Custom environment setup
 
-A sript called phpsdk-local.bat has to be put into the PHP SDK root. If present, it will be automatically picked up by the starter script. A template for such a script is included with the PHP SDK. This allows to automatically meet any required preparations, that are not foreseen by the standard PHP SDK startup. Be careful while creating your own phpsdk-local. It's your responsibility to ensure the regular PHP SDK startup isn't broken after phpsdk-local.bat was injected into the startup sequence.
+A script called phpsdk-local.bat has to be put into the PHP SDK root. If present, it will be automatically picked up by the starter script. A template for such a script is included with the PHP SDK. This allows to automatically meet any required preparations, that are not foreseen by the standard PHP SDK startup. Be careful while creating your own phpsdk-local. It's your responsibility to ensure the regular PHP SDK startup isn't broken after phpsdk-local.bat was injected into the startup sequence.
 
 ## Console emulator integration
 
