@@ -247,7 +247,8 @@ class Config
 			$data = $branches[$current_branch_name][$cur_crt];
 		} else {
 			/* Evaluate CRTs, to avoid ambiquity. */
-			list($crt, $data) = each($branches[$current_branch_name]);
+			$crt = key($branches[$current_branch_name]);
+			$data = $branches[$current_branch_name][$crt];
 			if ($crt != $cur_crt) {
 				throw new Exception("The passed CRT '$cur_crt' doesn't match any availbale for branch '$current_branch_name'");
 			}
