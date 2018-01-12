@@ -116,18 +116,21 @@ trait FileOps
 		return $ret;
 	}/*}}}*/
 
-	protected function download(string $url, string $dest = NULL) : ?string
+	protected function download(string $url, string $dest_fn = NULL) : ?string
 	{/*{{{*/
 		$fd = NULL;
-		$ch = curl_init($url);
+		$ch = curl_init();
 
-		if ($dest) {
-			$fd = fopen($dest, "w+");
+		curl_setopt($ch, CURLOPT_URL, $url);
+
+		if ($dest_fn) {
+			$fd = fopen($dest_fn, "w+");
 			curl_setopt($ch, CURLOPT_FILE, $fd); 
 		} else {
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		}
 
+		curl_setopt($ch, CURLOPT_HEADER, false);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -136,7 +139,7 @@ trait FileOps
 		if (false === $ret) {
 			$err = curl_error($ch);
 			curl_close($ch);
-			if ($dest) {
+			if ($dest_fn) {
 				fclose($fd);
 			}
 			throw new Exception($err);
@@ -144,12 +147,66 @@ trait FileOps
 
 		curl_close($ch);
 
-		if ($dest) {
+		if ($dest_fn) {
 			fclose($fd);
 			return NULL;
 		}
 
 		return $ret;
+	}/*}}}*/
+
+	/* TODO More detailed zip errors. */
+	protected function unzip(string $zip_fn, string $dest_fn, string $dest_dn = NULL) : void
+	{/*{{{*/
+		$zip = new \ZipArchive;
+
+		$res = $zip->open($zip_fn);
+		if (true !== $res) {
+			throw new Exception("Failed to open '$zip_fn'.");
+		}
+
+		$res = $zip->extractTo($dest_fn);
+		if (true !== $res) {
+			$zip->close();
+			throw new Exception("Failed to unzip '$zip_fn'.");
+		}
+
+		/* Not robust, useful for zips containing one dir sibling only in the root. */
+		if ($dest_dn) {
+			$stat = $zip->statIndex(0);
+			if (false === $stat) {
+				$zip->close();
+				throw new Exception("Failed to stat first index in '$zip_fn'.");
+			}
+
+			$zip->close();
+
+			/* Index of zero might be not the zipped folder, unusual but true. */
+			/*$name = $stat["name"];
+			if ("/" != substr($name, -1)) {
+				throw new Exception("'$name' is not a directory.");
+			}
+			$name = substr($name, 0, -1);*/
+
+			$name = rtrim($stat["name"], "/");
+			while (strchr($name, '/') !== false) {
+				$name = dirname($name);
+			}
+
+			$old_dir = $dest_fn . DIRECTORY_SEPARATOR . $name;
+			$new_dir = $dest_fn . DIRECTORY_SEPARATOR . $dest_dn;
+			if (file_exists($new_dir)) {
+				if (!$this->rm($new_dir)) {
+					throw new Exception("Failed to remove '$new_dir'.");
+				}
+			}
+			/* if (!$this->mv($old_dir, $new_dir)) { */
+			if (!rename($old_dir, $new_dir)) {
+				throw new Exception("Failed to rename '$old_dir' to '$new_dir'.");
+			}
+		} else {
+			$zip->close();
+		}
 	}/*}}}*/
 }
 

@@ -107,6 +107,22 @@ If the PHP SDK is kept as a git checkout, merely what is needed instead is to gi
 
 The SDK tools are based on the KISS principle and should be kept so. Basic tools are implemented as simple batch script. The minimalistic `PHP` is available for internal SDK purposes. It can be used, if more complexity is required. A suitable PHP binary is bound with the PHP SDK. If you have an idea for some useful tool or workflow, please open a ticket or PR, so it can be discussed, implemented and added to the SDK. By contributing an implementation, you should also accept the SDK license.
 
+# PGO
+
+## Preparing PGO training environment
+- the pgo folder in the SDK root dir contains templates and scenarios for PGO training
+- adjust and execute doc/phpsdk_pgo_prep_elevated.bat.example to open ports required for PHP SDK training servers
+- run `phpsdk_pgo --init`
+
+## Creating a PGO build
+- compile PHP configured using `--enable-pgi`
+- run `phpsdk_pgo --train`
+- run `nmake clean-pgo`
+- rebuild PHP `--with-pgo`
+
+## Adding custom scenario
+TODO
+
 # Pitfalls
 
 - SDK or PHP sources put into paths including spaces might cause issue.

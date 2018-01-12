@@ -1,6 +1,6 @@
 <?php
 
-include dirname(__FILE__) . "/../lib/php/libsdk/autoload.php";
+include dirname(__FILE__) . "/../lib/php/autoload.php";
 
 use SDK\{Config, Exception};
 

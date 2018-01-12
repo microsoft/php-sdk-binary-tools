@@ -1,0 +1,6 @@
+{
+	"symfony_phar_url": "https://symfony.com/installer",
+	"type": "web",
+	"srv_http": "nginx",
+	"srv_db": null
+}

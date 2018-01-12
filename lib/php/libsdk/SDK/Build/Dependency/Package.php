@@ -2,11 +2,12 @@
 
 namespace SDK\Build\Dependency;
 
-use SDK\Config;
-use SDK\Exception;
+use SDK\{Config, Exception, FileOps};
 
 class Package
 {
+	use FileOps;
+
 	protected $name;
 	protected $series;
 	protected $fetcher;
@@ -44,15 +45,8 @@ class Package
 		if (!$this->filepath || !file_exists($this->filepath)) {
 			throw new Exception("Invalid filepath '{$this->filepath}'");
 		}
-		$zip = new \ZipArchive;
 
-		$ret = $zip->open($this->filepath);
-		if (true === $ret) {
-			$zip->extractTo($path);
-			$zip->close();
-		} else {
-			throw new Exception("Failed to unpack, error code '$ret'");
-		}
+		$this->unzip($this->filepath, $path);
 	}/*}}}*/
 
 	public function cleanup() : void

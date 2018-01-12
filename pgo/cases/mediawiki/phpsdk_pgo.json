@@ -1,0 +1,6 @@
+{
+	"mediawiki_zip_url": "https://github.com/wikimedia/mediawiki/archive/1.29.0.zip",
+	"type": "web",
+	"srv_http": "nginx",
+	"srv_db": null
+}

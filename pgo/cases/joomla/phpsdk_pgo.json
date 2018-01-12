@@ -1,0 +1,6 @@
+{
+	"joomla_zip_url": "https://github.com/joomla/joomla-cms/releases/download/3.7.2/Joomla_3.7.2-Stable-Full_Package.zip",
+	"type": "web",
+	"srv_http": "nginx",
+	"srv_db": "mariadb"
+}

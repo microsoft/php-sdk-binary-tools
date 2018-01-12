@@ -1,0 +1,47 @@
+
+
+@echo off
+rem These are default ports for the servers used for the training. If these
+rem ports are changed in the config templates, the commandos have to be
+rem adjusted as well. New servers have to be added here as well. Run this
+rem file on the elevated shell before starting the PGO environment setup
+rem using the relevant port numbers, especially for unattended PGO builds.
+rem We add opens inbound ports from the default PGP config templates and
+rem and the one increment by 1, just co cover a simple case the port number
+rem was incremented by the auto configuration.
+rem
+rem Alternatively, the firewall can be disabled on the build host.
+rem The commands to disable\enable firewall are
+rem netsh advfirewall set allprofiles state on
+rem netsh advfirewall set allprofiles state off
+@echo on
+
+rem NGINX
+netsh advfirewall firewall add rule name="NGINX for PGO" dir=in action=allow program="C:\php-snap-build\php-sdk\pgo\work\server\nginx\nginx.exe" profile=private
+for \l %%p in (8081, 1, 8091) do (
+	netsh advfirewall firewall add rule name="Open Port %%p for PHP PGO" dir=in action=allow protocol=TCP localport=%%p profile=private
+	netsh advfirewall firewall add rule name="Open Port %%p for PHP PGO" dir=in action=allow protocol=UDP localport=%%p profile=private
+)
+netsh advfirewall firewall add rule name="Open Port 80 for PHP PGO" dir=in action=allow protocol=TCP localport=80 profile=private
+netsh advfirewall firewall add rule name="Open Port 80 for PHP PGO" dir=in action=allow protocol=UDP localport=80 profile=private
+
+rem MariaDB
+netsh advfirewall firewall add rule name="MariaDB for PGO" dir=in action=allow program="c:\php-snap-build\php-sdk\pgo\work\server\mariadb\bin\mysqld.exe" profile=private
+netsh advfirewall firewall add rule name="Open Port 3307 for PHP PGO" dir=in action=allow protocol=TCP localport=3307 profile=private
+netsh advfirewall firewall add rule name="Open Port 3307 for PHP PGO" dir=in action=allow protocol=UDP localport=3307 profile=private
+netsh advfirewall firewall add rule name="Open Port 3308 for PHP PGO" dir=in action=allow protocol=TCP localport=3308 profile=private
+netsh advfirewall firewall add rule name="Open Port 3308 for PHP PGO" dir=in action=allow protocol=UDP localport=3308 profile=private
+
+rem Postgres
+netsh advfirewall firewall add rule name="Open Port 5434 for PHP PGO" dir=in action=allow protocol=TCP localport=5434 profile=private
+netsh advfirewall firewall add rule name="Open Port 5434 for PHP PGO" dir=in action=allow protocol=UDP localport=5434 profile=private
+netsh advfirewall firewall add rule name="Open Port 5435 for PHP PGO" dir=in action=allow protocol=TCP localport=5435 profile=private
+netsh advfirewall firewall add rule name="Open Port 5435 for PHP PGO" dir=in action=allow protocol=UDP localport=5435 profile=private
+
+rem PHP
+netsh advfirewall firewall add rule name="Open Port 9001 for PHP PGO" dir=in action=allow protocol=TCP localport=9001 profile=private
+netsh advfirewall firewall add rule name="Open Port 9001 for PHP PGO" dir=in action=allow protocol=UDP localport=9001 profile=private
+netsh advfirewall firewall add rule name="Open Port 9002 for PHP PGO" dir=in action=allow protocol=TCP localport=9002 profile=private
+netsh advfirewall firewall add rule name="Open Port 9002 for PHP PGO" dir=in action=allow protocol=UDP localport=9002 profile=private
+
+
