@@ -110,7 +110,7 @@ The SDK tools are based on the KISS principle and should be kept so. Basic tools
 
 # PGO
 
-As of the version 2.1.0, the SDK includes a tool for the [PGO](https://docs.microsoft.com/en-us/cpp/build/reference/profile-guided-optimizations) optimization. Several training cases are included by default, which are based on the real life opensource applications. The PGO optimization can give an overall speedup up to 30%. The work on adding more training scenarios for the widely used opensource apps is ongoing. Any contributions in this area are welcome.
+As of the version 2.1.0, the SDK includes a tool for the [PGO](https://docs.microsoft.com/en-us/cpp/build/reference/profile-guided-optimizations) optimization. Several training cases are included by default, which are based on the real life opensource applications. The PGO optimization can give an overall speedup up to 30%. The work on adding more training scenarios for the widely used opensource apps is ongoing. If you have a training scenario to share, please create a PR to this repo. Any new training cases are thoroughly validated through the extensive performance tests.
 
 ## Preparing PGO training environment
 - the pgo folder in the SDK root dir contains templates and scenarios for PGO training
