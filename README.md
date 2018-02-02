@@ -1,6 +1,6 @@
 # PHP SDK
 
-PHP SDK is a tool kit for Windows PHP builds
+PHP SDK is a tool kit for Windows PHP builds.
 
 # License
 
@@ -8,7 +8,7 @@ The PHP SDK itself and the SDK own tools and code are licensed under the BSD 2-C
 
 # Overview
 
-The PHP SDK 2.0 is compatible with PHP 7.0 and above. The compatibility with [older versions](http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-20110915.zip "php-sdk-binary-tools-20110915.zip") is kept, also available from the [legacy branch](https://github.com/OSTC/php-sdk-binary-tools/tree/legacy). The toolset was significantly revamped. Newer tools are now available, better workflows are now possible. The toolset consists on a mix of the hand written scripts, selected MSYS2 parts and standalone programs. 
+The PHP SDK 2.0+ is compatible with PHP 7.0 and above. The compatibility with [older versions](http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-20110915.zip "php-sdk-binary-tools-20110915.zip") is kept, also available from the [legacy branch](https://github.com/OSTC/php-sdk-binary-tools/tree/legacy). The toolset was significantly revamped. Newer tools are now available, better workflows are now possible. The toolset consists on a mix of the hand written scripts, selected MSYS2 parts and standalone programs. 
 
 # Requirements
 
@@ -109,9 +109,11 @@ The SDK tools are based on the KISS principle and should be kept so. Basic tools
 
 # PGO
 
+As of the version 2.1.0, the SDK includes the features to produce PGO trained builds. Several training cases are included by default, which are based on the real life opensource applications. The PGO trained builds can give an overall speedup up to 30%. 
+
 ## Preparing PGO training environment
 - the pgo folder in the SDK root dir contains templates and scenarios for PGO training
-- adjust and execute doc/phpsdk_pgo_prep_elevated.bat.example to open ports required for PHP SDK training servers
+- adjust and execute [doc/phpsdk_pgo_prep_elevated.bat.example](doc/phpsdk_pgo_prep_elevated.bat.example) to open ports required for PHP SDK training servers
 - run `phpsdk_pgo --init`
 
 ## Creating a PGO build
@@ -121,7 +123,17 @@ The SDK tools are based on the KISS principle and should be kept so. Basic tools
 - rebuild PHP `--with-pgo`
 
 ## Adding custom scenario
-TODO
+
+A custom scenario can be used to produce a custom PHP binary dedicated to a concrete application. 
+
+The existing training cases can be found in `pgo/cases`. Assumed the case would be named `myapp`, the general steps to setup were
+
+- create the case directory under `pgo/cases/myapp`
+- create `pgo/cases/myapp/phpsdk_pgo.json` with the necessary definitions 
+- create `pgo/cases/myapp/nginx.partial.conf` with a partial NGINX template
+- create `pgo/cases/myapp/TrainingCaseHandler.php` with a class as defined in the [interface](lib/php/libsdk/SDK/Build/PGO/Interfaces/TrainingCase.php)
+
+To skip a training case, add a file named `inactive` into the case folder.
 
 # Pitfalls
 
