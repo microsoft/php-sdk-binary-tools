@@ -126,7 +126,7 @@ As of the version 2.1.0, the SDK includes the features to produce PGO trained bu
 
 A custom scenario can be used to produce a custom PHP binary dedicated to a concrete application. 
 
-The existing training cases can be found in `pgo/cases`. Assumed the case would be named `myapp`, the general steps to setup were
+The existing training cases can be found in [pgo/cases](pgo/cases). Assumed the case would be named `myapp`, the general steps to setup were
 
 - create the case directory under `pgo/cases/myapp`
 - create `pgo/cases/myapp/phpsdk_pgo.json` with the necessary definitions 
