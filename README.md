@@ -26,8 +26,9 @@ All the tools included are either scripts or 32-bit binaries. They are therefore
 - starter scripts, named phpsdk-&lt;crt&gt;-&lt;arch&gt;.bat
 - `phpsdk_buildtree` - initialize the development filesystem structure
 - `phpsdk_deps`      - handle dependency libraries
-- `phpsdk_version`   - show SDK version
 - `phpsdk_dllmap`    - create a JSON listing of DLLs contained in zip files
+- `phpsdk_pgo`       - run PGO training 
+- `phpsdk_version`   - show SDK version
 - `task.exe`         - wrapper to hide the given command line
 
 ## Other tools
