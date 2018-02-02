@@ -8,7 +8,7 @@ The PHP SDK itself and the SDK own tools and code are licensed under the BSD 2-C
 
 # Overview
 
-The PHP SDK 2.0+ is compatible with PHP 7.0 and above. The compatibility with [older versions](http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-20110915.zip "php-sdk-binary-tools-20110915.zip") is kept, also available from the [legacy branch](https://github.com/OSTC/php-sdk-binary-tools/tree/legacy). The toolset was significantly revamped. Newer tools are now available, better workflows are now possible. The toolset consists on a mix of the hand written scripts, selected MSYS2 parts and standalone programs. 
+The PHP SDK 2.0+ is compatible with PHP 7.0 and above. The compatibility with [older versions](http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-20110915.zip "php-sdk-binary-tools-20110915.zip") is kept, also available from the [legacy branch](https://github.com/Microsoft/php-sdk-binary-tools/tree/legacy). The toolset was significantly revamped. Newer tools are now available, better workflows are now possible. The toolset consists on a mix of the hand written scripts, selected MSYS2 parts and standalone programs. 
 
 # Requirements
 
@@ -59,7 +59,7 @@ It is not required to hold the source in the PHP SDK directory. It could be usef
 
 ## Basic usage example
 
-- `git clone https://github.com/OSTC/php-sdk-binary-tools.git c:\php-sdk`
+- `git clone https://github.com/Microsoft/php-sdk-binary-tools.git c:\php-sdk`
 - `cd c:\php-sdk`
 - `git checkout php-sdk-2.0.12` or later
 - invoke `phpsdk-vc15-x64.bat`
@@ -72,7 +72,7 @@ More extensive documentation can be found on the [wiki](https://wiki.php.net/int
 
 ## The old way
 
-- `git clone https://github.com/OSTC/php-sdk-binary-tools.git c:\php-sdk`
+- `git clone https://github.com/Microsoft/php-sdk-binary-tools.git c:\php-sdk`
 - follow the instructions on the PHP [wiki page](https://wiki.php.net/internals/windows/stepbystepbuild "PHP wiki page")
 
 # Customizing
