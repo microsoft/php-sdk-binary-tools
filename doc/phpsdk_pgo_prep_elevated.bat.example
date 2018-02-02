@@ -2,11 +2,11 @@
 
 @echo off
 rem These are default ports for the servers used for the training. If these
-rem ports are changed in the config templates, the commandos have to be
+rem ports are changed in the config templates, the commands have to be
 rem adjusted as well. New servers have to be added here as well. Run this
 rem file on the elevated shell before starting the PGO environment setup
 rem using the relevant port numbers, especially for unattended PGO builds.
-rem We add opens inbound ports from the default PGP config templates and
+rem We add opens inbound ports from the default PGO config templates and
 rem and the one increment by 1, just co cover a simple case the port number
 rem was incremented by the auto configuration.
 rem
