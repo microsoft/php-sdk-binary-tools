@@ -123,7 +123,7 @@ As of the version 2.1.0, the SDK includes a tool for the [PGO](https://docs.micr
 - run `nmake clean-pgo`
 - rebuild PHP `--with-pgo`
 
-## Adding custom scenario
+## Adding custom PGO training scenario
 
 A custom scenario can be used to produce a custom PHP binary dedicated to an arbitrary application. 
 
@@ -133,6 +133,8 @@ The existing training cases can be found in [pgo/cases](pgo/cases). Assumed the 
 - create `pgo/cases/myapp/phpsdk_pgo.json` with the necessary definitions 
 - create `pgo/cases/myapp/nginx.partial.conf` with a partial NGINX template
 - create `pgo/cases/myapp/TrainingCaseHandler.php` with a class as defined in the [interface](lib/php/libsdk/SDK/Build/PGO/Interfaces/TrainingCase.php)
+
+After a training case is implemented and put under `pgo/cases`, the work environment needs to be reinitialized. The tool puts all the training data and necessary applications under `pgo/work`. Rename or remove that directory and rerun `phpsdk_pgo --init`.
 
 To skip a training case, add a file named `inactive` into the case folder.
 
