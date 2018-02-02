@@ -3,12 +3,12 @@ rem Task batch example.
 rem Create a task, put an action with the following data:
 rem Action: start a program
 rem Program/script: C:\php-sdk\bin\task.exe
-rem Add arguments: "C:\php-sdk\phpsdk-starter.bat -c vc14 -a x64 -t C:\php-sdk\unattended-build-task.bat"
+rem Add arguments: "C:\php-sdk\phpsdk-starter.bat -c vc15 -a x64 -t C:\php-sdk\unattended-build-task.bat"
 rem Run the task
 
 set LOG_NAME=%PHP_SDK_VC%-%PHP_SDK_ARCH%-task.log
 
-pushd C:\php-sdk\php70\vc14\x64\php-src
+pushd C:\php-sdk\php72\vc14\x64\php-src
 
 git pull --rebase > %LOG_NAME% 2>&1
 
