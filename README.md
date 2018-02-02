@@ -110,14 +110,14 @@ The SDK tools are based on the KISS principle and should be kept so. Basic tools
 
 # PGO
 
-As of the version 2.1.0, the SDK includes the features to produce PGO optimized builds. Several training cases are included by default, which are based on the real life opensource applications. The PGO builds can give an overall speedup up to 30%. 
+As of the version 2.1.0, the SDK includes a tool for the PGO optimization. Several training cases are included by default, which are based on the real life opensource applications. The PGO optimization can give an overall speedup up to 30%. The work on adding more training scenarios for the widely used opensource apps is ongoing. Any contributions in this area are welcome.
 
 ## Preparing PGO training environment
 - the pgo folder in the SDK root dir contains templates and scenarios for PGO training
 - adjust and execute [doc/phpsdk_pgo_prep_elevated.bat.example](doc/phpsdk_pgo_prep_elevated.bat.example) to open ports required for PHP SDK training servers
 - run `phpsdk_pgo --init`
 
-## Creating a PGO build
+## Creating PGO build
 - compile PHP configured using `--enable-pgi`
 - run `phpsdk_pgo --train`
 - run `nmake clean-pgo`
@@ -125,7 +125,7 @@ As of the version 2.1.0, the SDK includes the features to produce PGO optimized 
 
 ## Adding custom scenario
 
-A custom scenario can be used to produce a custom PHP binary dedicated to a concrete application. 
+A custom scenario can be used to produce a custom PHP binary dedicated to an arbitrary application. 
 
 The existing training cases can be found in [pgo/cases](pgo/cases). Assumed the case would be named `myapp`, the general steps to setup were
 
@@ -135,6 +135,7 @@ The existing training cases can be found in [pgo/cases](pgo/cases). Assumed the 
 - create `pgo/cases/myapp/TrainingCaseHandler.php` with a class as defined in the [interface](lib/php/libsdk/SDK/Build/PGO/Interfaces/TrainingCase.php)
 
 To skip a training case, add a file named `inactive` into the case folder.
+
 
 # Pitfalls
 
