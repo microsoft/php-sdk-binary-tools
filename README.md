@@ -109,7 +109,7 @@ The SDK tools are based on the KISS principle and should be kept so. Basic tools
 
 # PGO
 
-As of the version 2.1.0, the SDK includes the features to produce PGO trained builds. Several training cases are included by default, which are based on the real life opensource applications. The PGO trained builds can give an overall speedup up to 30%. 
+As of the version 2.1.0, the SDK includes the features to produce PGO optimized builds. Several training cases are included by default, which are based on the real life opensource applications. The PGO builds can give an overall speedup up to 30%. 
 
 ## Preparing PGO training environment
 - the pgo folder in the SDK root dir contains templates and scenarios for PGO training
