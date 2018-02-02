@@ -1,9 +1,5 @@
 @echo off
 
-rem edit if PGO scripts are present and are to be used
-rem set PHP_SDK_PGO_TOOLS_ROOT_PATH=%PHP_SDK_ROOT_PATH%\pgo
-rem set PATH=%PHP_SDK_PGO_TOOLS_ROOT_PATH%\bin;%PATH%
-
 set PGSQL_TEST_CONNSTR=host=127.0.0.1 dbname=test port=5432 user=test password=test
 set PDO_PGSQL_TEST_DSN=pgsql:host=127.0.0.1 port=5432 dbname=test user=test password=test
 
