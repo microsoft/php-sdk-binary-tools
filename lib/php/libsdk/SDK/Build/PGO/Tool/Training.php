@@ -52,6 +52,7 @@ class Training
 				curl_setopt($ch[$i], CURLOPT_CONNECTTIMEOUT_MS, 500000);
 				curl_setopt($ch[$i], CURLOPT_TIMEOUT_MS, 500000);
 				curl_setopt($ch[$i], CURLOPT_RETURNTRANSFER, true);
+				curl_setopt($ch[$i], CURLOPT_USERAGENT, SDKConfig::getSdkUserAgentName());
 				/* ??? */
 				/*curl_setopt($ch[$i], CURLOPT_FOLLOWLOCATION, true);*/
 
