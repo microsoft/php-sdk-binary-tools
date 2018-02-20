@@ -135,9 +135,12 @@ trait FileOps
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($ch, CURLOPT_USERAGENT, Config::getSdkUserAgentName());
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
 
 		$ret = curl_exec($ch);
-		if (false === $ret) {
+
+		$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		if (false === $ret || 200 !== $code) {
 			$err = curl_error($ch);
 			curl_close($ch);
 			if ($dest_fn) {

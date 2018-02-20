@@ -35,11 +35,23 @@ class Fetcher
 
 	/* TODO more robust implementation. */
 	/* TODO implement indicator. */
-	public function getByUri($uri) : string
+	public function getByUri(string $uri, int $retries = 3) : string
 	{/*{{{*/
 		$url = "http://{$this->host}:{$this->port}$uri";
+		$ret = false;
 
-		return $this->download($url);
+retry:
+		try {
+			$ret = $this->download($url);
+		} catch (Exception $e) {
+			if ($retries > 0) {
+				sleep(1);
+				$retries--;
+				goto retry;
+			}
+		}
+
+		return $ret;
 	}/*}}}*/
 
 	/*protected function fetch($uri) : string
