@@ -148,6 +148,7 @@ To skip a training case, add a file named `inactive` into the case folder.
 - Tools, based on MSYS2, only accept paths with forward slashes.
 - Both Visual C++ toolset and the Windows SDK components have to be installed for the PHP SDK to work properly. 
 - The VC++ toolset is still requried, even if another compiler, fe. clang, is intended to be used.
-- task.exe is not a console application, some systems might not propagate exit code except the batch is explicitly run from `cmd /c`, etc.
+- `task.exe` is not a console application, some systems might not propagate exit code except the batch is explicitly run from `cmd /c`, etc.
+- `7za` should be prefered over `unzip` and `zip` for compatibility reasons.
 
 

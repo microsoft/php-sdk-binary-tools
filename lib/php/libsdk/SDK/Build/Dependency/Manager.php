@@ -13,6 +13,7 @@ class Manager
 	protected $path;
 	protected $series;
 	protected $fetcher;
+	protected $updatesFlag = NULL;
 
 	public function __construct(string $path, string $stability, string $arch)
 	{/*{{{*/
@@ -39,7 +40,12 @@ class Manager
 
 	public function updatesAvailable() : bool
 	{/*{{{*/
-		return $this->series->updatesAvailable() || !file_exists(Config::getDepsLocalPath());
+		if (!is_null($this->updatesFlag)) {
+			return $this->updatesFlag;
+		}
+
+		$this->updatesFlag = $this->series->updatesAvailable() || !file_exists(Config::getDepsLocalPath());
+		return $this->updatesFlag;
 	}/*}}}*/
 
 	/* FIXME implement rollback */
