@@ -376,6 +376,11 @@ class Config
 
 		return $path;
 	}/*}}}*/
+
+	public static function getSdkUserAgentName() : string
+	{/*{{{*/
+		return "PHP-SDK-BINARY-TOOLS/" . self::getSdkVersion();
+	}/*}}}*/
 }
 
 /*
