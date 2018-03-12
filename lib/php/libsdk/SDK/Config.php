@@ -10,7 +10,8 @@ class Config
 {
 	/* Config variables. */
 	protected static $depsHost = 'windows.php.net';
-	protected static $depsPort = 80;
+	protected static $depsPort = 443;
+	protected static $depsUriScheme = "https";
 	protected static $depsBaseUri = "/downloads/php-sdk/deps";
 
 	/* protected static $sdkNugetFeedUrl = "http://127.0.0.1/sdk/nuget"; */
@@ -32,6 +33,11 @@ class Config
 	public static function getDepsPort() : string
 	{/*{{{*/
 		return self::$depsPort;
+	}/*}}}*/
+
+	public static function getDepsUriScheme() : string
+	{/*{{{*/
+		return self::$depsUriScheme;
 	}/*}}}*/
 
 	public static function getDepsBaseUri() : string
@@ -125,7 +131,7 @@ class Config
 		if (empty(self::$knownBranches)) {
 			$cache_file = "known_branches.txt";
 			$cache = new Cache(self::getDepsLocalPath());
-			$fetcher = new Fetcher(self::$depsHost, self::$depsPort);
+			$fetcher = new Fetcher(self::$depsHost, self::$depsPort, self::$depsUriScheme);
 
 			$tmp = $fetcher->getByUri(self::$depsBaseUri . "/series/");
 			if (false !== $tmp) {

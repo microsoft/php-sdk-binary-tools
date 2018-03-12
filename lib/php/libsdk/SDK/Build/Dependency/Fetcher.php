@@ -15,12 +15,13 @@ class Fetcher
 	protected $series;
 
 
-	public function __construct(string $host, int $port, string $arch = NULL, string $stability = NULL, Series $series = NULL)
+	public function __construct(string $host, int $port, string $scheme = "https", string $arch = NULL, string $stability = NULL, Series $series = NULL)
 	{/*{{{*/
 		$this->stability = $stability;
 		$this->arch = $arch;
 		$this->host = $host;
 		$this->port = $port;
+		$this->scheme = $scheme;
 	}/*}}}*/
 
 	public function getSeries() : Series
@@ -37,7 +38,7 @@ class Fetcher
 	/* TODO implement indicator. */
 	public function getByUri(string $uri, int $retries = 3) : string
 	{/*{{{*/
-		$url = "http://{$this->host}:{$this->port}$uri";
+		$url = "{$this->scheme}://{$this->host}:{$this->port}$uri";
 		$ret = false;
 
 retry:
