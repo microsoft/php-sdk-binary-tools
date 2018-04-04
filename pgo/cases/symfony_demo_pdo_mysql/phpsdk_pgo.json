@@ -1,0 +1,6 @@
+{
+	"symfony_demo_version": "v1.2.2",
+	"type": "web",
+	"srv_http": "nginx",
+	"srv_db": "mariadb"
+}
