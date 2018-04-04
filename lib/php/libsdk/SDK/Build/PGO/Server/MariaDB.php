@@ -114,8 +114,29 @@ class MariaDB extends Server implements DB
 		$port = $this->conf->getSectionItem($this->name, "port");
 
 		$pass_arg = $pass ? "-p$pass " : "";
-		$ret = shell_exec(".\\bin\\mysql.exe -u $user $pass_arg -h $host -P $port -e \"$s\"");
+		$db_arg = $db ? "-D $db" : "";
+		$ret = shell_exec(".\\bin\\mysql.exe -u $user $pass_arg -h $host -P $port $db_arg -e \"$s\"");
 		//var_dump($this->base, getcwd(), ".\\bin\\mysql.exe -u $user $pass_arg -h $host -P $port -e \"$s\"");
+
+		chdir($cwd);
+	}
+
+	public function import(string $path, string $db = NULL) : void
+	{
+		$ret = NULL;
+
+		$cwd = getcwd();
+
+		chdir($this->base);
+
+		$user = $this->conf->getSectionItem($this->name, "user");
+		$pass = $this->conf->getSectionItem($this->name, "pass");
+		$host = $this->conf->getSectionItem($this->name, "host");
+		$port = $this->conf->getSectionItem($this->name, "port");
+
+		$pass_arg = $pass ? "-p$pass " : "";
+		$db_arg = $db ? "-D $db" : "";
+		$ret = shell_exec(".\\bin\\mysql.exe -u $user $pass_arg -h $host -P $port $db_arg < \"$path\"");
 
 		chdir($cwd);
 	}
