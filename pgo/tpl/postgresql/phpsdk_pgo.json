@@ -1,5 +1,5 @@
 {
-	"pkg_url": "https://get.enterprisedb.com/postgresql/postgresql-9.6.3-1-windows-binaries.zip",
+	"pkg_url": "https://get.enterprisedb.com/postgresql/postgresql-9.6.8-1-windows-binaries.zip",
 	"host": "localhost",
 	"port": 5434,
 	"user": "root",
