@@ -16,7 +16,7 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 	protected $nginx;
 	protected $maria;
 	protected $php;
-	protected $max_runs = 8;
+	protected $max_runs = 12;
 
 	public function __construct(Config $conf, ?Interfaces\Server $nginx, ?Interfaces\Server\DB $maria)
 	{
