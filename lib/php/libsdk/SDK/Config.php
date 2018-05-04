@@ -130,7 +130,11 @@ class Config
 	{/*{{{*/
 		if (empty(self::$knownBranches)) {
 			$cache_file = "known_branches.txt";
-			$cache = new Cache(self::getDepsLocalPath());
+			$deps_path = self::getDepsLocalPath();
+			if (!$deps_path) {
+					throw new Exception("Couldn't determine dependencies path. Please either switch to the PHP source root or use -d option.");
+			}
+			$cache = new Cache($deps_path);
 			$fetcher = new Fetcher(self::$depsHost, self::$depsPort, self::$depsUriScheme);
 
 			$tmp = $fetcher->getByUri(self::$depsBaseUri . "/series/");
