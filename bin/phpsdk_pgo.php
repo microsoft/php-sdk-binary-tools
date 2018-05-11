@@ -112,7 +112,7 @@ function usage(int $code = -1)
 	echo "  -d --down     Shutdown training environment.", PHP_EOL;
 	echo "  -f --force    Force requested operation. Not every option can be forced.", PHP_EOL;
 	echo "  -s --scenario Run training with a specified scenario.", PHP_EOL;
-	echo "  -c --cases    Run training with a specified cases only.", PHP_EOL;
+	echo "  -c --cases    Run training with specified cases only. If omited, all the active cases will be used.", PHP_EOL;
 
 	/*echo "  -p --php-root  PHP binary to train.", PHP_EOL;*/
 
