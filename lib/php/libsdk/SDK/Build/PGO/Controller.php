@@ -206,13 +206,19 @@ class Controller
 		$pgo->clean();
 		unset($pgo);
 
+		$cases = $this->cases;
 		foreach (new TrainingCaseIterator($this->conf) as $handler) {
-			if ($this->cases && !in_array($handler->getName(), $this->cases)) {
+			$name = $handler->getName();
+			if ($cases && !in_array($name, $cases)) {
 				continue;
 			}
+			unset($cases[array_search($name, $cases)]);
 
 			echo "\n";
 			$handler->run();
+		}
+		if (!empty($cases)) {
+			echo "\n\033[31m WARNING: The cases " . implode(",", $cases) . " don't exist and was ignored!\033[0m\n\n";
 		}
 
 		/* All the PGC files are merged, simply clean them out. */
