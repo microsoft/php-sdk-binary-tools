@@ -209,6 +209,7 @@ class Controller
 		$cases = $this->cases;
 		foreach (new TrainingCaseIterator($this->conf) as $handler) {
 			$name = $handler->getName();
+			/* Just a white list handling for now. */
 			if ($cases && !in_array($name, $cases)) {
 				continue;
 			}
