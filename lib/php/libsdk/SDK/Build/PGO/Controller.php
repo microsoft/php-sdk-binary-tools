@@ -210,15 +210,18 @@ class Controller
 		foreach (new TrainingCaseIterator($this->conf) as $handler) {
 			$name = $handler->getName();
 			/* Just a white list handling for now. */
-			if ($cases && !in_array($name, $cases)) {
-				continue;
+			if (is_array($cases)) {
+				if (!in_array($name, $cases)) {
+					continue;
+				}
+				$key = array_search($name, $cases);
+				unset($cases[$key]);
 			}
-			unset($cases[array_search($name, $cases)]);
 
 			echo "\n";
 			$handler->run();
 		}
-		if (!empty($cases)) {
+		if (is_array($cases) && !empty($cases)) {
 			echo "\n\033[31m WARNING: The cases " . implode(",", $cases) . " don't exist and was ignored!\033[0m\n\n";
 		}
 
