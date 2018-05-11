@@ -6,8 +6,8 @@ use SDK\Config;
 use SDK\Exception;
 use SDK\Build\PGO\Controller;
 
-$sopt = "itudhs:fr";
-$lopt = array("init", "train", "up", "down", "help", "scenario:", "force", "ready");
+$sopt = "itudhs:frc:";
+$lopt = array("init", "train", "up", "down", "help", "scenario:", "force", "ready", "cases:");
 
 $cmd = NULL;
 /* TODO For now we simply check the current php build, this could be extended to take arbitrary binaries. */
@@ -15,6 +15,7 @@ $deps_root = NULL;
 $php_root = NULL;
 $scenario = NULL;
 $force = false;
+$cases = NULL;
 
 try {
 	$opt = getopt($sopt, $lopt);
@@ -47,6 +48,10 @@ try {
 		case "force":
 			$force = true;
 			break;
+		case "c":
+		case "cases":
+			$cases = explode(",", $val);
+			break;
 		case "h": case "help":
 			usage(0);
 			break;
@@ -73,7 +78,7 @@ try {
 		}
 	}
 
-	$controller = new Controller($cmd, $scenario);
+	$controller = new Controller($cmd, $scenario, $cases);
 	$controller->handle($force);
 
 	if ("check_init" == $cmd) {
@@ -105,6 +110,7 @@ function usage(int $code = -1)
 	echo "  -d --down     Shutdown training environment.", PHP_EOL;
 	echo "  -f --force    Force requested operation. Not every option can be forced.", PHP_EOL;
 	echo "  -s --scenario Run training with a specified scenario.", PHP_EOL;
+	echo "  -c --cases    Run training with a specified cases only.", PHP_EOL;
 
 	/*echo "  -p --php-root  PHP binary to train.", PHP_EOL;*/
 

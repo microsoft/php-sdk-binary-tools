@@ -17,8 +17,9 @@ class Controller
 	protected $cmd;
 	protected $scenario;
 	protected $conf;
+	protected $cases;
 
-	public function __construct(string $cmd, ?string $scenario)
+	public function __construct(string $cmd, ?string $scenario, ?array $cases)
 	{
 		$this->cmd = $cmd;
 
@@ -26,6 +27,7 @@ class Controller
 			$scenario = "default";
 		}
 		$this->scenario = $scenario;
+		$this->cases = $cases;
 	}
 
 	protected function vitalizeSrv()
@@ -205,6 +207,10 @@ class Controller
 		unset($pgo);
 
 		foreach (new TrainingCaseIterator($this->conf) as $handler) {
+			if ($this->cases && !in_array($handler->getName(), $this->cases)) {
+				continue;
+			}
+
 			echo "\n";
 			$handler->run();
 		}
