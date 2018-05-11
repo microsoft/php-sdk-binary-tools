@@ -48,6 +48,8 @@ try {
 		case "force":
 			$force = true;
 			break;
+			/* XXX This option is for now only integrated for training. It
+				would make sense to integrate it also with init. */
 		case "c":
 		case "cases":
 			$cases = explode(",", $val);
