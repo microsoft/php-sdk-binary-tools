@@ -7,7 +7,7 @@
 
 	"fcgi:env": {
 		"PHP_FCGI_CHILDREN": 8,
-		"PHP_FCGI_MAX_REQUESTS": 128
+		"PHP_FCGI_MAX_REQUESTS": 0
 	},
 	
 	"scenario":
