@@ -10,6 +10,8 @@ use SDK\Build\PGO\Tool\PackageWorkman;
 
 class FCGI extends Abstracts\PHP implements Interfaces\PHP
 {
+	use FileOps;
+
 	protected $conf;
 	protected $is_tcp;
 
@@ -22,6 +24,7 @@ class FCGI extends Abstracts\PHP implements Interfaces\PHP
 		$this->conf = $conf;
 		$this->is_tcp = $is_tcp;
 		$this->scenario = $conf->getScenario();
+		$this->id = $this->getIdString();
 
 		$this->setupPaths();
 	}
@@ -64,6 +67,13 @@ echo "PHP FCGI initialization done.\n";*/
 	{
 		echo "Starting PHP FCGI.\n";
 
+		if ("cache" == $this->scenario) {
+			if (file_exists($this->opcache_file_cache)) {
+				$this->rm($this->opcache_file_cache);
+			}
+			mkdir($this->opcache_file_cache);
+		}
+
 		$exe  = $this->getExeFilename();
 		$ini  = $this->getIniFilename();
 		$host = $this->conf->getSectionItem("php", "fcgi", "host");
@@ -82,6 +92,10 @@ echo "PHP FCGI initialization done.\n";*/
 		/* Give some time, it might be slow on PGI enabled proc. */
 		sleep(3);
 
+		/*while(false !== ($s = fread($pipes[2], 1024))) {
+			echo "$s";
+		}*/
+
 		$c = proc_close($p);
 
 		if ($c) {
@@ -98,6 +112,11 @@ echo "PHP FCGI initialization done.\n";*/
 		echo "Stopping PHP FCGI.\n";
 
 		exec("taskkill /f /im php-cgi.exe >nul 2>&1");
+
+		/* XXX Add cleanup interface. */
+		if ("cache" == $this->scenario) {
+			$this->rm($this->opcache_file_cache);
+		}
 
 		echo "PHP FCGI stopped.\n";
 	}

@@ -11,6 +11,8 @@ abstract class PHP
 {
 	protected $php_root;
 	protected $php_ext_root;
+	protected $opcache_file_cache;
+	protected $id;
 
 	protected function setupPaths()
 	{
@@ -22,6 +24,9 @@ abstract class PHP
 			}
 		} else {
 			$this->php_ext_root = $this->php_root;
+		}
+		if ("cache" == $this->scenario) {
+			$this->opcache_file_cache = SDKConfig::getTmpDir() . DIRECTORY_SEPARATOR . $this->id;
 		}
 	}
 
@@ -147,6 +152,11 @@ abstract class PHP
 			}
 		}
 
+		/* Special handling, otherwise it'll need functionality to extrapolate ini values. */
+		if ("cache" == $this->scenario) {
+			$tpl_vars[$this->conf->buildTplVarName("php", "opcache", "file_cache")] = $this->opcache_file_cache;
+		}
+
 		$this->conf->processTplFile(
 			$this->getIniTplFilename(),
 			$ret,
@@ -213,6 +223,14 @@ abstract class PHP
 		$p = proc_open($cmd, $desc, $pipes, $this->getRootDir(), $env);
 
 		return proc_close($p);
+	}
+
+	public function getIdString(): string
+	{
+		return $this->getVersion() . "-"
+			. SDKConfig::getCurrentCrtName() . "-"
+			. ($this->isThreadSafe() ? "ts" : "nts") . "-"
+			. ($this->is64bit() ? "x64" : "x86");
 	}
 }
 

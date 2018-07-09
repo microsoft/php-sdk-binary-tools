@@ -16,6 +16,10 @@ class CLI extends Abstracts\PHP implements Interfaces\PHP
 	{
 		$this->conf = $conf;
 		$this->scenario = $conf->getScenario();
+		// Don't do that, it'll be a recursive dependency. 
+		// Once we need to train CLI, we'll need to split
+		// a new class, this one is a utility class.
+		//$this->id = $this->getIdString();
 
 		$this->setupPaths();
 	}
