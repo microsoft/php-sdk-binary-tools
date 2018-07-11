@@ -71,9 +71,7 @@ echo "PHP FCGI initialization done.\n";*/
 			if (file_exists($this->opcache_file_cache)) {
 				$this->rm($this->opcache_file_cache);
 			}
-			if (!mkdir($this->opcache_file_cache)) {
-				throw new Exception("Failed to create '{$this->opcache_file_cache}'");
-			}
+			mkdir($this->opcache_file_cache);
 		}
 
 		$exe  = $this->getExeFilename();
