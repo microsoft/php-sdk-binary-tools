@@ -231,7 +231,7 @@ abstract class PHP
 			. SDKConfig::getCurrentCrtName() . "-"
 			. ($this->isThreadSafe() ? "ts" : "nts") . "-"
 			. ($this->is64bit() ? "x64" : "x86")
-			. "-" . md5(uniqid());
+			. "-" . substr(md5(uniqid()), 0, 8);
 	}
 }
 
