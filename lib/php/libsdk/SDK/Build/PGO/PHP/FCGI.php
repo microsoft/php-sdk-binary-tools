@@ -117,7 +117,11 @@ echo "PHP FCGI initialization done.\n";*/
 
 		/* XXX Add cleanup interface. */
 		if ("cache" == $this->scenario) {
-			$this->rm($this->opcache_file_cache);
+			try {
+				$this->rm($this->opcache_file_cache);
+			} catch (\UnexpectedValueException $e) {
+				echo $e->getMessage(), "\n";
+			}
 		}
 
 		echo "PHP FCGI stopped.\n";
