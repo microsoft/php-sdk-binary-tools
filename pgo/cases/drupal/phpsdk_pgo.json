@@ -1,0 +1,5 @@
+{
+	"type": "web",
+	"srv_http": "nginx",
+	"srv_db": null
+}
