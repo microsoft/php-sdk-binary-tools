@@ -46,6 +46,9 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 
 	protected function setupDist() : void
 	{
+		$port = $this->getHttpPort();
+		$host = $this->getHttpHost();
+
 		$vars = array(
 			$this->conf->buildTplVarName($this->getName(), "docroot") => str_replace("\\", "/", $this->base . DIRECTORY_SEPARATOR . "web"),
 		);
@@ -54,13 +57,12 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 
 		$php = new PHP\CLI($this->conf);
 
-		$this->nginx->up();
+		if (!is_dir($this->conf->getCaseWorkDir($this->getName()))) {
+			echo "Setting up in '{$this->base}'\n";
+			$cmd = $this->getToolFn() . " site-install demo_umami --db-url=sqlite://{$this->base}/drupal.sqlite --account-mail=\"admin@example.com\" --account-name=admin --account-pass=adminpass --site-mail=\"admin@example.com\" --site-name=\"Site-Install\" --yes";
 
-		$cmd = $this->getToolFn() . " site-install demo_umami --db-url=sqlite://{$this->base}/drupal.sqlite --account-mail=\"admin@example.com\" --account-name=admin --account-pass=adminpass --site-mail=\"admin@example.com\" --site-name=\"Site-Install\" --yes";
-
-		$php->exec($cmd);
-
-		$this->nginx->down(true);
+			$php->exec($cmd);
+		}
 	}
 
 	public function setupUrls()
