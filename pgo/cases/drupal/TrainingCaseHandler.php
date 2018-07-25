@@ -27,7 +27,6 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 		$this->base = $this->conf->getCaseWorkDir($this->getName());
 		$this->nginx = $nginx;
 		$this->php = $nginx->getPhp();
-		$this->maria = $maria;
 	}
 
 	public function getName() : string
@@ -66,14 +65,12 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 
 	public function setupUrls()
 	{
-		$this->maria->up();
 		$this->nginx->up();
 
 		$url = "http://" . $this->getHttpHost() . ":" . $this->getHttpPort();
 		$s = file_get_contents($url);
 
 		$this->nginx->down(true);
-		$this->maria->down(true);
 
 		echo "Generating training urls.\n";
 
