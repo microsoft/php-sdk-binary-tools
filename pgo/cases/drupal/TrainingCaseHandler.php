@@ -58,7 +58,7 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 
 		$cmd = $this->getToolFn() . " site-install demo_umami --db-url=sqlite://{$this->base}/drupal.sqlite --account-mail=\"admin@example.com\" --account-name=admin --account-pass=adminpass --site-mail=\"admin@example.com\" --site-name=\"Site-Install\" --yes";
 
-		$php->exec($cmd, NULL, $env);
+		$php->exec($cmd);
 
 		$this->nginx->down(true);
 	}
