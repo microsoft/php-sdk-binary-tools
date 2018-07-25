@@ -57,12 +57,10 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 
 		$php = new PHP\CLI($this->conf);
 
-		if (!is_dir($this->conf->getCaseWorkDir($this->getName()))) {
-			echo "Setting up in '{$this->base}'\n";
-			$cmd = $this->getToolFn() . " site-install demo_umami --db-url=sqlite://{$this->base}/drupal.sqlite --account-mail=\"admin@example.com\" --account-name=admin --account-pass=adminpass --site-mail=\"admin@example.com\" --site-name=\"Site-Install\" --yes";
+		echo "Setting up in '{$this->base}'\n";
+		$cmd = $this->getToolFn() . " site-install demo_umami --db-url=sqlite://" . str_replace("\\", "/", $this->base) . "/drupal.sqlite --account-mail=\"admin@example.com\" --account-name=admin --account-pass=adminpass --site-mail=\"admin@example.com\" --site-name=\"Site-Install\" --yes";
 
-			$php->exec($cmd);
-		}
+		$php->exec($cmd);
 	}
 
 	public function setupUrls()
