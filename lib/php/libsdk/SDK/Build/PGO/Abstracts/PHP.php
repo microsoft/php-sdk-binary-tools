@@ -50,6 +50,16 @@ abstract class PHP
 			}
 		}
 
+		$drive = getenv("HOMEDRIVE");
+		$path = getenv("HOMEPATH");
+		if (!$drive || !$path) {
+			$p = SDKConfig::getTmpDir();
+			$drive = substr($p, 0, 2);
+			$path = substr($p, 2);
+			putenv("HOMEDRIVE=$drive");
+			putenv("HOMEPATH=$path");
+		}
+
 		return $env;
 	}
 
