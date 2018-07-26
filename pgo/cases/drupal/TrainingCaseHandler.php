@@ -111,7 +111,6 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 	public function init() : void
 	{
 		echo "Initializing " . $this->getName() . ".\n";
-		echo "It is OK to see some warnings here, because the joomla tools are not fully Windows compatible.\n";
 
 		$this->setupDist();
 		$this->setupUrls();
