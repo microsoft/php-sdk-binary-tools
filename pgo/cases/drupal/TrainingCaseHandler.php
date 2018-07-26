@@ -47,7 +47,7 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 	protected function setupDist() : void
 	{
 		$db_path =  str_replace("\\", "/", $this->base) . "/drupal.sqlite3";
-		if (!file_exits($db_path)) {
+		if (!file_exists($db_path)) {
 			echo "Setting up in '{$this->base}'\n";
 
 			$php = new PHP\CLI($this->conf);
