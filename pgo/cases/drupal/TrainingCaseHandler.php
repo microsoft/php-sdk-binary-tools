@@ -51,7 +51,7 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 			echo "Setting up in '{$this->base}'\n";
 
 			$php = new PHP\CLI($this->conf);
-			$cmd = $this->getToolFn() . " site-install demo_umami --db-url=sqlite://$db_path --account-name=admin --account-pass=adminpass --yes -vvv";
+			$cmd = $this->getToolFn() . " site-install demo_umami --db-url=sqlite://$db_path --account-name=admin --account-pass=adminpass --yes";
 
 			$php->exec($cmd);
 		}
