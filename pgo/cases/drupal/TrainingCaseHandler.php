@@ -46,6 +46,16 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 
 	protected function setupDist() : void
 	{
+		$db_path =  str_replace("\\", "/", $this->base) . "/drupal.sqlite3";
+		if (!file_exits($db_path)) {
+			echo "Setting up in '{$this->base}'\n";
+
+			$php = new PHP\CLI($this->conf);
+			$cmd = $this->getToolFn() . " site-install demo_umami --db-url=sqlite://$db_path --account-name=admin --account-pass=adminpass --yes -vvv";
+
+			$php->exec($cmd);
+		}
+
 		$port = $this->getHttpPort();
 		$host = $this->getHttpHost();
 
@@ -54,13 +64,6 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 		);
 		$tpl_fn = $this->conf->getCasesTplDir($this->getName()) . DIRECTORY_SEPARATOR . "nginx.partial.conf";
 		$this->nginx->addServer($tpl_fn, $vars);
-
-		$php = new PHP\CLI($this->conf);
-
-		echo "Setting up in '{$this->base}'\n";
-		$cmd = $this->getToolFn() . " site-install demo_umami --db-url=sqlite://" . str_replace("\\", "/", $this->base) . "/drupal.sqlite3 --account-mail=\"admin@example.com\" --account-name=admin --account-pass=adminpass --site-mail=\"admin@example.com\" --site-name=\"Site-Install\" --yes -vvv";
-
-		$php->exec($cmd);
 	}
 
 	public function setupUrls()
