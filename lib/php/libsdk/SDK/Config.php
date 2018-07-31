@@ -213,6 +213,19 @@ class Config
 			if (is_numeric($major) && is_numeric($minor)) {
 				$branch = "$major.$minor";
 			}
+
+			/* Verify that we use an available branch name. Master has some
+				version, but no dedicated series. For master, it rather
+				makes sense to use master as branch name. */
+			$git = trim(shell_exec("where git.exe"));
+			if ($git) {
+				$cmd = "\"$git\" branch";
+
+				$ret = trim(shell_exec($cmd));
+				if (preg_match_all(",\*\s+master,", $ret) > 0) {	
+					$branch = "master";
+				}
+			}
 		}
 
 		return $branch;
@@ -277,10 +290,10 @@ class Config
 			}
 		}
 
-		if (!$ret["stability"]) {
+		if (!@$ret["stability"]) {
 			throw new Exception("Failed to find config with stability '" . self::getCurrentStabilityName() . "'");
 		}
-		if (!$ret["crt"]) {
+		if (!@$ret["crt"]) {
 			throw new Exception("Failed to find config with arch '" . self::getCurrentArchName() . "'");
 		}
 
