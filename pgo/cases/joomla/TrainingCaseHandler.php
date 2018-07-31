@@ -117,7 +117,7 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 		if (preg_match_all(", href=\"([^\"]+)\",", $s, $m)) {
 			foreach ($m[1] as $u) {
 				$h = parse_url($u, PHP_URL_HOST);
-				$s = parse_url($u, PHP_URL_SCHEME)
+				$s = parse_url($u, PHP_URL_SCHEME);
 				if ($h && $s) {
 					if ($this->getHttpHost() != $h) {
 						continue;
