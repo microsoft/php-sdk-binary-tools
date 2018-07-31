@@ -221,7 +221,7 @@ class Config
 			if (!$git && is_executable('c:\apps\git\bin\git.exe')) {
 				$git = 'c:\apps\git\bin\git.exe';
 			}
-			if ($git) {
+			if ($git && is_dir(".git")) {
 				$cmd = "\"$git\" branch";
 
 				$ret = trim(shell_exec($cmd));
