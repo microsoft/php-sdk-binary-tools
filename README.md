@@ -138,6 +138,10 @@ After a training case is implemented and put under `pgo/cases`, the work environ
 
 To skip a training case, add a file named `inactive` into the case folder.
 
+# Support
+
+- Join `#winphp-dev` on Freenode to discuss any ideas or questions
+- File an issue on GitHub
 
 # Pitfalls
 
