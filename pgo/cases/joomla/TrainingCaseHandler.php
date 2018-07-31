@@ -116,6 +116,17 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 		$lst = array();
 		if (preg_match_all(", href=\"([^\"]+)\",", $s, $m)) {
 			foreach ($m[1] as $u) {
+				$h = parse_url($u, PHP_URL_HOST);
+				$s = parse_url($u, PHP_URL_SCHEME)
+				if ($h && $s) {
+					if ($this->getHttpHost() != $h) {
+						continue;
+					}
+					if (!in_array($u, $lst)) {
+						$lst[] = $u;
+					}
+					continue;
+				}
 				$p = parse_url($u, PHP_URL_PATH);
 				if (strlen($p) >= 2 && "/" == $p[0] && "/" != $p[1] && !in_array(substr($p, -3), array("css", "xml", "ico"))) {
 					$ur = "http://" . $this->getHttpHost() . ":" . $this->getHttpPort() . $u;
