@@ -218,6 +218,9 @@ class Config
 				version, but no dedicated series. For master, it rather
 				makes sense to use master as branch name. */
 			$git = trim(shell_exec("where git.exe"));
+			if (!$git && is_executable('c:\apps\git\bin\git.exe')) {
+				$git = 'c:\apps\git\bin\git.exe';
+			}
 			if ($git) {
 				$cmd = "\"$git\" branch";
 
