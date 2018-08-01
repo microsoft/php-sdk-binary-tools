@@ -128,7 +128,8 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 					continue;
 				}
 				$p = parse_url($u, PHP_URL_PATH);
-				if (strlen($p) >= 2 && "/" == $p[0] && "/" != $p[1] && !in_array(substr($p, -3), array("css", "xml", "ico"))) {
+				if (strlen($p) >= 2 && "/" == $p[0] && "/" != $p[1] && !in_array(substr($p, -3), array("css", "xml", "ico")) &&
+					"/using-joomla/extensions/components/news-feeds-component/single-news-feed" != $p) {
 					$ur = "http://" . $this->getHttpHost() . ":" . $this->getHttpPort() . $u;
 					if (!in_array($ur, $lst)) {
 						$lst[] = $ur;
