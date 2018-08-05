@@ -5,7 +5,7 @@ namespace SDK\Build\PGO\Server;
 use SDK\Build\PGO\Interfaces\Server\DB;
 use SDK\Build\PGO\Abstracts\Server;
 use SDK\Build\PGO\Config as PGOConfig;
-use SDK\{Config as SDKConfig, Exception, FileOps};
+use SDK\{Exception, FileOps};
 use SDK\Build\PGO\Tool\PackageWorkman;
 
 class MariaDB extends Server implements DB
@@ -115,7 +115,7 @@ class MariaDB extends Server implements DB
 
 		$pass_arg = $pass ? "-p$pass " : "";
 		$db_arg = $db ? "-D $db" : "";
-		$ret = shell_exec(".\\bin\\mysql.exe -u $user $pass_arg -h $host -P $port $db_arg -e \"$s\"");
+		shell_exec(".\\bin\\mysql.exe -u $user $pass_arg -h $host -P $port $db_arg -e \"$s\"");
 		//var_dump($this->base, getcwd(), ".\\bin\\mysql.exe -u $user $pass_arg -h $host -P $port -e \"$s\"");
 
 		chdir($cwd);
@@ -136,9 +136,8 @@ class MariaDB extends Server implements DB
 
 		$pass_arg = $pass ? "-p$pass " : "";
 		$db_arg = $db ? "-D $db" : "";
-		$ret = shell_exec(".\\bin\\mysql.exe -u $user $pass_arg -h $host -P $port $db_arg < \"$path\"");
+		shell_exec(".\\bin\\mysql.exe -u $user $pass_arg -h $host -P $port $db_arg < \"$path\"");
 
 		chdir($cwd);
 	}
 }
-

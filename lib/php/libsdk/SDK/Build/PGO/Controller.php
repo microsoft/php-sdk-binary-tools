@@ -2,13 +2,12 @@
 
 namespace SDK\Build\PGO;
 
-use SDK\{Config as SDKConfig, Exception, Lock};
+use SDK\{Exception, Lock};
 use SDK\Build\PGO\Config as PGOConfig;
 use SDK\Build\PGO\Server\{MariaDB, NGINX, PostgreSQL};
 use SDK\Build\PGO\PHP;
 use SDK\Build\PGO\Tool\{PGO, PackageWorkman};
-use SDK\Build\PGO\Interfaces\TrainingCase;
-use SDK\Build\PGO\TrainingCaseIterator;
+
 
 /* TODO add bench action */
 
@@ -79,38 +78,38 @@ class Controller
 		$this->conf = $this->setupConfig($this->cmd);
 
 		switch ($this->cmd) {
-		default:
-			throw new Exception("Unknown action '{$this->cmd}'.");
-			break;
-		case "init":
-			$lk = new Lock("pgo_init");
-			if (!$lk->locked()) {
-				echo "Another process runs initialization right now, waiting.", PHP_EOL;
-				$lk->exclusive(true);
-				echo "Another process finished running initialization, I quit as well.", PHP_EOL;
-				return;
-			}
-			$this->init($force);
-			break;
-		case "train":
-			$lk = new Lock("pgo_train");
-			if (!$lk->locked()) {
-				echo "Another process runs training right now, I have to wait.", PHP_EOL;
-				$lk->exclusive(true);
-				echo "Another process finished training, I may continue.", PHP_EOL;
-			}
-			$this->train();
-			break;
-		case "up":
-			$this->up();
-			break;
+			default:
+				throw new Exception("Unknown action '{$this->cmd}'.");
+				break;
+			case "init":
+				$lk = new Lock("pgo_init");
+				if (!$lk->locked()) {
+					echo "Another process runs initialization right now, waiting.", PHP_EOL;
+					$lk->exclusive(true);
+					echo "Another process finished running initialization, I quit as well.", PHP_EOL;
+					return;
+				}
+				$this->init($force);
+				break;
+			case "train":
+				$lk = new Lock("pgo_train");
+				if (!$lk->locked()) {
+					echo "Another process runs training right now, I have to wait.", PHP_EOL;
+					$lk->exclusive(true);
+					echo "Another process finished training, I may continue.", PHP_EOL;
+				}
+				$this->train();
+				break;
+			case "up":
+				$this->up();
+				break;
 
-		case "down":
-			$this->down($force);
-			break;
-		case "check_init":
-			// pass
-			break;
+			case "down":
+				$this->down($force);
+				break;
+			case "check_init":
+				// pass
+				break;
 		}
 	}
 

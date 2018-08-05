@@ -2,7 +2,6 @@
 
 namespace SDK\Build\PGO\Interfaces;
 
-use SDK\Build\PGO\Config;
 use SDK\Build\PGO\Tool\PackageWorkman;
 
 interface Server
@@ -14,4 +13,3 @@ interface Server
 	public function down(bool $force = false) : void;
 	public function getName() : string;
 }
-

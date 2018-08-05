@@ -2,7 +2,6 @@
 
 namespace SDK\Build\PGO;
 
-use SDK\{Config as SDKConfig, Exception, FileOps};
 use SDK\Build\PGO\Config as PGOConfig;
 
 
@@ -21,7 +20,7 @@ class TrainingCaseIterator implements \Iterator
 
 		$items = glob($this->conf->getCasesTplDir() . DIRECTORY_SEPARATOR . "*");
 		foreach ($items as $it) {
-			if(!is_dir($it)) {
+			if (!is_dir($it)) {
 				continue;
 			}
 
@@ -53,7 +52,7 @@ class TrainingCaseIterator implements \Iterator
 
 	public function current()
 	{
-		$base =  $this->items[$this->idx];
+		$base = $this->items[$this->idx];
 		$ns = basename($base);
 
 		/* Don't overwrite generated config. */
@@ -97,6 +96,4 @@ class TrainingCaseIterator implements \Iterator
 
 		return $this->el->getName();
 	}
-
 }
-

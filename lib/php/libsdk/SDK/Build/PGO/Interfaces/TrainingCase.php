@@ -25,4 +25,3 @@ interface TrainingCase
 	/* Get training type, it's like "web", "cli", etc.*/
 	public function getType() : string;
 }
-

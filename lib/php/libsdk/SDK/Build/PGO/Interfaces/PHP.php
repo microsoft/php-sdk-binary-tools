@@ -2,7 +2,6 @@
 
 namespace SDK\Build\PGO\Interfaces;
 
-use SDK\Build\PGO\Config;
 use SDK\Build\PGO\Tool\PackageWorkman;
 
 interface PHP
@@ -15,4 +14,3 @@ interface PHP
 	public function getVersion(bool $short = false) : string;
 	public function getExeFilename() : string;
 }
-
