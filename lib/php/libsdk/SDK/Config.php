@@ -3,8 +3,6 @@
 namespace SDK;
 
 use SDK\Build\Dependency\Fetcher;
-use SDK\Cache;
-use SDK\Exception;
 
 class Config
 {

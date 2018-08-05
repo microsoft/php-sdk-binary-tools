@@ -1,7 +1,7 @@
 <?php
 
 spl_autoload_register(function($name) {
-	$fl = dirname(__FILE__) . DIRECTORY_SEPARATOR . "libsdk" . DIRECTORY_SEPARATOR . $name . ".php";
+	$fl = __DIR__ . DIRECTORY_SEPARATOR . "libsdk" . DIRECTORY_SEPARATOR . $name . ".php";
 
 	if (file_exists($fl)) {
 		require_once $fl;

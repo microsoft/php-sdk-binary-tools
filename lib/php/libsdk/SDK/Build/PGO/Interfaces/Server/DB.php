@@ -10,4 +10,3 @@ interface DB extends Interfaces\Server
 	public function __construct(Config $conf);
 	public function query(string $s, string $db = NULL) : void;
 }
-

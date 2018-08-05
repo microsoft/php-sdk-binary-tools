@@ -6,7 +6,7 @@ use SDK\Build\PGO\Abstracts;
 use SDK\Build\PGO\Interfaces;
 use SDK\Build\PGO\Config;
 use SDK\Build\PGO\PHP;
-use SDK\{Config as SDKConfig, Exception, FileOps};
+use SDK\Exception;
 use SDK\Build\PGO\Tool;
 
 class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\TrainingCase
@@ -133,7 +133,7 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 		if (!file_exists($lock) || $force) {
 			$composer = $this->conf->getToolsDir() . DIRECTORY_SEPARATOR . "composer.phar";
 			$composer_cmd = file_exists($lock) ? "update" : "install";
-			$cmd = $this->conf->getToolsDir() . DIRECTORY_SEPARATOR . "composer.phar $composer_cmd --no-dev --working-dir=" . $this->conf->getCaseWorkDir($this->getName());
+			$cmd = $composer . " $composer_cmd --no-dev --working-dir=" . $this->conf->getCaseWorkDir($this->getName());
 			$php->exec($cmd);
 		}
 
@@ -155,8 +155,6 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 		$this->setupUrls();
 
 		echo $this->getName() . " initialization done.\n";
-		echo $this->getName() . " site configured to run under " . $this->getHttpHost() . ":" .$this->getHttpPort() . "\n";
+		echo $this->getName() . " site configured to run under " . $this->getHttpHost() . ":" . $this->getHttpPort() . "\n";
 	}
 }
-
-

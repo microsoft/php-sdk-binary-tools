@@ -6,7 +6,7 @@ use SDK\Build\PGO\Abstracts;
 use SDK\Build\PGO\Interfaces;
 use SDK\Build\PGO\Config;
 use SDK\Build\PGO\PHP;
-use SDK\{Config as SDKConfig, Exception, FileOps};
+use SDK\Exception;
 use SDK\Build\PGO\Tool;
 
 class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\TrainingCase
@@ -51,9 +51,6 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 			$php = new PHP\CLI($this->conf);
 			$php->exec($this->getToolFn() . " demo " . $this->base);
 		}
-
-		$port = $this->getHttpPort();
-		$host = $this->getHttpHost();
 
 		$vars = array(
 			$this->conf->buildTplVarName($this->getName(), "docroot") => str_replace("\\", "/", $this->base . DIRECTORY_SEPARATOR . "web"),
@@ -110,8 +107,6 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 		$this->setupUrls();
 
 		echo $this->getName() . " initialization done.\n";
-		echo $this->getName() . " site configured to run under " . $this->getHttpHost() . ":" .$this->getHttpPort() . "\n";
+		echo $this->getName() . " site configured to run under " . $this->getHttpHost() . ":" . $this->getHttpPort() . "\n";
 	}
 }
-
-

@@ -4,7 +4,7 @@ namespace SDK\Build\PGO\Tool;
 
 use SDK\{Config as SDKConfig, Exception};
 use SDK\Build\PGO\Config as PGOConfig;
-use SDK\Build\PGO\Interfaces\{TrainingCase, Server, Server\DB, PHP};
+use SDK\Build\PGO\Interfaces\TrainingCase;
 
 class Training
 {
@@ -15,8 +15,9 @@ class Training
 	{
 		$this->conf = $conf;
 		$this->t_case = $t_case;
-		
-		if (!in_array($this->t_case->getType(), array("web", "cli"))) {
+
+		$type = $this->t_case->getType();
+		if (!in_array($type, array("web", "cli"))) {
 			throw new Exception("Unknown training type '$type'.");
 		}
 	}
@@ -107,8 +108,7 @@ class Training
 	public function run(int $max_runs = 1, ?array &$stat = array()) : void
 	{
 		$type = $this->t_case->getType();
-		switch ($type)
-		{
+		switch ($type) {
 			case "web":
 				$this->runWeb($max_runs, $stat);
 				break;

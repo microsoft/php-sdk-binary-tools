@@ -2,7 +2,7 @@
 
 namespace SDK\Build\Dependency;
 
-use SDK\{Config, Exception, FileOps};
+use SDK\{Exception, FileOps};
 
 class Fetcher
 {
@@ -13,6 +13,7 @@ class Fetcher
 	protected $stability;
 	protected $arch;
 	protected $series;
+	protected $scheme;
 
 
 	public function __construct(string $host, int $port, string $scheme = "https", string $arch = NULL, string $stability = NULL, Series $series = NULL)
@@ -22,6 +23,7 @@ class Fetcher
 		$this->host = $host;
 		$this->port = $port;
 		$this->scheme = $scheme;
+		$this->series = $series;
 	}/*}}}*/
 
 	public function getSeries() : Series

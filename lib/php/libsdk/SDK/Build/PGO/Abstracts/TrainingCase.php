@@ -2,8 +2,7 @@
 
 namespace SDK\Build\PGO\Abstracts;
 
-use SDK\Build\PGO\Config as PGOConfig;
-use SDK\{Config as SDKConfig, Exception, FileOps};
+use SDK\FileOps;
 use SDK\Build\PGO\Tool;
 
 class TrainingCase
@@ -148,4 +147,3 @@ class TrainingCase
 		return $ret;
 	}
 }
-

@@ -2,10 +2,8 @@
 
 namespace SDK\Build\PGO\Abstracts;
 
-use SDK\Build\PGO\Interfaces\Server;
 use SDK\Build\PGO\PHP\CLI;
-use SDK\Build\PGO\Config as PGOConfig;
-use SDK\{Config as SDKConfig, Exception, FileOps};
+use SDK\{Config as SDKConfig, Exception};
 
 abstract class PHP
 {
@@ -44,7 +42,7 @@ abstract class PHP
 			$deps_root = SDKConfig::getDepsLocalPath();
 			foreach ($env as $k => $v) {
 				if (strtoupper($k) == "PATH") {
-					$env[$k] = "$deps_root" . DIRECTORY_SEPARATOR . "bin;" . $env[$k];
+					$env[$k] = $deps_root . DIRECTORY_SEPARATOR . "bin;" . $env[$k];
 					break;
 				}
 			}
@@ -110,7 +108,7 @@ abstract class PHP
 			}
 		}
 
-		if (is_null($ret)) {
+		if (null === $ret) {
 			throw new Exception("Failed to determine the test PHP version.");
 		}
 
@@ -194,8 +192,8 @@ abstract class PHP
 	public function exec(string $php_cmd, string $args = NULL, array $extra_env = array()) : int
 	{
 		$env = $this->createEnv();
-		$exe  = $this->getExeFilename();
-		$ini  = $this->getIniFilename();
+		$exe = $this->getExeFilename();
+		$ini = $this->getIniFilename();
 
 		$cert_path = getenv("PHP_SDK_ROOT_PATH") . "\\msys2\\usr\\ssl\\cert.pem";
 		$ini .= " -d curl.cainfo=$cert_path";
@@ -223,7 +221,7 @@ abstract class PHP
 			$env[$k] = $v;
 		}
 
-		$cmd = "$exe -n -c $ini " . ($args ? "$args " : "") . "$php_cmd";
+		$cmd = "$exe -n -c $ini " . ($args ? "$args " : "") . $php_cmd;
 
 		$desc = array(
 			0 => array("file", "php://stdin", "r"),
@@ -244,4 +242,3 @@ abstract class PHP
 			. "-" . substr(md5(uniqid()), 0, 8);
 	}
 }
-

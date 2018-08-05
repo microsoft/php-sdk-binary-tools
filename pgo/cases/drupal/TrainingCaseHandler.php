@@ -6,7 +6,7 @@ use SDK\Build\PGO\Abstracts;
 use SDK\Build\PGO\Interfaces;
 use SDK\Build\PGO\Config;
 use SDK\Build\PGO\PHP;
-use SDK\{Config as SDKConfig, Exception, FileOps};
+use SDK\Exception;
 use SDK\Build\PGO\Tool;
 
 class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\TrainingCase
@@ -56,9 +56,6 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 			$php->exec($cmd);
 		}
 
-		$port = $this->getHttpPort();
-		$host = $this->getHttpHost();
-
 		$vars = array(
 			$this->conf->buildTplVarName($this->getName(), "docroot") => str_replace("\\", "/", $this->base . DIRECTORY_SEPARATOR . "web"),
 		);
@@ -107,7 +104,7 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 
 		$composer = $this->conf->getToolsDir() . DIRECTORY_SEPARATOR . "composer.phar";
 
-		$cmd = $this->conf->getToolsDir() . DIRECTORY_SEPARATOR . "composer.phar create-project drupal-composer/drupal-project:8.x-dev {$this->base} --stability dev --no-interaction"; 
+		$cmd = $composer . " create-project drupal-composer/drupal-project:8.x-dev {$this->base} --stability dev --no-interaction";
 		$php->exec($cmd);
 	}
 
@@ -119,8 +116,6 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 		$this->setupUrls();
 
 		echo $this->getName() . " initialization done.\n";
-		echo $this->getName() . " site configured to run under " . $this->getHttpHost() . ":" .$this->getHttpPort() . "\n";
+		echo $this->getName() . " site configured to run under " . $this->getHttpHost() . ":" . $this->getHttpPort() . "\n";
 	}
 }
-
-

@@ -1,6 +1,6 @@
 <?php
 
-include dirname(__FILE__) . "/../lib/php/autoload.php";
+include __DIR__ . "/../lib/php/autoload.php";
 
 use SDK\Config;
 use SDK\Exception;
@@ -21,43 +21,42 @@ try {
 	$opt = getopt($sopt, $lopt);
 	foreach ($opt as $name => $val) {
 		switch ($name) {
-		case "i":
-		case "init":
-			$cmd = "init";
-			break;
-		case "ready":
-			$cmd = "check_init";
-			break;
-		case "t":
-		case "train":
-			$cmd = "train";
-			break;
-		case "u":
-		case "up":
-			$cmd = "up";
-			break;
-		case "d":
-		case "down":
-			$cmd = "down";
-			break;
-		case "s":
-		case "scenario":
-			$scenario = $val;
-			break;
-		case "f":
-		case "force":
-			$force = true;
-			break;
-			/* XXX This option is for now only integrated for training. It
-				would make sense to integrate it also with init. */
-		case "c":
-		case "cases":
-			$cases = explode(",", $val);
-			break;
-		case "h": case "help":
-			usage(0);
-			break;
-
+			case "i":
+			case "init":
+				$cmd = "init";
+				break;
+			case "ready":
+				$cmd = "check_init";
+				break;
+			case "t":
+			case "train":
+				$cmd = "train";
+				break;
+			case "u":
+			case "up":
+				$cmd = "up";
+				break;
+			case "d":
+			case "down":
+				$cmd = "down";
+				break;
+			case "s":
+			case "scenario":
+				$scenario = $val;
+				break;
+			case "f":
+			case "force":
+				$force = true;
+				break;
+				/* XXX This option is for now only integrated for training. It
+					would make sense to integrate it also with init. */
+			case "c":
+			case "cases":
+				$cases = explode(",", $val);
+				break;
+			case "h": case "help":
+				usage(0);
+				break;
 		}
 	}
 
