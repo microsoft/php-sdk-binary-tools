@@ -11,7 +11,6 @@ use SDK\Build\PGO\Tool;
 
 class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\TrainingCase
 {
-	protected $conf;
 	protected $base;
 	protected $nginx;
 	protected $maria;
@@ -70,6 +69,9 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 		$this->maria->import("$case_dir/blog.mysql", $this->getName());
 
 		$this->maria->down(true);
+
+        $port = $this->getHttpPort();
+        $host = $this->getHttpHost();
 
 		$vars = array(
 			$this->conf->buildTplVarName($this->getName(), "docroot") => str_replace("\\", "/", $this->base . DIRECTORY_SEPARATOR . "public"),

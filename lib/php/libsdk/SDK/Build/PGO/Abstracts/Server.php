@@ -4,7 +4,7 @@ namespace SDK\Build\PGO\Abstracts;
 
 use SDK\Build\PGO\Interfaces;
 
-class Server
+abstract class Server
 {
 	public function getName() : string
 	{

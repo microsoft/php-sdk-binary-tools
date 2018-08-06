@@ -11,6 +11,8 @@ abstract class PHP
 	protected $php_ext_root;
 	protected $opcache_file_cache;
 	protected $id;
+	protected $scenario;
+	protected $conf;
 
 	protected function setupPaths()
 	{

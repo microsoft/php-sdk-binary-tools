@@ -11,7 +11,6 @@ use SDK\Build\PGO\Tool;
 
 class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\TrainingCase
 {
-	protected $conf;
 	protected $base;
 	protected $nginx;
 	protected $php;
@@ -51,6 +50,9 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 			$php = new PHP\CLI($this->conf);
 			$php->exec($this->getToolFn() . " demo " . $this->base);
 		}
+
+        $port = $this->getHttpPort();
+        $host = $this->getHttpHost();
 
 		$vars = array(
 			$this->conf->buildTplVarName($this->getName(), "docroot") => str_replace("\\", "/", $this->base . DIRECTORY_SEPARATOR . "web"),

@@ -11,7 +11,6 @@ use SDK\Build\PGO\Tool;
 
 class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\TrainingCase
 {
-	protected $conf;
 	protected $base;
 	protected $nginx;
 	protected $maria;

@@ -12,7 +12,6 @@ class FCGI extends Abstracts\PHP implements Interfaces\PHP
 {
 	use FileOps;
 
-	protected $conf;
 	protected $is_tcp;
 
 	public function __construct(PGOConfig $conf, bool $is_tcp)

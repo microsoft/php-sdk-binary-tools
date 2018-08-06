@@ -10,8 +10,6 @@ use SDK\Build\PGO\Tool\PackageWorkman;
 
 class CLI extends Abstracts\PHP implements Interfaces\PHP
 {
-	protected $conf;
-
 	public function __construct(PGOConfig $conf)
 	{
 		$this->conf = $conf;
