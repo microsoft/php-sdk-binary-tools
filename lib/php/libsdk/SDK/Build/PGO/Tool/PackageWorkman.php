@@ -2,7 +2,7 @@
 
 namespace SDK\Build\PGO\Tool;
 
-use SDK\{Config as SDKConfig, Exception, FileOps};
+use SDK\{Exception, FileOps};
 use SDK\Build\PGO\Config as PGOConfig;
 
 
@@ -47,11 +47,10 @@ class PackageWorkman
 			echo "Unpacking '$cache_fn' to '$tgt_name'\n";
 			try {
 				$this->unzip($cache_fn, $zip_tgt_dn, $tgt_bn);
-			} catch (Throwable $e) {
+			} catch (\Throwable $e) {
 				$this->rm($cache_fn);
 				throw $e;
 			}
 		}
 	}
 }
-

@@ -1,6 +1,6 @@
 <?php
 
-include dirname(__FILE__) . "/../lib/php/autoload.php";
+include __DIR__ . "/../lib/php/autoload.php";
 
 use SDK\{Config, Exception};
 
@@ -36,7 +36,7 @@ try {
 		switch ($name) {
 			default:
 				throw new Exception("Unknown switch '$name'");
-			break;
+				break;
 
 			case "h":
 			case "help":

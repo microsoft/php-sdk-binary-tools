@@ -44,7 +44,6 @@ class Series
 
 	public function getName() : string
 	{/*{{{*/
-		$base = Config::getDepsBaseUri();
 		$branch_data = Config::getCurrentBranchData();
 
 		$file = "packages-" . Config::getCurrentBranchName() . "-{$branch_data['crt']}-{$this->arch}-{$this->stability}.txt";

@@ -2,10 +2,6 @@
 
 namespace SDK;
 
-use SDK\Config;
-use SDK\Cache;
-use SDK\Exception;
-
 class Cache
 {
 	protected $id;
@@ -48,7 +44,7 @@ class Cache
 		$old_sum = md5_file($p);
 		$new_sum = md5($content);
 
-		return $old_sum != $new_sum;
+		return $old_sum !== $new_sum;
 	}/*}}}*/
 
 	public function cacheContent(string $path, string $content, bool $relative = false) : void
@@ -64,7 +60,7 @@ class Cache
 
 		do {
 			$got = fwrite($fd, substr($content, $wrote));
-			if (false == $got) {
+			if (false === $got) {
 				break;
 			}
 			$wrote += $got;

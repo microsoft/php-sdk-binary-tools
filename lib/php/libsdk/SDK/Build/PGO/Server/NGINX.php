@@ -5,7 +5,7 @@ namespace SDK\Build\PGO\Server;
 use SDK\Build\PGO\Interfaces;
 use SDK\Build\PGO\Abstracts;
 use SDK\Build\PGO\{Config as PGOConfig};
-use SDK\{Config as SDKConfig, Exception, FileOps};
+use SDK\{Exception, FileOps};
 use SDK\Build\PGO\Tool\PackageWorkman;
 
 class NGINX extends Abstracts\Server implements Interfaces\Server\HTTP
@@ -29,7 +29,6 @@ class NGINX extends Abstracts\Server implements Interfaces\Server\HTTP
 		$nginx_conf_in = $this->conf->getTplDir($this->name) . DIRECTORY_SEPARATOR . "nginx.conf";
 		$conf_fn = $this->base . DIRECTORY_SEPARATOR . "conf" . DIRECTORY_SEPARATOR . "nginx.conf";
 
-		$vars = array();
 		$port = $this->conf->getSectionItem($this->name, "port");
 		if (!$port) {
 			$port = $this->conf->getNextPort();
@@ -148,4 +147,3 @@ class NGINX extends Abstracts\Server implements Interfaces\Server\HTTP
 		}
 	}
 }
-

@@ -2,8 +2,6 @@
 
 namespace SDK;
 
-use SDK\{Config, Exception};
-
 class Lock
 {
 	protected $fd;

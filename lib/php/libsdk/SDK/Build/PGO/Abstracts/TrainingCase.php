@@ -2,11 +2,10 @@
 
 namespace SDK\Build\PGO\Abstracts;
 
-use SDK\Build\PGO\Config as PGOConfig;
-use SDK\{Config as SDKConfig, Exception, FileOps};
+use SDK\FileOps;
 use SDK\Build\PGO\Tool;
 
-class TrainingCase
+abstract class TrainingCase
 {
 	use FileOps;
 
@@ -14,6 +13,8 @@ class TrainingCase
 	const TYPE_CLI = "cli";
 
 	protected $stat = array();
+	/** @var \SDK\Build\PGO\Config */
+	protected $conf;
 
 	public function getType() : string
 	{
@@ -148,4 +149,3 @@ class TrainingCase
 		return $ret;
 	}
 }
-

@@ -29,10 +29,10 @@ $flags = 0;
 $opt = getopt($sopt, $lopt);
 foreach ($opt as $name => $val) {
 	switch ($name) {
-			case "p":
-			case "pretty":
-				$flags = JSON_PRETTY_PRINT;
-				break;
+		case "p":
+		case "pretty":
+			$flags = JSON_PRETTY_PRINT;
+			break;
 	}
 }
 
@@ -85,16 +85,16 @@ foreach ($dirs as $path) {
 
 		$dlls = array();
 
-		for( $i = 0; $i < $zip->numFiles; $i++ ){
-			$stat = $zip->statIndex( $i );
-			
+		for ($i = 0; $i < $zip->numFiles; $i++) {
+			$stat = $zip->statIndex($i);
+
 			if (substr($stat['name'], -3) != "dll") {
 				continue;
 			}
 
 			$dlls[] = basename($stat['name']);
 		} 
-		
+
 		$zip->close();
 		unset($zip);
 

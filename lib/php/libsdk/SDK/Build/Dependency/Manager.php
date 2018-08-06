@@ -11,6 +11,7 @@ class Manager
 	protected $stability;
 	protected $arch;
 	protected $path;
+	protected $cache;
 	protected $series;
 	protected $fetcher;
 	protected $updatesFlag = NULL;
@@ -41,7 +42,7 @@ class Manager
 
 	public function updatesAvailable() : bool
 	{/*{{{*/
-		if (!is_null($this->updatesFlag)) {
+		if (NULL !== $this->updatesFlag) {
 			return $this->updatesFlag;
 		}
 

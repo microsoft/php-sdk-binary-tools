@@ -2,7 +2,7 @@
 
 namespace SDK\Build\PGO;
 
-use SDK\{Config as SDKConfig, Exception};
+use SDK\Exception;
 
 class Config
 {
@@ -18,7 +18,7 @@ class Config
 	protected $tpl_vars = array();
 	protected $srv = array();
 
-	public function __construct(int $mode = MODE_RUN)
+	public function __construct(int $mode = self::MODE_RUN)
 	{
 		if (self::MODE_CHECK_INIT == $mode) {
 			// XXX The check is simple right now, so this is sufficient. 
@@ -40,7 +40,6 @@ class Config
 		$this->mode = $mode;
 
 
-		$base = getenv("PHP_SDK_ROOT_PATH");
 		if (self::MODE_INIT == $mode) {
 			foreach (array("nginx", "mariadb", "postgresql", "php") as $i) {
 				$this->importSectionFromDir($i, $this->getTplDir() . DIRECTORY_SEPARATOR . $i);
@@ -279,7 +278,7 @@ class Config
 	public function processTplFile(string $tpl_fn, string $dst_fn, array $additional_vars = array()) : void
 	{
 		if (!file_exists($tpl_fn)) {
-			throw new Exception("Template file '$fn' doesn't exist.");
+			throw new Exception("Template file '$tpl_fn' doesn't exist.");
 		}
 
 		$s = file_get_contents($tpl_fn);	
@@ -368,4 +367,3 @@ class Config
 		return $ret;
 	}
 }
-

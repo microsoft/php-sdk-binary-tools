@@ -6,12 +6,11 @@ use SDK\Build\PGO\Abstracts;
 use SDK\Build\PGO\Interfaces;
 use SDK\Build\PGO\Config;
 use SDK\Build\PGO\PHP;
-use SDK\{Config as SDKConfig, Exception, FileOps};
+use SDK\Exception;
 use SDK\Build\PGO\Tool;
 
 class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\TrainingCase
 {
-	protected $conf;
 	protected $base;
 	protected $nginx;
 	protected $php;
@@ -176,8 +175,6 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 		$this->setupUrls();
 
 		echo $this->getName() . " initialization done.\n";
-		echo $this->getName() . " site configured to run under " . $this->getHttpHost() . ":" .$this->getHttpPort() . "\n";
+		echo $this->getName() . " site configured to run under " . $this->getHttpHost() . ":" . $this->getHttpPort() . "\n";
 	}
 }
-
-

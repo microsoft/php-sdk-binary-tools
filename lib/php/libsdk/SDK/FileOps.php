@@ -2,9 +2,6 @@
 
 namespace SDK;
 
-use SDK\Config;
-use SDK\Exception;
-
 trait FileOps
 {
 	protected function md(string $name = "", bool $tmp = false) : string
@@ -193,7 +190,7 @@ trait FileOps
 			$name = substr($name, 0, -1);*/
 
 			$name = rtrim($stat["name"], "/");
-			while (strchr($name, '/') !== false) {
+			while (strstr($name, '/') !== false) {
 				$name = dirname($name);
 			}
 
