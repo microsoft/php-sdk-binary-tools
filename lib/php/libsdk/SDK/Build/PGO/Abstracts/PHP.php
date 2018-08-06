@@ -110,7 +110,7 @@ abstract class PHP
 			}
 		}
 
-		if (null === $ret) {
+		if (NULL === $ret) {
 			throw new Exception("Failed to determine the test PHP version.");
 		}
 
