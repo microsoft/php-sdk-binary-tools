@@ -70,8 +70,8 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 
 		$this->maria->down(true);
 
-        $port = $this->getHttpPort();
-        $host = $this->getHttpHost();
+		$port = $this->getHttpPort();
+		$host = $this->getHttpHost();
 
 		$vars = array(
 			$this->conf->buildTplVarName($this->getName(), "docroot") => str_replace("\\", "/", $this->base . DIRECTORY_SEPARATOR . "public"),

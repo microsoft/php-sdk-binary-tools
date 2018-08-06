@@ -14,7 +14,7 @@ abstract class TrainingCase
 
 	protected $stat = array();
 	/** @var \SDK\Build\PGO\Config */
-    protected $conf;
+	protected $conf;
 
 	public function getType() : string
 	{

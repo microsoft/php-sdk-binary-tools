@@ -47,8 +47,8 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 
 	protected function setupDist() : void
 	{
-        $port = $this->getHttpPort();
-        $host = $this->getHttpHost();
+		$port = $this->getHttpPort();
+		$host = $this->getHttpHost();
 		$db_port = $this->getDbPort();
 		$db_host = $this->getDbHost();
 		$db_user = $this->getDbUser();

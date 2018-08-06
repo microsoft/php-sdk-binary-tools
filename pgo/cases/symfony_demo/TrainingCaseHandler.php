@@ -51,8 +51,8 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 			$php->exec($this->getToolFn() . " demo " . $this->base);
 		}
 
-        $port = $this->getHttpPort();
-        $host = $this->getHttpHost();
+		$port = $this->getHttpPort();
+		$host = $this->getHttpHost();
 
 		$vars = array(
 			$this->conf->buildTplVarName($this->getName(), "docroot") => str_replace("\\", "/", $this->base . DIRECTORY_SEPARATOR . "web"),
