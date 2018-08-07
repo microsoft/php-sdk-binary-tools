@@ -116,6 +116,9 @@ trait FileOps
 	protected function download(string $url, string $dest_fn = NULL) : ?string
 	{/*{{{*/
 		$fd = NULL;
+		$retry = 0;
+
+retry:
 		$ch = curl_init();
 
 		curl_setopt($ch, CURLOPT_URL, $url);
@@ -142,6 +145,9 @@ trait FileOps
 			curl_close($ch);
 			if ($dest_fn) {
 				fclose($fd);
+			}
+			if ($retry++ < 3) {
+				goto retry;
 			}
 			throw new Exception($err);
 		}
