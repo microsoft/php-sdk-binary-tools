@@ -140,7 +140,8 @@ class Controller
 		if (!file_exists($composer) || $force) {
 			/* XXX this needs to go into the config, specifically for composer maybe even separate class. */
 			$url = "https://getcomposer.org/installer";
-			$tool = $this->conf->getToolsDir() . DIRECTORY_SEPARATOR . "composer-setup.php";
+			/* XXX remove the explicit version option when symfony demo is fixed. */
+			$tool = $this->conf->getToolsDir() . DIRECTORY_SEPARATOR . "composer-setup.php --version=1.6.5";
 			$pw->fetch($url, $tool, $force);
 			$php->exec("$tool --install-dir=" . $this->conf->getToolsDir());
 			unlink($tool);
