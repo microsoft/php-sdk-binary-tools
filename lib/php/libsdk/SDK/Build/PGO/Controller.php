@@ -143,7 +143,7 @@ class Controller
 			/* XXX remove the explicit version option when symfony demo is fixed. */
 			$tool = $this->conf->getToolsDir() . DIRECTORY_SEPARATOR . "composer-setup.php";
 			$pw->fetch($url, $tool, $force);
-			$php->exec("$tool --install-dir=" . $this->conf->getToolsDir() . " --version=1.6.5");
+			$php->exec("$tool --install-dir=" . $this->conf->getToolsDir());
 			unlink($tool);
 		}
 	}
