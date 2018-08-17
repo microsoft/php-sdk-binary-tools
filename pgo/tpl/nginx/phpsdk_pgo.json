@@ -1,5 +1,5 @@
 {
-	"pkg_url": "http://nginx.org/download/nginx-1.15.1.zip",
+	"pkg_url": "http://nginx.org/download/nginx-1.15.2.zip",
 	"host": "127.0.0.1",
 	"port": 8081
 }
