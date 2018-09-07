@@ -152,16 +152,25 @@ be produced by adding `--enable-debug-pack`. These options are mutually exclusiv
 
 ## Debugging with Visual Studio
 
-- configure with either `--enable-debug` or `--enable-debug-pack`
-- a debug build might bring better experience for dev, but sometimes you want to debug a release build
-- `nmake run ARGS=yourscript.php DEBUGGER=1`, that will open a Visual Studio window 
-- any additional runtime options for PHP or the script executed go to ARGS, too
-- select `Debug -> New Breakpoint -> Function Breakpoint` and add a function where the debugger should break
-- click `Start`
+- Configure with either `--enable-debug` or `--enable-debug-pack`.
+- A debug build might bring better experience for dev, but sometimes you want to debug a release build.
+- `nmake run ARGS=yourscript.php DEBUGGER=1`, that will open a Visual Studio window.
+- Any additional runtime options for PHP or the script executed go to ARGS, too.
+- Select `Debug -> New Breakpoint -> Function Breakpoint` and add a function where the debugger should break.
+- Click `Start`.
 
 Adding a breakpoint before starting debugging might be not necessary, if a crash is debugged. When such a script runs
 under the debugger, the debugger will stop at the crashing point. In that case, a breakpoint can be added
 around the crashed code directly.
+
+## Debugging test suite with Visual Studio
+
+The [Microsoft Child Process Debugging Power Tool](https://marketplace.visualstudio.com/items?itemName=vsdbgplat.MicrosoftChildProcessDebuggingPowerTool)
+plugin for Visual Studio is required. After installing it, following these steps
+
+- `nmake test TESTS=ext/myext/tests/sometest.phpt DEBUGGER=1`
+- Select `Debug -> Other Debug Targets -> Child Process Debugging Settings` and enable child process debugging.
+- If necessary, add a breakpoint and start debugging as described in the previous section.
 
 ## Debugging with WinDbg
 
