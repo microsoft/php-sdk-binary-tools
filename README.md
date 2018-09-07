@@ -138,6 +138,37 @@ After a training case is implemented and put under `pgo/cases`, the work environ
 
 To skip a training case, add a file named `inactive` into the case folder.
 
+# Debugging PHP
+
+This part covers debugging possibilities for the builds produced by the native VS compilers.
+For the cross compiled builds produced with toolsets other than VC++, please check the
+documentation for the corresponding toolsets. In any case, general principles on debugging
+native programs apply.
+
+Either a debug build of PHP or enabled debug symbols are required to be able to debug PHP.
+A debug build is usually more suitable for the development process and can be produced by
+adding `--enable-debug` to the configure options. A release build with debug symbols can
+be produced by adding `--enable-debug-pack`. These options are mutually exclusive.
+
+## Debugging with Visual Studio
+
+If you're new to Visual Studio, going through the official documentation and tutorials is
+strongely recommended.
+
+- configure with either `--enable-debug` or `--enable-debug-pack`
+- a debug build might bring better experience for dev, but sometimes you want to debug a release build
+- `nmake run ARGS=yourscript.php DEBUGGER=1`, that will open a Visual Studio window 
+- any additional runtime options for PHP or the script executed go to ARGS, too
+- select `Debug -> New Breakpoint -> Function Breakpoint` and add a function where the debugger should break
+- click `Start`
+
+## Debugging with WinDbg
+
+PHP can also be debugged with the tools from the WinDbg package. There is currently no way
+implemented in the Makefile to start the WinDbg integrated, so it needs to de done manually.
+Either a debug build or a release build with debug symbols is still required, as described
+previously.
+
 # Support
 
 - Join `#winphp-dev` on Freenode to discuss any ideas or questions
