@@ -152,15 +152,16 @@ be produced by adding `--enable-debug-pack`. These options are mutually exclusiv
 
 ## Debugging with Visual Studio
 
-If you're new to Visual Studio, going through the official documentation and tutorials is
-strongely recommended.
-
 - configure with either `--enable-debug` or `--enable-debug-pack`
 - a debug build might bring better experience for dev, but sometimes you want to debug a release build
 - `nmake run ARGS=yourscript.php DEBUGGER=1`, that will open a Visual Studio window 
 - any additional runtime options for PHP or the script executed go to ARGS, too
 - select `Debug -> New Breakpoint -> Function Breakpoint` and add a function where the debugger should break
 - click `Start`
+
+Adding a breakpoint before starting debugging might be not necessary, if a crash is debugged. When such a script runs
+under the debugger, the debugger will stop at the crashing point. In that case, a breakpoint can be added
+around the crashed code directly.
 
 ## Debugging with WinDbg
 
