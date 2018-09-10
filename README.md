@@ -195,5 +195,6 @@ previously.
 - The VC++ toolset is still requried, even if another compiler, fe. clang, is intended to be used.
 - `task.exe` is not a console application, some systems might not propagate exit code except the batch is explicitly run from `cmd /c`, etc.
 - `7za` should be prefered over `unzip` and `zip` for compatibility reasons.
-
+- If you experince some strange crashes on MSYS2 tools, try the phpsdk_rebase_msys2 tool. MSYS2 tools might be have unstable
+  on ASLR enabled systems.
 
