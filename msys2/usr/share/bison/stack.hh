@@ -15,28 +15,28 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-m4_pushdef([b4_copyright_years],
-           [2002-2015, 2018])
+
+# b4_stack_file
+# -------------
+# Name of the file containing the stack class, if we want this file.
+b4_defines_if([b4_required_version_if([302], [],
+                                      [m4_define([b4_stack_file], [stack.hh])])])
+
 
 # b4_stack_define
 # ---------------
 m4_define([b4_stack_define],
 [[  /// A stack with random access from its top.
-  template <class T, class S = std::vector<T> >
+  template <typename T, typename S = std::vector<T> >
   class stack
   {
   public:
     // Hide our reversed order.
     typedef typename S::reverse_iterator iterator;
     typedef typename S::const_reverse_iterator const_iterator;
+    typedef typename S::size_type size_type;
 
-    stack ()
-      : seq_ ()
-    {
-      seq_.reserve (200);
-    }
-
-    stack (unsigned n)
+    stack (size_type n = 200)
       : seq_ (n)
     {}
 
@@ -44,34 +44,52 @@ m4_define([b4_stack_define],
     ///
     /// Index 0 returns the topmost element.
     T&
-    operator[] (unsigned i)
+    operator[] (size_type i)
     {
-      return seq_[seq_.size () - 1 - i];
+      return seq_[size () - 1 - i];
+    }
+
+    /// Random access.
+    ///
+    /// Index 0 returns the topmost element.
+    T&
+    operator[] (int i)
+    {
+      return operator[] (size_type (i));
     }
 
     /// Random access.
     ///
     /// Index 0 returns the topmost element.
     const T&
-    operator[] (unsigned i) const
+    operator[] (size_type i) const
     {
-      return seq_[seq_.size () - 1 - i];
+      return seq_[size () - 1 - i];
+    }
+
+    /// Random access.
+    ///
+    /// Index 0 returns the topmost element.
+    const T&
+    operator[] (int i) const
+    {
+      return operator[] (size_type (i));
     }
 
     /// Steal the contents of \a t.
     ///
     /// Close to move-semantics.
     void
-    push (T& t)
+    push (YY_MOVE_REF (T) t)
     {
-      seq_.push_back (T());
+      seq_.push_back (T ());
       operator[](0).move (t);
     }
 
     void
-    pop (unsigned n = 1)
+    pop (int n = 1)
     {
-      for (; n; --n)
+      for (; 0 < n; --n)
         seq_.pop_back ();
     }
 
@@ -81,7 +99,7 @@ m4_define([b4_stack_define],
       seq_.clear ();
     }
 
-    typename S::size_type
+    size_type
     size () const
     {
       return seq_.size ();
@@ -107,46 +125,35 @@ m4_define([b4_stack_define],
   };
 
   /// Present a slice of the top of a stack.
-  template <class T, class S = stack<T> >
+  template <typename T, typename S = stack<T> >
   class slice
   {
   public:
-    slice (const S& stack, unsigned range)
+    slice (const S& stack, int range)
       : stack_ (stack)
       , range_ (range)
     {}
 
     const T&
-    operator [] (unsigned i) const
+    operator[] (int i) const
     {
       return stack_[range_ - i];
     }
 
   private:
     const S& stack_;
-    unsigned range_;
+    int range_;
   };
 ]])
 
-b4_defines_if(
-[b4_output_begin([b4_dir_prefix[]stack.hh])
-b4_copyright([Stack handling for Bison parsers in C++])[
-
-/**
- ** \file ]b4_dir_prefix[stack.hh
- ** Define the ]b4_namespace_ref[::stack class.
- */
-
-]b4_cpp_guard_open([b4_dir_prefix[]stack.hh])[
-
-# include <vector>
-
-]b4_namespace_open[
-]b4_stack_define[
-]b4_namespace_close[
-
-]b4_cpp_guard_close([b4_dir_prefix[]stack.hh])
-b4_output_end()
-])
-
-m4_popdef([b4_copyright_years])
+m4_ifdef([b4_stack_file],
+[b4_output_begin([b4_dir_prefix], [b4_stack_file])[
+]b4_generated_by[
+// Starting with Bison 3.2, this file is useless: the structure it
+// used to define is now defined with the parser itself.
+//
+// To get rid of this file:
+// 1. add 'require "3.2"' (or newer) to your grammar file
+// 2. remove references to this file from your build system.
+]b4_output_end[
+]])
