@@ -179,6 +179,39 @@ implemented in the Makefile to start the WinDbg integrated, so it needs to de do
 Either a debug build or a release build with debug symbols is still required, as described
 previously.
 
+# PHP Extensions (modules)
+
+The tools that are built by this SDK can be used to compile any standalone PHP extensions on Windows.
+The following example is running within a ConEmu task with the following settings:
+
+`C:\php-sdk\phpsdk-vc15-x64.bat -cur_console:d:C:\php-sdk\phpbuild\vc15\x64\php-src`
+
+```
+php-sdk $ php phpbuild\vc15\x64\php-src\ext\ext_skel.php --ext foo --author bar --dir c:\foo --std
+Creating CREDITS... done
+Copying config scripts... done
+Copying sources... done
+Copying tests... done
+Success.
+
+$ cd c:\foo
+foo$ c:\php\SDK\phpize
+foo$ configure --enabe-foo
+foo$ nmake
+foo$ nmake test
+foo$ nmake run
+Microsoft (R) Program Maintenance Utility Version 14.16.27025.1
+Copyright (C) Microsoft Corporation. Tous droits reserves.
+    "C:\php\php.exe" -n -d extension=C:\foo\x64\Release_TS\\php_foo.dll
+<?php
+foo_test1();
+^Z[enter]
+The extension foo is loaded and working!
+```
+
+For more details about the compilation of PHP extensions with both this SDK on Windows and
+on Linux, you can theck this [php-bonjour](https://github.com/vjardin/php-bonjour) tutorial.
+
 # Support
 
 - Join `#winphp-dev` on Freenode to discuss any ideas or questions
