@@ -62,7 +62,7 @@ It is not required to hold the source in the PHP SDK directory. It could be usef
 
 - `git clone https://github.com/Microsoft/php-sdk-binary-tools.git c:\php-sdk`
 - `cd c:\php-sdk`
-- `git checkout php-sdk-2.0.12` or later
+- `git checkout php-sdk-2.1.9` or later
 - invoke `phpsdk-vc15-x64.bat`
 - `phpsdk_buildtree phpmaster`
 - `git clone https://github.com/php/php-src.git && cd php-src`, or fetch a zipball
