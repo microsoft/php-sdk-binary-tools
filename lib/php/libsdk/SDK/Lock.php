@@ -66,6 +66,9 @@ class Lock
 		} else {
 			$this->fd = fopen($this->fn, "wb");
 		}
+		if (false === $this->fd) {
+			throw new Exception("Failed to open lock under '$this->fn'");
+		}
 		$this->locked = flock($this->fd, $flags, $this->wouldBlock);	
 		return $this->locked;
 	}/*}}}*/
