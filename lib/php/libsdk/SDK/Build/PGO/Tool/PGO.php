@@ -41,7 +41,7 @@ class PGO
 		$dll = array_merge($dll, glob($this->php->getExtRootDir() . DIRECTORY_SEPARATOR . "php*.dll"));
 
 		/* find out next index */
-		$tpl = glob($this->php->getRootDir() . DIRECTORY_SEPARATOR . "php7{ts,}.dll", GLOB_BRACE)[0];
+		$tpl = glob($this->php->getRootDir() . DIRECTORY_SEPARATOR . "php{7,8,}{ts,}.dll", GLOB_BRACE)[0];
 		if (!$tpl) {
 			throw new Exception("Couldn't find php7[ts].dll in the PHP root dir.");
 		}
