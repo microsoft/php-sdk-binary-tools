@@ -2,7 +2,8 @@
 
 # Language-independent M4 Macros for Bison.
 
-# Copyright (C) 2002, 2004-2015, 2018 Free Software Foundation, Inc.
+# Copyright (C) 2002, 2004-2015, 2018-2019 Free Software Foundation,
+# Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -263,8 +264,8 @@ m4_define([b4_subtract],
 # -------------------
 # Join with comma, skipping empty arguments.
 # b4_join calls itself recursively until it sees the first non-empty
-# argument, then calls _b4_join which prepends each non-empty argument
-# with a comma.
+# argument, then calls _b4_join (i.e., `_$0`) which prepends each
+# non-empty argument with a comma.
 m4_define([b4_join],
 [m4_if([$#$1],
        [1], [],
@@ -374,60 +375,42 @@ b4_define_flag_if([token_table])        # Whether yytoken_table is demanded.
 b4_define_flag_if([yacc])               # Whether POSIX Yacc is emulated.
 
 
+# b4_glr_cc_if([IF-TRUE], [IF-FALSE])
+# -----------------------------------
+m4_define([b4_glr_cc_if],
+          [m4_if(b4_skeleton, ["glr.cc"], $@)])
+
+
 ## --------- ##
 ## Symbols.  ##
 ## --------- ##
 
-# In order to unify the handling of the various aspects of symbols
-# (tag, type_name, whether terminal, etc.), bison.exe defines one
-# macro per (token, field), where field can has_id, id, etc.: see
-# src/output.c:prepare_symbols_definitions().
+# For a description of the Symbol handling, see README.
 #
-# The various FIELDS are:
-#
-# - has_id: 0 or 1.
-#   Whether the symbol has an id.
-# - id: string
-#   If has_id, the id.  Guaranteed to be usable as a C identifier.
-#   Prefixed by api.token.prefix if defined.
-# - tag: string.
-#   A representat of the symbol.  Can be 'foo', 'foo.id', '"foo"' etc.
-# - user_number: integer
-#   The assigned (external) number as used by yylex.
-# - is_token: 0 or 1
-#   Whether this is a terminal symbol.
-# - number: integer
-#   The internalized number (used after yytranslate).
-# - has_type: 0, 1
-#   Whether has a semantic value.
-# - type_tag: string
-#   When api.value.type=union, the generated name for the union member.
-#   yytype_INT etc. for symbols that has_id, otherwise yytype_1 etc.
-# - type
-#   If it has a semantic value, its type tag, or, if variant are used,
-#   its type.
-#   In the case of api.value.type=union, type is the real type (e.g. int).
-# - has_printer: 0, 1
-# - printer: string
-# - printer_file: string
-# - printer_line: integer
-#   If the symbol has a printer, everything about it.
-# - has_destructor, destructor, destructor_file, destructor_line
-#   Likewise.
-#
-# The following macros provide access to these values.
+# The following macros provide access to symbol related values.
+
+# __b4_symbol(NUM, FIELD)
+# -----------------------
+# Recover a FIELD about symbol #NUM.  Thanks to m4_indir, fails if
+# undefined.
+m4_define([__b4_symbol],
+[m4_indir([b4_symbol($1, $2)])])
+
 
 # _b4_symbol(NUM, FIELD)
 # ----------------------
-# Recover a FIELD about symbol #NUM.  Thanks to m4_indir, fails if
+# Recover a FIELD about symbol #NUM (or "orig NUM").  Fails if
 # undefined.
 m4_define([_b4_symbol],
-[m4_indir([b4_symbol($1, $2)])])
+[m4_ifdef([b4_symbol($1, number)],
+          [__b4_symbol(m4_indir([b4_symbol($1, number)]), $2)],
+          [__b4_symbol([$1], [$2])])])
+
 
 
 # b4_symbol(NUM, FIELD)
 # ---------------------
-# Recover a FIELD about symbol #NUM.  Thanks to m4_indir, fails if
+# Recover a FIELD about symbol #NUM (or "orig NUM").  Fails if
 # undefined.  If FIELD = id, prepend the token prefix.
 m4_define([b4_symbol],
 [m4_case([$2],
@@ -468,8 +451,8 @@ m4_define([b4_symbol_action_location],
 m4_define([b4_symbol_action],
 [b4_symbol_if([$1], [has_$2],
 [b4_dollar_pushdef([(*yyvaluep)],
-                   b4_symbol_if([$1], [has_type],
-                                [m4_dquote(b4_symbol([$1], [type]))]),
+                   [$1],
+                   [],
                    [(*yylocationp)])dnl
     _b4_symbol_case([$1])[]dnl
 b4_syncline([b4_symbol([$1], [$2_line])], [b4_symbol([$1], [$2_file])])
@@ -497,7 +480,7 @@ m4_define([b4_symbol_actions],
 m4_ifval(m4_defn([b4_actions_]),
 [switch (m4_default([$2], [yytype]))
     {
-      m4_defn([b4_actions_])
+m4_defn([b4_actions_])[]dnl
       default:
         break;
     }dnl
@@ -508,7 +491,9 @@ m4_popdef([b4_actions_])dnl
 
 # _b4_symbol_case(SYMBOL-NUM)
 # ---------------------------
-# Issue a "case NUM" for SYMBOL-NUM.
+# Issue a "case NUM" for SYMBOL-NUM.  Ends with its EOL to make it
+# easier to use with m4_map, but then, use []dnl to suppress the last
+# one.
 m4_define([_b4_symbol_case],
 [case b4_symbol([$1], [number]): b4_symbol_tag_comment([$1])])
 ])
@@ -569,7 +554,7 @@ m4_define([b4_token_format],
 # Run actions for the symbol NUMS that all have the same type-name.
 # Skip NUMS that have no type-name.
 #
-# To specify the action to run, define b4_dollar_dollar(NUMBER,
+# To specify the action to run, define b4_dollar_dollar(SYMBOL-NUM,
 # TAG, TYPE).
 m4_define([_b4_type_action],
 [b4_symbol_if([$1], [has_type],

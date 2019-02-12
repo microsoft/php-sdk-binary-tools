@@ -2,7 +2,8 @@
 
 # C M4 Macros for Bison.
 
-# Copyright (C) 2002, 2004-2015, 2018 Free Software Foundation, Inc.
+# Copyright (C) 2002, 2004-2015, 2018-2019 Free Software Foundation,
+# Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-m4_include(b4_pkgdatadir/[c-like.m4])
+m4_include(b4_skeletonsdir/[c-like.m4])
 
 # b4_tocpp(STRING)
 # ----------------
@@ -373,15 +374,17 @@ m4_define([b4_token_enums_defines],
 ## ----------------- ##
 
 
-# b4_symbol_value(VAL, [TYPE])
-# ----------------------------
-# Given a semantic value VAL ($$, $1 etc.), extract its value of type
-# TYPE if TYPE is given, otherwise just return VAL.  The result can be
-# used safely, it is put in parens to avoid nasty precedence issues.
-# TYPE is *not* put in braces, provide some if needed.
+# b4_symbol_value(VAL, [SYMBOL-NUM], [TYPE-TAG])
+# ----------------------------------------------
+# See README.
 m4_define([b4_symbol_value],
-[($1[]m4_ifval([$2], [.$2]))])
-
+[m4_ifval([$3],
+          [($1.$3)],
+          [m4_ifval([$2],
+                    [b4_symbol_if([$2], [has_type],
+                                  [($1.b4_symbol([$2], [type]))],
+                                  [$1])],
+                    [$1])])])
 
 
 ## ---------------------- ##
@@ -604,14 +607,17 @@ m4_define([b4_type_define_tag],
 ])
 
 
-# b4_symbol_value_union(VAL, [TYPE])
-# ----------------------------------
+# b4_symbol_value_union(VAL, SYMBOL-NUM, [TYPE])
+# ----------------------------------------------
 # Same of b4_symbol_value, but when api.value.type=union.
 m4_define([b4_symbol_value_union],
-[m4_ifval([$2],
-          [(*($2*)(&$1))],
-          [$1])])
-])
+[m4_ifval([$3],
+          [(*($3*)(&$1))],
+          [m4_ifval([$2],
+                    [b4_symbol_if([$2], [has_type],
+                                  [($1.b4_symbol([$2], [type_tag]))],
+                                  [$1])],
+                    [$1])])])
 
 
 # b4_value_type_setup_union

@@ -1,6 +1,6 @@
 # C++ skeleton for Bison
 
-# Copyright (C) 2002-2015, 2018 Free Software Foundation, Inc.
+# Copyright (C) 2002-2015, 2018-2019 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-m4_include(b4_pkgdatadir/[c++.m4])
+m4_include(b4_skeletonsdir/[c++.m4])
 
 # api.value.type=variant is valid.
 m4_define([b4_value_type_setup_variant])
@@ -35,57 +35,55 @@ m4_define([b4_integral_parser_table_declare],
 # Define "parser::yy<TABLE-NAME>_" whose contents is CONTENT.
 m4_define([b4_integral_parser_table_define],
 [  const b4_int_type_for([$2])
-  b4_parser_class_name::yy$1_[[]] =
+  b4_parser_class::yy$1_[[]] =
   {
   $2
   };dnl
 ])
 
-# b4_symbol_value_template(VAL, [TYPE])
-# -------------------------------------
+# b4_symbol_value_template(VAL, SYMBOL-NUM, [TYPE])
+# -------------------------------------------------
 # Same as b4_symbol_value, but used in a template method.  It makes
 # a difference when using variants.  Note that b4_value_type_setup_union
 # overrides b4_symbol_value, so we must override it again.
 m4_copy([b4_symbol_value], [b4_symbol_value_template])
 m4_append([b4_value_type_setup_union],
-          [m4_copy_force([b4_symbol_value_union], [b4_symbol_value_template])])
+[m4_copy_force([b4_symbol_value_union], [b4_symbol_value_template])])
 
-# b4_lhs_value([TYPE])
-# --------------------
-# Expansion of $<TYPE>$.
+# b4_lhs_value(SYMBOL-NUM, [TYPE])
+# --------------------------------
+# See README.
 m4_define([b4_lhs_value],
-          [b4_symbol_value([yylhs.value], [$1])])
+[b4_symbol_value([yylhs.value], [$1], [$2])])
 
 
 # b4_lhs_location()
 # -----------------
 # Expansion of @$.
 m4_define([b4_lhs_location],
-          [yylhs.location])
+[yylhs.location])
 
 
-# b4_rhs_data(RULE-LENGTH, NUM)
+# b4_rhs_data(RULE-LENGTH, POS)
 # -----------------------------
-# Return the data corresponding to the symbol #NUM, where the current
-# rule has RULE-LENGTH symbols on RHS.
+# See README.
 m4_define([b4_rhs_data],
-          [yystack_@{b4_subtract($@)@}])
+[yystack_@{b4_subtract($@)@}])
 
 
-# b4_rhs_state(RULE-LENGTH, NUM)
+# b4_rhs_state(RULE-LENGTH, POS)
 # ------------------------------
-# The state corresponding to the symbol #NUM, where the current
+# The state corresponding to the symbol #POS, where the current
 # rule has RULE-LENGTH symbols on RHS.
 m4_define([b4_rhs_state],
-          [b4_rhs_data([$1], [$2]).state])
+[b4_rhs_data([$1], [$2]).state])
 
 
-# b4_rhs_value(RULE-LENGTH, NUM, [TYPE])
-# --------------------------------------
-# Expansion of $<TYPE>NUM, where the current rule has RULE-LENGTH
-# symbols on RHS.
+# b4_rhs_value(RULE-LENGTH, POS, SYMBOL-NUM, [TYPE])
+# --------------------------------------------------
+# See README.
 m4_define([_b4_rhs_value],
-          [b4_symbol_value([b4_rhs_data([$1], [$2]).value], [$3])])
+[b4_symbol_value([b4_rhs_data([$1], [$2]).value], [$3], [$4])])
 
 m4_define([b4_rhs_value],
 [b4_percent_define_ifdef([api.value.automove],
@@ -93,12 +91,12 @@ m4_define([b4_rhs_value],
                          [_b4_rhs_value($@)])])
 
 
-# b4_rhs_location(RULE-LENGTH, NUM)
+# b4_rhs_location(RULE-LENGTH, POS)
 # ---------------------------------
-# Expansion of @NUM, where the current rule has RULE-LENGTH symbols
+# Expansion of @POS, where the current rule has RULE-LENGTH symbols
 # on RHS.
 m4_define([b4_rhs_location],
-          [b4_rhs_data([$1], [$2]).location])
+[b4_rhs_data([$1], [$2]).location])
 
 
 # b4_symbol_action(SYMBOL-NUM, KIND)
@@ -109,10 +107,10 @@ m4_define([b4_symbol_action],
 [b4_symbol_if([$1], [has_$2],
 [m4_pushdef([b4_symbol_value], m4_defn([b4_symbol_value_template]))[]dnl
 b4_dollar_pushdef([yysym.value],
-                   b4_symbol_if([$1], [has_type],
-                                [m4_dquote(b4_symbol([$1], [type]))]),
-                   [yysym.location])dnl
-      _b4_symbol_case([$1])
+                  [$1],
+                  [],
+                  [yysym.location])dnl
+      _b4_symbol_case([$1])[]dnl
 b4_syncline([b4_symbol([$1], [$2_line])], [b4_symbol([$1], [$2_file])])
         b4_symbol([$1], [$2])
 b4_syncline([@oline@], [@ofile@])
@@ -137,16 +135,16 @@ m4_ifdef([b4_lex_param], [, ]b4_lex_param))])])
 
 
 m4_pushdef([b4_copyright_years],
-           [2002-2015, 2018])
+           [2002-2015, 2018-2019])
 
-m4_define([b4_parser_class_name],
-          [b4_percent_define_get([[parser_class_name]])])
+m4_define([b4_parser_class],
+          [b4_percent_define_get([[api.parser.class]])])
 
 b4_bison_locations_if([# Backward compatibility.
    m4_define([b4_location_constructors])
-   m4_include(b4_pkgdatadir/[location.cc])])
-m4_include(b4_pkgdatadir/[stack.hh])
-b4_variant_if([m4_include(b4_pkgdatadir/[variant.hh])])
+   m4_include(b4_skeletonsdir/[location.cc])])
+m4_include(b4_skeletonsdir/[stack.hh])
+b4_variant_if([m4_include(b4_skeletonsdir/[variant.hh])])
 
 
 # b4_shared_declarations(hh|cc)
@@ -174,21 +172,18 @@ m4_define([b4_shared_declarations],
 
 ]b4_namespace_open[
 
-]b4_stack_define[
 ]b4_bison_locations_if([m4_ifndef([b4_location_file],
                                   [b4_location_define])])[
 
-]b4_variant_if([b4_variant_define])[
-
   /// A Bison parser.
-  class ]b4_parser_class_name[
+  class ]b4_parser_class[
   {
   public:
 ]b4_public_types_declare[
-]b4_symbol_type_declare[
+]b4_symbol_type_define[
     /// Build a parser object.
-    ]b4_parser_class_name[ (]b4_parse_param_decl[);
-    virtual ~]b4_parser_class_name[ ();
+    ]b4_parser_class[ (]b4_parse_param_decl[);
+    virtual ~]b4_parser_class[ ();
 
     /// Parse.  An alias for parse ().
     /// \returns  0 iff parsing succeeded.
@@ -220,12 +215,12 @@ m4_define([b4_shared_declarations],
     /// Report a syntax error.
     void error (const syntax_error& err);
 
-]b4_symbol_constructor_declare[
+]b4_token_constructor_define[
 
   private:
     /// This class is not copyable.
-    ]b4_parser_class_name[ (const ]b4_parser_class_name[&);
-    ]b4_parser_class_name[& operator= (const ]b4_parser_class_name[&);
+    ]b4_parser_class[ (const ]b4_parser_class[&);
+    ]b4_parser_class[& operator= (const ]b4_parser_class[&);
 
     /// State numbers.
     typedef int state_type;
@@ -296,26 +291,26 @@ m4_define([b4_shared_declarations],
     struct by_state
     {
       /// Default constructor.
-      by_state ();
+      by_state () YY_NOEXCEPT;
 
       /// The symbol type as needed by the constructor.
       typedef state_type kind_type;
 
       /// Constructor.
-      by_state (kind_type s);
+      by_state (kind_type s) YY_NOEXCEPT;
 
       /// Copy constructor.
-      by_state (const by_state& other);
+      by_state (const by_state& that) YY_NOEXCEPT;
 
       /// Record that this symbol is empty.
-      void clear ();
+      void clear () YY_NOEXCEPT;
 
       /// Steal the symbol type from \a that.
       void move (by_state& that);
 
       /// The (internal) type number (corresponding to \a state).
       /// \a empty_symbol when empty.
-      symbol_number_type type_get () const;
+      symbol_number_type type_get () const YY_NOEXCEPT;
 
       /// The state number used to denote an empty symbol.
       enum { empty_state = -1 };
@@ -342,6 +337,8 @@ m4_define([b4_shared_declarations],
       stack_symbol_type& operator= (stack_symbol_type& that);
 #endif
     };
+
+]b4_stack_define[
 
     /// Stack type.
     typedef stack<stack_symbol_type> stack_type;
@@ -391,7 +388,7 @@ m4_define([b4_shared_declarations],
 
 #ifndef ]b4_api_PREFIX[STYPE
  // Redirection for backward compatibility.
-# define ]b4_api_PREFIX[STYPE b4_namespace_ref::b4_parser_class_name::semantic_type
+# define ]b4_api_PREFIX[STYPE b4_namespace_ref::b4_parser_class::semantic_type
 #endif
 ])[
 ]b4_percent_code_get([[provides]])[
@@ -518,11 +515,11 @@ m4_if(b4_prefix, [yy], [],
      apostrophe, a comma, or backslash (other than backslash-backslash).
      YYSTR is taken from yytname.  */
   std::string
-  ]b4_parser_class_name[::yytnamerr_ (const char *yystr)
+  ]b4_parser_class[::yytnamerr_ (const char *yystr)
   {
     if (*yystr == '"')
       {
-        std::string yyr = "";
+        std::string yyr;
         char const *yyp = yystr;
 
         for (;;)
@@ -535,7 +532,10 @@ m4_if(b4_prefix, [yy], [],
             case '\\':
               if (*++yyp != '\\')
                 goto do_not_strip_quotes;
-              // Fall through.
+              else
+                goto append;
+
+            append:
             default:
               yyr += *yyp;
               break;
@@ -551,7 +551,7 @@ m4_if(b4_prefix, [yy], [],
 ]])[
 
   /// Build a parser object.
-  ]b4_parser_class_name::b4_parser_class_name[ (]b4_parse_param_decl[)]m4_ifset([b4_parse_param], [
+  ]b4_parser_class::b4_parser_class[ (]b4_parse_param_decl[)]m4_ifset([b4_parse_param], [
     :])[
 #if ]b4_api_PREFIX[DEBUG
     ]m4_ifset([b4_parse_param], [  ], [ :])[yydebug_ (false),
@@ -559,9 +559,11 @@ m4_if(b4_prefix, [yy], [],
 #endif]b4_parse_param_cons[
   {}
 
-  ]b4_parser_class_name::~b4_parser_class_name[ ()
+  ]b4_parser_class::~b4_parser_class[ ()
   {}
 
+  ]b4_parser_class[::syntax_error::~syntax_error () YY_NOEXCEPT YY_NOTHROW
+  {}
 
   /*---------------.
   | Symbol types.  |
@@ -570,33 +572,33 @@ m4_if(b4_prefix, [yy], [],
 ]b4_token_ctor_if([], [b4_public_types_define([cc])])[
 
   // by_state.
-  ]b4_parser_class_name[::by_state::by_state ()
+  ]b4_parser_class[::by_state::by_state () YY_NOEXCEPT
     : state (empty_state)
   {}
 
-  ]b4_parser_class_name[::by_state::by_state (const by_state& other)
-    : state (other.state)
+  ]b4_parser_class[::by_state::by_state (const by_state& that) YY_NOEXCEPT
+    : state (that.state)
   {}
 
   void
-  ]b4_parser_class_name[::by_state::clear ()
+  ]b4_parser_class[::by_state::clear () YY_NOEXCEPT
   {
     state = empty_state;
   }
 
   void
-  ]b4_parser_class_name[::by_state::move (by_state& that)
+  ]b4_parser_class[::by_state::move (by_state& that)
   {
     state = that.state;
     that.clear ();
   }
 
-  ]b4_parser_class_name[::by_state::by_state (state_type s)
+  ]b4_parser_class[::by_state::by_state (state_type s) YY_NOEXCEPT
     : state (s)
   {}
 
-  ]b4_parser_class_name[::symbol_number_type
-  ]b4_parser_class_name[::by_state::type_get () const
+  ]b4_parser_class[::symbol_number_type
+  ]b4_parser_class[::by_state::type_get () const YY_NOEXCEPT
   {
     if (state == empty_state)
       return empty_symbol;
@@ -604,10 +606,10 @@ m4_if(b4_prefix, [yy], [],
       return yystos_[state];
   }
 
-  ]b4_parser_class_name[::stack_symbol_type::stack_symbol_type ()
+  ]b4_parser_class[::stack_symbol_type::stack_symbol_type ()
   {}
 
-  ]b4_parser_class_name[::stack_symbol_type::stack_symbol_type (YY_RVREF (stack_symbol_type) that)
+  ]b4_parser_class[::stack_symbol_type::stack_symbol_type (YY_RVREF (stack_symbol_type) that)
     : super_type (YY_MOVE (that.state)]b4_variant_if([], [, YY_MOVE (that.value)])b4_locations_if([, YY_MOVE (that.location)])[)
   {]b4_variant_if([
     b4_symbol_variant([that.type_get ()],
@@ -618,7 +620,7 @@ m4_if(b4_prefix, [yy], [],
 #endif
   }
 
-  ]b4_parser_class_name[::stack_symbol_type::stack_symbol_type (state_type s, YY_MOVE_REF (symbol_type) that)
+  ]b4_parser_class[::stack_symbol_type::stack_symbol_type (state_type s, YY_MOVE_REF (symbol_type) that)
     : super_type (s]b4_variant_if([], [, YY_MOVE (that.value)])[]b4_locations_if([, YY_MOVE (that.location)])[)
   {]b4_variant_if([
     b4_symbol_variant([that.type_get ()],
@@ -628,8 +630,8 @@ m4_if(b4_prefix, [yy], [],
   }
 
 #if YY_CPLUSPLUS < 201103L
-  ]b4_parser_class_name[::stack_symbol_type&
-  ]b4_parser_class_name[::stack_symbol_type::operator= (stack_symbol_type& that)
+  ]b4_parser_class[::stack_symbol_type&
+  ]b4_parser_class[::stack_symbol_type::operator= (stack_symbol_type& that)
   {
     state = that.state;
     ]b4_variant_if([b4_symbol_variant([that.type_get ()],
@@ -644,7 +646,7 @@ m4_if(b4_prefix, [yy], [],
 
   template <typename Base>
   void
-  ]b4_parser_class_name[::yy_destroy_ (const char* yymsg, basic_symbol<Base>& yysym) const
+  ]b4_parser_class[::yy_destroy_ (const char* yymsg, basic_symbol<Base>& yysym) const
   {
     if (yymsg)
       YY_SYMBOL_PRINT (yymsg, yysym);]b4_variant_if([], [
@@ -656,16 +658,18 @@ m4_if(b4_prefix, [yy], [],
 #if ]b4_api_PREFIX[DEBUG
   template <typename Base>
   void
-  ]b4_parser_class_name[::yy_print_ (std::ostream& yyo,
+  ]b4_parser_class[::yy_print_ (std::ostream& yyo,
                                      const basic_symbol<Base>& yysym) const
   {
     std::ostream& yyoutput = yyo;
     YYUSE (yyoutput);
     symbol_number_type yytype = yysym.type_get ();
+#if defined __GNUC__ && ! defined __clang__ && ! defined __ICC && __GNUC__ * 100 + __GNUC_MINOR__ <= 408
     // Avoid a (spurious) G++ 4.8 warning about "array subscript is
     // below array bounds".
     if (yysym.empty ())
       std::abort ();
+#endif
     yyo << (yytype < yyntokens_ ? "token" : "nterm")
         << ' ' << yytname_[yytype] << " ("]b4_locations_if([
         << yysym.location << ": "])[;
@@ -675,7 +679,7 @@ m4_if(b4_prefix, [yy], [],
 #endif
 
   void
-  ]b4_parser_class_name[::yypush_ (const char* m, YY_MOVE_REF (stack_symbol_type) sym)
+  ]b4_parser_class[::yypush_ (const char* m, YY_MOVE_REF (stack_symbol_type) sym)
   {
     if (m)
       YY_SYMBOL_PRINT (m, sym);
@@ -683,7 +687,7 @@ m4_if(b4_prefix, [yy], [],
   }
 
   void
-  ]b4_parser_class_name[::yypush_ (const char* m, state_type s, YY_MOVE_REF (symbol_type) sym)
+  ]b4_parser_class[::yypush_ (const char* m, state_type s, YY_MOVE_REF (symbol_type) sym)
   {
 #if 201103L <= YY_CPLUSPLUS
     yypush_ (m, stack_symbol_type (s, std::move (sym)));
@@ -694,40 +698,40 @@ m4_if(b4_prefix, [yy], [],
   }
 
   void
-  ]b4_parser_class_name[::yypop_ (int n)
+  ]b4_parser_class[::yypop_ (int n)
   {
     yystack_.pop (n);
   }
 
 #if ]b4_api_PREFIX[DEBUG
   std::ostream&
-  ]b4_parser_class_name[::debug_stream () const
+  ]b4_parser_class[::debug_stream () const
   {
     return *yycdebug_;
   }
 
   void
-  ]b4_parser_class_name[::set_debug_stream (std::ostream& o)
+  ]b4_parser_class[::set_debug_stream (std::ostream& o)
   {
     yycdebug_ = &o;
   }
 
 
-  ]b4_parser_class_name[::debug_level_type
-  ]b4_parser_class_name[::debug_level () const
+  ]b4_parser_class[::debug_level_type
+  ]b4_parser_class[::debug_level () const
   {
     return yydebug_;
   }
 
   void
-  ]b4_parser_class_name[::set_debug_level (debug_level_type l)
+  ]b4_parser_class[::set_debug_level (debug_level_type l)
   {
     yydebug_ = l;
   }
 #endif // ]b4_api_PREFIX[DEBUG
 
-  ]b4_parser_class_name[::state_type
-  ]b4_parser_class_name[::yy_lr_goto_state_ (state_type yystate, int yysym)
+  ]b4_parser_class[::state_type
+  ]b4_parser_class[::yy_lr_goto_state_ (state_type yystate, int yysym)
   {
     int yyr = yypgoto_[yysym - yyntokens_] + yystate;
     if (0 <= yyr && yyr <= yylast_ && yycheck_[yyr] == yystate)
@@ -737,25 +741,25 @@ m4_if(b4_prefix, [yy], [],
   }
 
   bool
-  ]b4_parser_class_name[::yy_pact_value_is_default_ (int yyvalue)
+  ]b4_parser_class[::yy_pact_value_is_default_ (int yyvalue)
   {
     return yyvalue == yypact_ninf_;
   }
 
   bool
-  ]b4_parser_class_name[::yy_table_value_is_error_ (int yyvalue)
+  ]b4_parser_class[::yy_table_value_is_error_ (int yyvalue)
   {
     return yyvalue == yytable_ninf_;
   }
 
   int
-  ]b4_parser_class_name[::operator() ()
+  ]b4_parser_class[::operator() ()
   {
     return parse ();
   }
 
   int
-  ]b4_parser_class_name[::parse ()
+  ]b4_parser_class[::parse ()
   {
     // State.
     int yyn;
@@ -782,7 +786,7 @@ m4_if(b4_prefix, [yy], [],
     YYCDEBUG << "Starting parse\n";
 
 ]m4_ifdef([b4_initial_action], [
-b4_dollar_pushdef([yyla.value], [], [yyla.location])dnl
+b4_dollar_pushdef([yyla.value], [], [], [yyla.location])dnl
     b4_user_initial_action
 b4_dollar_popdef])[]dnl
 
@@ -793,17 +797,22 @@ b4_dollar_popdef])[]dnl
     yystack_.clear ();
     yypush_ (YY_NULLPTR, 0, YY_MOVE (yyla));
 
-    // A new symbol was pushed on the stack.
+  /*-----------------------------------------------.
+  | yynewstate -- push a new symbol on the stack.  |
+  `-----------------------------------------------*/
   yynewstate:
     YYCDEBUG << "Entering state " << yystack_[0].state << '\n';
 
     // Accept?
     if (yystack_[0].state == yyfinal_)
-      goto yyacceptlab;
+      YYACCEPT;
 
     goto yybackup;
 
-    // Backup.
+
+  /*-----------.
+  | yybackup.  |
+  `-----------*/
   yybackup:
     // Try to take a decision without lookahead.
     yyn = yypact_[yystack_[0].state];
@@ -825,6 +834,7 @@ b4_dollar_popdef])[]dnl
 #if YY_EXCEPTIONS
         catch (const syntax_error& yyexc)
           {
+            YYCDEBUG << "Caught exception: " << yyexc.what() << '\n';
             error (yyexc);
             goto yyerrlab1;
           }
@@ -856,6 +866,7 @@ b4_dollar_popdef])[]dnl
     yypush_ ("Shifting", yyn, YY_MOVE (yyla));
     goto yynewstate;
 
+
   /*-----------------------------------------------------------.
   | yydefault -- do the default action for the current state.  |
   `-----------------------------------------------------------*/
@@ -865,8 +876,9 @@ b4_dollar_popdef])[]dnl
       goto yyerrlab;
     goto yyreduce;
 
+
   /*-----------------------------.
-  | yyreduce -- Do a reduction.  |
+  | yyreduce -- do a reduction.  |
   `-----------------------------*/
   yyreduce:
     yylen = yyr2_[yyn];
@@ -891,8 +903,8 @@ b4_dollar_popdef])[]dnl
 [
       // Default location.
       {
-        slice<stack_symbol_type, stack_type> slice (yystack_, yylen);
-        YYLLOC_DEFAULT (yylhs.location, slice, yylen);
+        stack_type::slice range (yystack_, yylen);
+        YYLLOC_DEFAULT (yylhs.location, range, yylen);
         yyerror_range[1].location = yylhs.location;
       }]])[
 
@@ -912,6 +924,7 @@ b4_dollar_popdef])[]dnl
 #if YY_EXCEPTIONS
       catch (const syntax_error& yyexc)
         {
+          YYCDEBUG << "Caught exception: " << yyexc.what() << '\n';
           error (yyexc);
           YYERROR;
         }
@@ -925,6 +938,7 @@ b4_dollar_popdef])[]dnl
       yypush_ (YY_NULLPTR, YY_MOVE (yylhs));
     }
     goto yynewstate;
+
 
   /*--------------------------------------.
   | yyerrlab -- here on detecting error.  |
@@ -963,17 +977,17 @@ b4_dollar_popdef])[]dnl
   | yyerrorlab -- error raised explicitly by YYERROR.  |
   `---------------------------------------------------*/
   yyerrorlab:
-
-    /* Pacify compilers like GCC when the user code never invokes
-       YYERROR and the label yyerrorlab therefore never appears in user
-       code.  */
+    /* Pacify compilers when the user code never invokes YYERROR and
+       the label yyerrorlab therefore never appears in user code.  */
     if (false)
-      goto yyerrorlab;
+      YYERROR;
+
     /* Do not reclaim the symbols of the rule whose action triggered
        this YYERROR.  */
     yypop_ (yylen);
     yylen = 0;
     goto yyerrlab1;
+
 
   /*-------------------------------------------------------------.
   | yyerrlab1 -- common code for both syntax error and YYERROR.  |
@@ -1015,16 +1029,26 @@ b4_dollar_popdef])[]dnl
     }
     goto yynewstate;
 
-    // Accept.
+
+  /*-------------------------------------.
+  | yyacceptlab -- YYACCEPT comes here.  |
+  `-------------------------------------*/
   yyacceptlab:
     yyresult = 0;
     goto yyreturn;
 
-    // Abort.
+
+  /*-----------------------------------.
+  | yyabortlab -- YYABORT comes here.  |
+  `-----------------------------------*/
   yyabortlab:
     yyresult = 1;
     goto yyreturn;
 
+
+  /*-----------------------------------------------------.
+  | yyreturn -- parsing is finished, return the result.  |
+  `-----------------------------------------------------*/
   yyreturn:
     if (!yyla.empty ())
       yy_destroy_ ("Cleanup: discarding lookahead", yyla);
@@ -1060,7 +1084,7 @@ b4_dollar_popdef])[]dnl
   }
 
   void
-  ]b4_parser_class_name[::error (const syntax_error& yyexc)
+  ]b4_parser_class[::error (const syntax_error& yyexc)
   {
     error (]b4_join(b4_locations_if([yyexc.location]),
                     [[yyexc.what ()]])[);
@@ -1068,7 +1092,7 @@ b4_dollar_popdef])[]dnl
 
   // Generate an error message.
   std::string
-  ]b4_parser_class_name[::yysyntax_error_ (]dnl
+  ]b4_parser_class[::yysyntax_error_ (]dnl
 b4_error_verbose_if([state_type yystate, const symbol_type& yyla],
                     [state_type, const symbol_type&])[) const
   {]b4_error_verbose_if([[
@@ -1167,9 +1191,9 @@ b4_error_verbose_if([state_type yystate, const symbol_type& yyla],
   }
 
 
-  const ]b4_int_type(b4_pact_ninf, b4_pact_ninf) b4_parser_class_name::yypact_ninf_ = b4_pact_ninf[;
+  const ]b4_int_type(b4_pact_ninf, b4_pact_ninf) b4_parser_class::yypact_ninf_ = b4_pact_ninf[;
 
-  const ]b4_int_type(b4_table_ninf, b4_table_ninf) b4_parser_class_name::yytable_ninf_ = b4_table_ninf[;
+  const ]b4_int_type(b4_table_ninf, b4_table_ninf) b4_parser_class::yytable_ninf_ = b4_table_ninf[;
 
 ]b4_parser_tables_define[
 
@@ -1177,7 +1201,7 @@ b4_error_verbose_if([state_type yystate, const symbol_type& yyla],
   // YYTNAME[SYMBOL-NUM] -- String name of the symbol SYMBOL-NUM.
   // First, the terminals, then, starting at \a yyntokens_, nonterminals.
   const char*
-  const ]b4_parser_class_name[::yytname_[] =
+  const ]b4_parser_class[::yytname_[] =
   {
   ]b4_tname[
   };
@@ -1187,7 +1211,7 @@ b4_error_verbose_if([state_type yystate, const symbol_type& yyla],
 
   // Print the state stack on the debug stream.
   void
-  ]b4_parser_class_name[::yystack_print_ ()
+  ]b4_parser_class[::yystack_print_ ()
   {
     *yycdebug_ << "Stack now";
     for (stack_type::const_iterator
@@ -1200,7 +1224,7 @@ b4_error_verbose_if([state_type yystate, const symbol_type& yyla],
 
   // Report on the debug stream that the rule \a yyrule is going to be reduced.
   void
-  ]b4_parser_class_name[::yy_reduce_print_ (int yyrule)
+  ]b4_parser_class[::yy_reduce_print_ (int yyrule)
   {
     unsigned yylno = yyrline_[yyrule];
     int yynrhs = yyr2_[yyrule];
