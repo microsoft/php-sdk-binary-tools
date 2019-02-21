@@ -11,7 +11,7 @@ class Config
 	/* Config variables. */
 	protected static $depsHost = 'windows.php.net';
 	protected static $depsPort = 80;
-	protected static $depsBaseUri = "/downloads/php-sdk/deps";
+	protected static $depsBaseUri = "/downloads/php-sdk/backports/deps";
 
 	/* protected static $sdkNugetFeedUrl = "http://127.0.0.1/sdk/nuget"; */
 
@@ -266,10 +266,13 @@ class Config
 			}
 		}
 
-		if (!$ret["stability"]) {
+		if (!isset($ret["arch"]) || !$ret["arch"]) {
+			throw new Exception("Failed to find config with arch '" . self::getCurrentArchName() . "'");
+		}
+		if (!isset($ret["stability"]) || !$ret["stability"]) {
 			throw new Exception("Failed to find config with stability '" . self::getCurrentStabilityName() . "'");
 		}
-		if (!$ret["crt"]) {
+		if (!isset($ret["crt"]) || !$ret["crt"]) {
 			throw new Exception("Failed to find config with arch '" . self::getCurrentArchName() . "'");
 		}
 
