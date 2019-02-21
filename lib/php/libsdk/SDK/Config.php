@@ -293,10 +293,13 @@ class Config
 			}
 		}
 
-		if (!@$ret["stability"]) {
+		if (!isset($ret["arch"]) || !$ret["arch"]) {
+			throw new Exception("Failed to find config with arch '" . self::getCurrentArchName() . "'");
+		}
+		if (!isset($ret["stability"]) || !$ret["stability"]) {
 			throw new Exception("Failed to find config with stability '" . self::getCurrentStabilityName() . "'");
 		}
-		if (!@$ret["crt"]) {
+		if (!isset($ret["crt"]) || !$ret["crt"]) {
 			throw new Exception("Failed to find config with arch '" . self::getCurrentArchName() . "'");
 		}
 
