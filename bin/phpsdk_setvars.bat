@@ -17,5 +17,12 @@ set PHP_SDK_PHP_CMD=%PHP_SDK_BIN_PATH%\php\do_php.bat
 
 set PATH=%PHP_SDK_BIN_PATH%;%PHP_SDK_MSYS2_PATH%;%PATH%
 
+for /f "tokens=1* delims=: " %%a in ('link /?') do ( 
+	set PHP_SDK_VC_TOOLSET_VER=%%b
+	goto break0
+)
+:break0
+set PHP_SDK_VC_TOOLSET_VER=%PHP_SDK_VC_TOOLSET_VER:~-13%
+
 exit /b %errorlevel%
 
