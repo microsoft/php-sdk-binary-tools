@@ -10,11 +10,11 @@ rem otherwise - retain the old behavior, create structs for all the known build 
 cmd /c "exit /b 0"
 
 if "%PHP_SDK_ARCH%" NEQ "" (
-	if "%PHP_SDK_VC%" NEQ "" (
-		MD %_%\%PHP_SDK_VC%\%PHP_SDK_ARCH%\deps\bin
-		MD %_%\%PHP_SDK_VC%\%PHP_SDK_ARCH%\deps\lib
-		MD %_%\%PHP_SDK_VC%\%PHP_SDK_ARCH%\deps\include
-		cd %_%\%PHP_SDK_VC%\%PHP_SDK_ARCH%
+	if "%PHP_SDK_VS%" NEQ "" (
+		MD %_%\%PHP_SDK_VS%\%PHP_SDK_ARCH%\deps\bin
+		MD %_%\%PHP_SDK_VS%\%PHP_SDK_ARCH%\deps\lib
+		MD %_%\%PHP_SDK_VS%\%PHP_SDK_ARCH%\deps\include
+		cd %_%\%PHP_SDK_VS%\%PHP_SDK_ARCH%
 		goto exit
 	)
 	goto create_all

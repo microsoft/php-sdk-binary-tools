@@ -52,9 +52,9 @@ if "%TASK%" neq "" (
 		set TASK_ARGS=%TASK_ARGS:"=%
 
 		if exist "%PHP_SDK_ROOT_PATH%\phpsdk-local.bat" (
-			cmd /c "!PHP_SDK_VC_SHELL_CMD! && %PHP_SDK_ROOT_PATH%\bin\phpsdk_setvars.bat && %PHP_SDK_ROOT_PATH%\phpsdk-local.bat && %TASK% !TASK_ARGS!"
+			cmd /c "!PHP_SDK_VS_SHELL_CMD! && %PHP_SDK_ROOT_PATH%\bin\phpsdk_setvars.bat && %PHP_SDK_ROOT_PATH%\phpsdk-local.bat && %TASK% !TASK_ARGS!"
 		) else (
-			cmd /c "!PHP_SDK_VC_SHELL_CMD! && %PHP_SDK_ROOT_PATH%\bin\phpsdk_setvars.bat && %TASK% !TASK_ARGS!"
+			cmd /c "!PHP_SDK_VS_SHELL_CMD! && %PHP_SDK_ROOT_PATH%\bin\phpsdk_setvars.bat && %TASK% !TASK_ARGS!"
 		)
 		set TASK=
 		exit /b !ERRORLEVEL!
@@ -66,9 +66,9 @@ if "%TASK%" neq "" (
 )
 
 if exist "%PHP_SDK_ROOT_PATH%\phpsdk-local.bat" (
-	cmd /k "!PHP_SDK_VC_SHELL_CMD! && set __VSCMD_ARG_NO_LOGO=&& set VSCMD_START_DIR=&& %PHP_SDK_ROOT_PATH%\bin\phpsdk_setvars.bat && %PHP_SDK_ROOT_PATH%\bin\phpsdk_dumpenv.bat && %PHP_SDK_ROOT_PATH%\phpsdk-local.bat && echo. && set prompt=$P$_$+$$$S"
+	cmd /k "!PHP_SDK_VS_SHELL_CMD! && set __VSCMD_ARG_NO_LOGO=&& set VSCMD_START_DIR=&& %PHP_SDK_ROOT_PATH%\bin\phpsdk_setvars.bat && %PHP_SDK_ROOT_PATH%\bin\phpsdk_dumpenv.bat && %PHP_SDK_ROOT_PATH%\phpsdk-local.bat && echo. && set prompt=$P$_$+$$$S"
 ) else (
-	cmd /k "!PHP_SDK_VC_SHELL_CMD! && set __VSCMD_ARG_NO_LOGO=&& set VSCMD_START_DIR=&& %PHP_SDK_ROOT_PATH%\bin\phpsdk_setvars.bat && %PHP_SDK_ROOT_PATH%\bin\phpsdk_dumpenv.bat && set prompt=$P$_$+$$$S"
+	cmd /k "!PHP_SDK_VS_SHELL_CMD! && set __VSCMD_ARG_NO_LOGO=&& set VSCMD_START_DIR=&& %PHP_SDK_ROOT_PATH%\bin\phpsdk_setvars.bat && %PHP_SDK_ROOT_PATH%\bin\phpsdk_dumpenv.bat && set prompt=$P$_$+$$$S"
 )
 
 exit /b !ERRORLEVEL!
