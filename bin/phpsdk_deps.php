@@ -131,14 +131,6 @@ try {
 		throw new Exception("Active CRT '$active_crt' differs from the branch CRT '" . Config::getCurrentCrtName() . "'.");
 	}
 
-	if (NULL === Config::getCurrentStabilityName()) {
-		if ("master" == Config::getCurrentBranchName()) {
-			Config::setCurrentStabilityName("staging");
-		} else {
-			Config::setCurrentStabilityName("stable");
-		}
-	}
-
 	$branch_data = Config::getCurrentBranchData();
 	echo "\nConfiguration: " . Config::getCurrentBranchName() . "-$branch_data[crt]-$branch_data[arch]-$branch_data[stability]\n\n";
 
