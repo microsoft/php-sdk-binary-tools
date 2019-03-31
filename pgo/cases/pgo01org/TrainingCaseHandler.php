@@ -90,6 +90,13 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 		$constants = preg_replace(",define\('DB_HOST'.+,", "define('DB_HOST', '$db_host:$db_port');", $constants);
 		file_put_contents($fl, $constants);
 
+		// work around <https://github.com/Microsoft/php-sdk-binary-tools/issues/51>
+		$fl = $htdocs . DIRECTORY_SEPARATOR . "class.php";
+		$class = file_get_contents($fl);
+		$class = preg_replace(",function Student,", "function __construct", $class);
+		$class = preg_replace(",function Faculty,", "function __construct", $class);
+		file_put_contents($fl, $class);
+
 		//$php->exec($cmd, NULL, $env);
 		/* TODO check status or switch to cli. */
 		$out = file_get_contents("http://$http_host:$http_port/init.php");
