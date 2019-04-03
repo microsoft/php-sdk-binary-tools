@@ -81,21 +81,24 @@ if 15 gtr %PHP_SDK_VS_NUM% (
 	)
 	for /f "tokens=2*" %%a in ('reg query !TMPKEY! /v ProductDir') do set PHP_SDK_VC_DIR=%%b
 ) else (
-	rem the first one found seems the correct one
-	for /f "tokens=1* delims=: " %%a in ('%~dp0\vswhere -nologo -version %PHP_SDK_VS_NUM% -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath -format text') do (
+	rem build the version range, e.g. "[15,16)"
+	set /a PHP_SDK_VS_RANGE=PHP_SDK_VS_NUM + 1
+	set PHP_SDK_VS_RANGE="[%PHP_SDK_VS_NUM%,!PHP_SDK_VS_RANGE%!)"
+
+	for /f "tokens=1* delims=: " %%a in ('%~dp0\vswhere -nologo -version !PHP_SDK_VS_RANGE! -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath -format text') do (
 		set PHP_SDK_VC_DIR=%%b\VC
 		goto break0
 	)
 :break0
 	if not exist "!PHP_SDK_VC_DIR!" (
-		for /f "tokens=1* delims=: " %%a in ('%~dp0\vswhere -nologo -version %PHP_SDK_VS_NUM% -products Microsoft.VisualStudio.Product.BuildTools -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath -format text') do (
+		for /f "tokens=1* delims=: " %%a in ('%~dp0\vswhere -nologo -version !PHP_SDK_VS_RANGE! -products Microsoft.VisualStudio.Product.BuildTools -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath -format text') do (
 			set PHP_SDK_VC_DIR=%%b\VC
 			goto break1
 		)
 :break1
 		if not exist "!PHP_SDK_VC_DIR!" (
 			rem check for a preview release
-			for /f "tokens=1* delims=: " %%a in ('%~dp0\vswhere -nologo -version %PHP_SDK_VS_NUM% -prerelease -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath -format text') do (
+			for /f "tokens=1* delims=: " %%a in ('%~dp0\vswhere -nologo -version !PHP_SDK_VS_RANGE! -prerelease -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath -format text') do (
 				set PHP_SDK_VC_DIR=%%b\VC
 				goto break3
 			)
@@ -109,6 +112,7 @@ if 15 gtr %PHP_SDK_VS_NUM% (
 	set VSCMD_ARG_no_logo=nologo
 )
 set TMPKEY=
+set PHP_SDK_VS_RANGE=
 
 if 15 gtr %PHP_SDK_VS_NUM% (
 	rem get sdk dir
