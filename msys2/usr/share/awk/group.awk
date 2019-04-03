@@ -38,7 +38,7 @@ function _gr_init(    oldfs, oldrs, olddol0, grcat,
         n = split($4, a, "[ \t]*,[ \t]*")
         for (i = 1; i <= n; i++)
             if (a[i] in _gr_groupsbyuser)
-                _gr_groupsbyuser[a[i]] = gr_groupsbyuser[a[i]] " " $1
+                _gr_groupsbyuser[a[i]] = _gr_groupsbyuser[a[i]] " " $1
             else
                 _gr_groupsbyuser[a[i]] = $1
 
