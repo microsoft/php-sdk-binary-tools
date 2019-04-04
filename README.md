@@ -19,8 +19,6 @@ The PHP SDK 2.0+ is compatible with PHP 7.0 and above. The compatibility with [o
 
 # Tools
 
-All the tools included are either scripts or binaries. They are therefore runable on any of x86 or x64 supported Windows system.
-
 ## SDK
 
 - starter scripts, named phpsdk-&lt;crt&gt;-&lt;arch&gt;.bat
