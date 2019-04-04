@@ -2,7 +2,7 @@
 
 setlocal enableextensions enabledelayedexpansion
 
-set PHPSDK_MSYS2_BASE_ADDR=0x70000000
+set PHPSDK_MSYS2_BASE_ADDR=0x100400000
 set PHPSDK_MSYS2_BASE_DYNAMIC=0
 
 :getopt
@@ -33,7 +33,7 @@ GOTO EXIT
 
 :help
 echo phpsdk_rebase_msys2 ^<address^>
-echo Rebase MSYS2 DLLs to the given address. If ommited, default is 0x70000000.
+echo Rebase MSYS2 DLLs to the given address. If ommited, default is 0x100400000.
 
 :EXIT
 exit /b %errorlevel%
