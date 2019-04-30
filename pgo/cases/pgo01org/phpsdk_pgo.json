@@ -1,5 +1,5 @@
 {
-	"pgo01org_zip_url": "https://github.com/01org/php_pgo_training_scripts/archive/master.zip",
+	"pgo01org_zip_url": "https://github.com/intel/php_pgo_training_scripts/archive/master.zip",
 	"type": "web",
 	"srv_http": "nginx",
 	"srv_db": "mariadb"
