@@ -50,7 +50,7 @@ These are not included with the PHP SDK, but might be useful. While Visual C++ i
 
 # Usage
 
-The PHP SDK should be unzipped into the shortest possible path, preferrably somewhere near the drive root.
+The PHP SDK should be unzipped into the shortest possible path, preferably somewhere near the drive root.
 
 Usually, the first step to start the PHP SDK is by invoking one of the suitable starter scripts. This automatically puts the console on the correct environment relevant for the desired PHP build configuration.
 
@@ -190,9 +190,9 @@ previously.
 - When fetching the binary SDK from git, git `core.autocrlf` configuration directive set to `false` is recommended.
 - Tools, based on MSYS2, only accept paths with forward slashes.
 - Both Visual C++ toolset and the Windows SDK components have to be installed for the PHP SDK to work properly. 
-- The VC++ toolset is still requried, even if another compiler, fe. clang, is intended to be used.
+- The VC++ toolset is still required, even if another compiler, fe. clang, is intended to be used.
 - `task.exe` is not a console application, some systems might not propagate exit code except the batch is explicitly run from `cmd /c`, etc.
-- `7za` should be prefered over `unzip` and `zip` for compatibility reasons.
-- If you experince some strange crashes on MSYS2 tools, try the phpsdk_rebase_msys2 tool. MSYS2 tools might be have unstable
+- `7za` should be preferred over `unzip` and `zip` for compatibility reasons.
+- If you experience some strange crashes on MSYS2 tools, try the phpsdk_rebase_msys2 tool. MSYS2 tools might be have unstable
   on ASLR enabled systems.
 
