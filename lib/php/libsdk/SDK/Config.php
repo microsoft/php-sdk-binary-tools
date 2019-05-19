@@ -138,8 +138,7 @@ class Config
 			$tmp = $fetcher->getByUri(self::$depsBaseUri . "/series/");
 			if (false !== $tmp) {
 				$data = array();
-				if (preg_match_all(",/packages-(.+)-(vc\d+)-(x86|x64)-(stable|staging)\.txt,U", $tmp, $m, PREG_SET_ORDER)
-					|| preg_match_all(",/packages-(.+)-(vs\d+)-(x86|x64)-(stable|staging)\.txt,U", $tmp, $m, PREG_SET_ORDER)) {
+				if (preg_match_all(",/packages-(.+)-(v[cs]\d+)-(x86|x64)-(stable|staging)\.txt,U", $tmp, $m, PREG_SET_ORDER)) {
 					foreach ($m as $b) {
 						if (!isset($data[$b[1]])) {
 							$data[$b[1]] = array();
