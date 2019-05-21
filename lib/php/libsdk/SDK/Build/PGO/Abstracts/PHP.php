@@ -238,7 +238,7 @@ abstract class PHP
 	public function getIdString(): string
 	{
 		return $this->getVersion() . "-"
-			. SDKConfig::getCurrentCrtName() . "-"
+			. getenv('PHP_SDK_VS') . "-"
 			. ($this->isThreadSafe() ? "ts" : "nts") . "-"
 			. ($this->is64bit() ? "x64" : "x86")
 			. "-" . substr(md5(uniqid()), 0, 8);
