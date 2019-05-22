@@ -57,20 +57,24 @@ class Config
 	public static function getCurrentArchName() : string
 	{/*{{{*/
 		if (NULL === self::$currentArchName) {
-			/* XXX this might be not true for other compilers! */
-			passthru("where cl.exe >nul", $status);
-			if ($status) {
-				throw new Exception("Couldn't execute cl.exe.");
-			}
-
-			exec("cl.exe /? 2>&1", $out);
-
-			if (preg_match(",x64,", $out[0])) {
-				self::setCurrentArchName("x64");
-			} elseif (preg_match(",x86,", $out[0])) {
-				self::setCurrentArchName("x86");
+			if (FALSE !== ($env = getenv('PHP_SDK_ARCH'))) {
+				self::setCurrentArchName($env);
 			} else {
-				throw new Exception("Couldn't determine Arch.");
+				/* XXX this might be not true for other compilers! */
+				passthru("where cl.exe >nul", $status);
+				if ($status) {
+					throw new Exception("Couldn't execute cl.exe.");
+				}
+
+				exec("cl.exe /? 2>&1", $out);
+
+				if (preg_match(",x64,", $out[0])) {
+					self::setCurrentArchName("x64");
+				} elseif (preg_match(",x86,", $out[0])) {
+					self::setCurrentArchName("x86");
+				} else {
+					throw new Exception("Couldn't determine Arch.");
+				}
 			}
 		}
 
@@ -85,18 +89,22 @@ class Config
 	public static function getCurrentCrtName() : ?string
 	{/*{{{*/
 		if (NULL === self::$currentCrtName) {
-			$all_branches = Config::getKnownBranches();
+			if (FALSE !== ($env = getenv('PHP_SDK_VS'))) {
+				self::setCurrentCrtName($env);
+			} else {
+				$all_branches = Config::getKnownBranches();
 
-			if (!isset($all_branches[Config::getCurrentBranchName()])) {
-				throw new Exception("Couldn't find any configuration for branch '" . Config::getCurrentBranchName() . "'");
+				if (!isset($all_branches[Config::getCurrentBranchName()])) {
+					throw new Exception("Couldn't find any configuration for branch '" . Config::getCurrentBranchName() . "'");
+				}
+
+				$branch = $all_branches[Config::getCurrentBranchName()];
+				if (count($branch) > 1) {
+					throw new Exception("Multiple CRTs are available for this branch, please choose one from " . implode(",", array_keys($branch)));
+				}
+
+				self::setCurrentCrtName(array_keys($branch)[0]);
 			}
-
-			$branch = $all_branches[Config::getCurrentBranchName()];
-			if (count($branch) > 1) {
-				throw new Exception("Multiple CRTs are available for this branch, please choose one from " . implode(",", array_keys($branch)));
-			}
-
-			self::setCurrentCrtName(array_keys($branch)[0]);
 		}
 
 		return self::$currentCrtName;

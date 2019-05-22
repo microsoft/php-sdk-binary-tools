@@ -130,19 +130,6 @@ abstract class PHP
 		return true;
 	}
 
-	public function is64bit() : bool
-	{
-		$cli = new CLI($this->conf, $this->scenario);
-
-		$out = shell_exec($cli->getExeFilename() . " -n -v");
-
-		if (preg_match(",x64,", $out, $m) > 0) {
-			return true;
-		}
-
-		return false;
-	}
-
 	/* Need to cleanup it somewhere. */
 	public function getIniFilename()
 	{
@@ -153,7 +140,7 @@ abstract class PHP
 			$this->conf->buildTplVarName("php", "error_log") => $this->getRootDir() . DIRECTORY_SEPARATOR . "pgo_run_error.log",
 		);
 
-		$k = $this->is64bit() ? "x64" : "x86";
+		$k = SDKConfig::getCurrentArchName();
 		$scenario_vars = (array)$this->conf->getSectionItem("php", "scenario", $this->scenario, "ini", $k);
 		if ($scenario_vars) {
 			foreach ($scenario_vars as $k => $v) {
@@ -238,9 +225,9 @@ abstract class PHP
 	public function getIdString(): string
 	{
 		return $this->getVersion() . "-"
-			. getenv('PHP_SDK_VS') . "-"
+			. SDKConfig::getCurrentCrtName() . "-"
 			. ($this->isThreadSafe() ? "ts" : "nts") . "-"
-			. ($this->is64bit() ? "x64" : "x86")
+			. SDKConfig::getCurrentArchName()
 			. "-" . substr(md5(uniqid()), 0, 8);
 	}
 }
