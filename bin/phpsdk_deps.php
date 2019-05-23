@@ -128,7 +128,7 @@ try {
 	/* The current CRT needs to match the config one. */
 	$active_crt = getenv("PHP_SDK_VS");
 	if (Config::getCurrentCrtName() != $active_crt && !$force) {
-		throw new Exception("Active CRT '$active_crt' differs from the branch CRT '" . Config::getCurrentCrtName() . "'.");
+		throw new Exception("Active CRT name '$active_crt' differs from the branch CRT name '" . Config::getCurrentCrtName() . "'.");
 	}
 
 	$branch_data = Config::getCurrentBranchData();
