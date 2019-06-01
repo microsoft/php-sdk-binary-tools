@@ -22,8 +22,8 @@ The legacy binary tools SDK is available from the [legacy branch](https://github
 - Windows 7 or later
 - `Visual C++ 2017` or `Visual C++ 2019` must be installed prior SDK usage. Required components
   - C++ dev
+  - Windows SDK
   - .NET dev
-  - Windows SDK.
 - if `Cygwin`, `MingW` or any other cross solution is installed, please read notes in the pitfalls section
 
 # Tools
