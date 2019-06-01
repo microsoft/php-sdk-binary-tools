@@ -31,8 +31,8 @@ The PHP SDK 2.0+ is compatible with PHP 7.0 and above. The compatibility with [o
 
 ## Other tools
 
-- `bison` 3.2.4, `re2c` 1.1.1, `lemon`
-- `awk`, `gawk`, `sed`, `grep`
+- `bison` 3.3.2, `re2c` 1.1.1, `lemon`
+- `awk`, `gawk`, `sed`, `grep`, `jq`
 - `diff`, `diff3`, `patch`
 - `md5sum`, `sha1sum`, `sha224sum`, `sha256sum`, `sha384sum`, `sha512sum`
 - `7za`, `zip`, `unzip`, `unzipsfx`
