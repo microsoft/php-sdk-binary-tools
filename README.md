@@ -8,7 +8,7 @@ The PHP SDK itself and the SDK own tools and code are licensed under the BSD 2-C
 
 # Overview
 
-The toolset consists on a mix of the hand written scripts, selected MSYS2 parts and standalone programs. It supports any workflows, be it a custom local or a CI build whatsoever.
+The toolset consists on a mix of the hand written scripts, selected MSYS2 parts and standalone programs. It supports any workflows, be it a custom, local or a CI build whatsoever.
 
 The PHP SDK 2.2+ is compatible with PHP 7.2 and above.
 
