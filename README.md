@@ -13,7 +13,7 @@ The PHP SDK 2.0+ is compatible with PHP 7.0 and above. The compatibility with [o
 # Requirements
 
 - A 64-bit build host
-- `Visual C++ 2015` or `Visual C++ 2017` must be installed prior SDK usage (be sure to install the C++ dev, .NET dev and the Windows SDK components)
+- `Visual C++ 2015`, `Visual C++ 2017` or `Visual C++ 2019` must be installed prior SDK usage (be sure to install the C++ dev, .NET dev and the Windows SDK components)
 - if `Cygwin`, `MingW` or any other cross solution is installed, please read notes in the pitfalls section
 - The PHP SDK was successfully tested on Windows 7 or later, earlier versions might work but are not recommended
 
