@@ -12,16 +12,19 @@ The toolset consists on a mix of the hand written scripts, selected MSYS2 parts 
 
 The PHP SDK 2.2+ is compatible with PHP 7.2 and above.
 
-To build PHP 7.1 and below, the latest 2.1.x versions of the SDK have to be used.
+The PHP SDK 2.1 is required to build PHP 7.1 or 7.0.
 
 The legacy binary tools SDK is available from the [legacy branch](https://github.com/Microsoft/php-sdk-binary-tools/tree/legacy) and is suitable to build PHP 5.
 
 # Requirements
 
 - A 64-bit build host
-- `Visual C++ 2015`, `Visual C++ 2017` or `Visual C++ 2019` must be installed prior SDK usage (be sure to install the C++ dev, .NET dev and the Windows SDK components)
+- Windows 7 or later
+- `Visual C++ 2017` or `Visual C++ 2019` must be installed prior SDK usage. Required components
+  - C++ dev
+  - .NET dev
+  - Windows SDK.
 - if `Cygwin`, `MingW` or any other cross solution is installed, please read notes in the pitfalls section
-- The PHP SDK was successfully tested on Windows 7 or later, earlier versions might work but are not recommended
 
 # Tools
 
