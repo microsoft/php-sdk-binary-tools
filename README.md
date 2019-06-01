@@ -8,7 +8,13 @@ The PHP SDK itself and the SDK own tools and code are licensed under the BSD 2-C
 
 # Overview
 
-The PHP SDK 2.0+ is compatible with PHP 7.0 and above. The compatibility with [older versions](http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-20110915.zip "php-sdk-binary-tools-20110915.zip") is kept, also available from the [legacy branch](https://github.com/Microsoft/php-sdk-binary-tools/tree/legacy). The toolset was significantly revamped. Newer tools are now available, better workflows are now possible. The toolset consists on a mix of the hand written scripts, selected MSYS2 parts and standalone programs. 
+The toolset consists on a mix of the hand written scripts, selected MSYS2 parts and standalone programs. It supports any workflows, be it a custom local or a CI build whatsoever.
+
+The PHP SDK 2.2+ is compatible with PHP 7.2 and above.
+
+To build PHP 7.1 and below, the latest 2.1.x versions of the SDK have to be used.
+
+The legacy binary tools SDK is available from the [legacy branch](https://github.com/Microsoft/php-sdk-binary-tools/tree/legacy) and is suitable to build PHP 5.
 
 # Requirements
 
