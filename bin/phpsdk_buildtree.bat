@@ -20,12 +20,14 @@ if "%PHP_SDK_ARCH%" NEQ "" (
 	goto create_all
 ) else (
 :create_all
-	MD %_%\vc14\x86\deps\bin
-	MD %_%\vc14\x86\deps\lib
-	MD %_%\vc14\x86\deps\include
-	MD %_%\vc14\x64\deps\bin
-	MD %_%\vc14\x64\deps\lib
-	MD %_%\vc14\x64\deps\include
+	for %%i in (vc14 vc15 vs16) do (
+		MD %_%\%%i\x86\deps\bin
+		MD %_%\%%i\x86\deps\lib
+		MD %_%\%%i\x86\deps\include
+		MD %_%\%%i\x64\deps\bin
+		MD %_%\%%i\x64\deps\lib
+		MD %_%\%%i\x64\deps\include
+	)
 )
 
 set _=
