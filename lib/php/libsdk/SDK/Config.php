@@ -276,7 +276,7 @@ class Config
 				}
 			}
 			if (!$cur_crt_usable) {
-				throw new Exception("The passed CRT '$cur_crt' doesn't match any availbale for branch '$current_branch_name'");
+				throw new Exception("The passed CRT '$cur_crt' doesn't match any available for branch '$current_branch_name'");
 			}
 			$data = $branches[$current_branch_name][$cur_crt];
 		} else {
@@ -284,7 +284,7 @@ class Config
 			$crt = key($branches[$current_branch_name]);
 			$data = $branches[$current_branch_name][$crt];
 			if ($crt != $cur_crt) {
-				throw new Exception("The passed CRT '$cur_crt' doesn't match any availbale for branch '$current_branch_name'");
+				throw new Exception("The passed CRT '$cur_crt' doesn't match any available for branch '$current_branch_name'");
 			}
 		}
 
