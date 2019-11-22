@@ -97,6 +97,12 @@ class TrainingCaseHandler extends Abstracts\TrainingCase implements Interfaces\T
 		$class = preg_replace(",function Faculty,", "function __construct", $class);
 		file_put_contents($fl, $class);
 
+		// patch <https://github.com/intel/php_pgo_training_scripts/pull/4>
+		$fl = $htdocs . DIRECTORY_SEPARATOR . "standard_calls.php";
+		$standard_calls = file_get_contents($fl);
+		$standard_calls = preg_replace(",parse_str\(\\\$var1\),", "parse_str(\$var1, \$dummy)", $standard_calls);
+		file_put_contents($fl, $standard_calls);
+
 		//$php->exec($cmd, NULL, $env);
 		/* TODO check status or switch to cli. */
 		$out = file_get_contents("http://$http_host:$http_port/init.php");
