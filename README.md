@@ -122,7 +122,9 @@ As of the version 2.1.0, the SDK includes a tool for the [PGO](https://docs.micr
 ## Preparing PGO training environment
 - the pgo folder in the SDK root dir contains templates and scenarios for PGO training
 - adjust and execute [doc/phpsdk_pgo_prep_elevated.bat.example](doc/phpsdk_pgo_prep_elevated.bat.example) to open ports required for PHP SDK training servers
-- run `phpsdk_pgo --init`
+- run `phpsdk_pgo --init`. Note that composer requires huge amounts of memory, so
+  it may be necessary to set the environment variable `COMPOSER_MEMORY_LIMIT=-1`.
+  The PGO initialization may not succeed in x86 enviroments.
 
 ## Creating PGO build
 - compile PHP configured using `--enable-pgi`
