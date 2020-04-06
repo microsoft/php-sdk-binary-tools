@@ -1,5 +1,5 @@
 {
-	"pkg_url": "https://downloads.mariadb.com/MariaDB/mariadb-5.5.66/win32-packages/mariadb-5.5.66-win32.zip",
+	"pkg_url": "https://downloads.mariadb.com/MariaDB/mariadb-10.3.22/win32-packages/mariadb-10.3.22-win32.zip",
 	"host": "localhost",
 	"port": 3307,
 	"user": "root",
