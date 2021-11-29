@@ -27,6 +27,9 @@ if "%PHP_SDK_ARCH%" NEQ "" (
 		MD %_%\%%i\x64\deps\bin
 		MD %_%\%%i\x64\deps\lib
 		MD %_%\%%i\x64\deps\include
+		MD %_%\%%i\arm64\deps\bin
+		MD %_%\%%i\arm64\deps\lib
+		MD %_%\%%i\arm64\deps\include
 	)
 )
 

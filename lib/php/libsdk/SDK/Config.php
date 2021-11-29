@@ -47,8 +47,8 @@ class Config
 	{/*{{{*/
 		$arch = strtolower($arch);
 
-		if ("x64" != $arch && "x86" != $arch) {
-			throw new Exception("Unknown arch keyword, either x86 or x64 is accepted");
+		if ("x64" != $arch && "x86" != $arch && "arm64" != $arch) {
+			throw new Exception("Unknown arch keyword, x86 or x64 or arm64 is accepted");
 		}
 
 		self::$currentArchName = $arch;
@@ -72,6 +72,8 @@ class Config
 					self::setCurrentArchName("x64");
 				} elseif (preg_match(",x86,", $out[0])) {
 					self::setCurrentArchName("x86");
+				} elseif (preg_match(",arm64,", $out[0])) {
+					self::setCurrentArchName("arm64");
 				} else {
 					throw new Exception("Couldn't determine Arch.");
 				}
@@ -146,7 +148,7 @@ class Config
 			$tmp = $fetcher->getByUri(self::$depsBaseUri . "/series/");
 			if (false !== $tmp) {
 				$data = array();
-				if (preg_match_all(",/packages-(.+)-(v[cs]\d+)-(x86|x64)-(stable|staging)\.txt,U", $tmp, $m, PREG_SET_ORDER)) {
+				if (preg_match_all(",/packages-(.+)-(v[cs]\d+)-(x86|x64|arm64)-(stable|staging)\.txt,U", $tmp, $m, PREG_SET_ORDER)) {
 					foreach ($m as $b) {
 						if (!isset($data[$b[1]])) {
 							$data[$b[1]] = array();
