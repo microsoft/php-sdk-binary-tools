@@ -173,10 +173,15 @@ if /i "%PHP_SDK_OS_ARCH%"=="x64" (
 	set HOST_ARCH_NAME=%PHP_SDK_ARCH%
 )
 
-if 15 gtr %PHP_SDK_VS_NUM% (
-	set PHP_SDK_VS_SHELL_CMD="!PHP_SDK_VC_DIR!\vcvarsall.bat" !HOST_ARCH_NAME!_!TARGET_ARCH_NAME!
+if "%HOST_ARCH_NAME%"=="%TARGET_ARCH_NAME%" (
+	set VCVARSALL_ARCH_NAME=%HOST_ARCH_NAME%
 ) else (
-	set PHP_SDK_VS_SHELL_CMD="!PHP_SDK_VC_DIR!\Auxiliary\Build\vcvarsall.bat" !HOST_ARCH_NAME!_!TARGET_ARCH_NAME!
+	set VCVARSALL_ARCH_NAME=%HOST_ARCH_NAME%_%TARGET_ARCH_NAME%
+)
+if 15 gtr %PHP_SDK_VS_NUM% (
+	set PHP_SDK_VS_SHELL_CMD="!PHP_SDK_VC_DIR!\vcvarsall.bat" !VCVARSALL_ARCH_NAME!
+) else (
+	set PHP_SDK_VS_SHELL_CMD="!PHP_SDK_VC_DIR!\Auxiliary\Build\vcvarsall.bat" !VCVARSALL_ARCH_NAME!
 )
 
 rem echo Visual Studio VC path %PHP_SDK_VC_DIR%
